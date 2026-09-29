@@ -1,11 +1,11 @@
 # Threat model
 
-- Last reviewed: 2026-09-29 (milestone 0.2, error handling)
+- Last reviewed: 2026-09-29 (milestone 0.2, About and Privacy pages)
 - Update this document in the same pull request whenever a trust boundary, data category, third-party service, or externally reachable endpoint changes.
 
-## System today (0.1)
+## System today (0.2)
 
-A single SvelteKit server (Node, `adapter-node`) behind a TLS-terminating reverse proxy. It renders one public landing page, serves static assets, and exposes `GET /healthz`. There are no accounts, no cookies, no database, no forms, no uploads, no third-party scripts, fonts, or APIs, and no learner data on the server or in the browser.
+A single SvelteKit server (Node, `adapter-node`) behind a TLS-terminating reverse proxy. It renders a few static public pages (home, About, Privacy, error pages), serves static assets, and exposes `GET /healthz`. There are no accounts, no cookies, no database, no forms, no uploads, no third-party scripts, fonts, or APIs, and no learner data on the server or in the browser. SvelteKit's client router keeps per-tab scroll positions in `sessionStorage` for back/forward navigation; they never leave the browser. The Privacy page (`src/routes/privacy/+page.svelte`) states these facts to learners, and `tests/e2e/layout.spec.ts` checks every page for third-party requests, cookies, and browser storage.
 
 ## Assets
 

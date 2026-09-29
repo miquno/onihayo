@@ -3,7 +3,7 @@
   import '../app.css';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { navigationCurrent, primaryNavigation, siteName } from '$lib/site';
+  import { footerNavigation, navigationCurrent, primaryNavigation, siteName } from '$lib/site';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
@@ -36,11 +36,23 @@
 </main>
 
 <footer class="site-footer">
-  <div class="container">
+  <div class="container footer-inner">
     <p>
       Onihayo is open source under the MIT licence:
       <a href="https://github.com/miquno/onihayo">source code on GitHub</a>.
     </p>
+    <nav aria-label="Site information">
+      <ul>
+        {#each footerNavigation as item (item.route)}
+          <li>
+            <a
+              href={resolve(item.route)}
+              aria-current={navigationCurrent(page.route.id, item.route)}>{item.label}</a
+            >
+          </li>
+        {/each}
+      </ul>
+    </nav>
   </div>
 </footer>
 
@@ -113,5 +125,13 @@
     border-top: var(--border-width) solid var(--color-border);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
+  }
+
+  .footer-inner {
+    padding-block: var(--space-4);
+  }
+
+  .footer-inner p {
+    margin: 0 0 var(--space-2);
   }
 </style>

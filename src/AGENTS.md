@@ -8,8 +8,8 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `healthz/+server.ts` (liveness probe).
-- `lib/site.ts` — site name, primary navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
+- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `healthz/+server.ts` (liveness probe).
+- `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
 
@@ -29,6 +29,7 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - No `{@html}` with anything that is not a compile-time constant. Learning content is rendered as text, never as HTML.
 - Semantic HTML first: landmarks, one `h1` per page, real buttons and links, labelled inputs. Japanese text carries `lang="ja"`.
 - Pages reflow from 320 px wide and at 200 % zoom without horizontal scrolling: no fixed widths or heights on content, sizes in `rem`, `max-width` and wrapping flex or grid for layout. `layout.spec.ts` checks every page for overflow.
-- The root layout owns the landmarks: pages render no `<main>`, `<header>`, or `<footer>` of their own. Every page sets `<title>{pageTitle('…')}</title>` and has exactly one `h1`. A new top-level page adds its entry to `primaryNavigation` if it belongs there, and to the `pages` list in `tests/e2e/layout.spec.ts`.
+- The root layout owns the landmarks: pages render no `<main>`, `<header>`, or `<footer>` of their own. Every page sets `<title>{pageTitle('…')}</title>` and has exactly one `h1`. A new top-level page adds its entry to `primaryNavigation` (learning sections) or `footerNavigation` (site information such as Privacy) if it belongs in either, and to the `pages` list in `tests/e2e/layout.spec.ts`.
+- The Privacy page must stay true: a change that stores data in the browser or on the server, sets a cookie, logs something new, or adds a third party updates `routes/privacy/+page.svelte` in the same pull request.
 - No inline `style` attributes or `<script>` in markup; the CSP blocks them. Use component `<style>` blocks or classes.
 - Unit tests sit beside the code as `*.test.ts` and run in Node (`pnpm test`).

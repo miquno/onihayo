@@ -3,11 +3,21 @@ import type { RouteId } from '$app/types';
 /** Site-wide name and navigation used by the root layout. */
 export const siteName = 'Onihayo';
 
-/** Primary navigation, in display order. A new top-level page adds its entry here. */
-export const primaryNavigation = [{ route: '/', label: 'Home' }] as const satisfies readonly {
+interface NavigationEntry {
   route: RouteId;
   label: string;
-}[];
+}
+
+/** Primary navigation in the header, in display order. A new top-level page adds its entry here. */
+export const primaryNavigation = [
+  { route: '/', label: 'Home' },
+  { route: '/about', label: 'About' }
+] as const satisfies readonly NavigationEntry[];
+
+/** Site information linked from the footer, in display order. */
+export const footerNavigation = [
+  { route: '/privacy', label: 'Privacy' }
+] as const satisfies readonly NavigationEntry[];
 
 /** The document title: "About — Onihayo" for a page, the full site title for the home page. */
 export function pageTitle(title?: string): string {

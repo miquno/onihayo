@@ -2,10 +2,21 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
 // Every page route. A new page is added here so it gets the layout, title,
-// keyboard, and accessibility checks below.
+// keyboard, and accessibility checks below. `current` is the navigation link
+// that carries `aria-current="page"`, if any.
 const pages = [
-  { path: '/', title: 'Onihayo — Learn Japanese from zero to JLPT N5', nav: 'Home' },
-  { path: '/this-route-does-not-exist', title: 'Page not found — Onihayo', nav: null }
+  {
+    path: '/',
+    title: 'Onihayo — Learn Japanese from zero to JLPT N5',
+    current: { navigation: 'Primary', link: 'Home' }
+  },
+  { path: '/about', title: 'About — Onihayo', current: { navigation: 'Primary', link: 'About' } },
+  {
+    path: '/privacy',
+    title: 'Privacy — Onihayo',
+    current: { navigation: 'Site information', link: 'Privacy' }
+  },
+  { path: '/this-route-does-not-exist', title: 'Page not found — Onihayo', current: null }
 ];
 
 /**
@@ -27,7 +38,7 @@ async function overflow(page: Page) {
   });
 }
 
-for (const { path, title, nav } of pages) {
+for (const { path, title, current } of pages) {
   test.describe(`layout on ${path}`, () => {
     test('has the shell landmarks, one h1, and its own title', async ({ page }) => {
       await page.goto(path);
@@ -41,16 +52,47 @@ for (const { path, title, nav } of pages) {
 
     test('marks the active navigation link', async ({ page }) => {
       await page.goto(path);
-      const navigation = page.getByRole('navigation', { name: 'Primary' });
-      if (nav === null) {
-        await expect(navigation.locator('[aria-current]')).toHaveCount(0);
+      const marked = page.getByRole('navigation').locator('[aria-current]');
+      if (current === null) {
+        await expect(marked).toHaveCount(0);
       } else {
-        await expect(navigation.getByRole('link', { name: nav })).toHaveAttribute(
-          'aria-current',
-          'page'
-        );
-        await expect(navigation.locator('[aria-current]')).toHaveCount(1);
+        await expect(
+          page
+            .getByRole('navigation', { name: current.navigation })
+            .getByRole('link', { name: current.link })
+        ).toHaveAttribute('aria-current', 'page');
+        await expect(marked).toHaveCount(1);
       }
+    });
+
+    test('loads nothing from other origins, has no console errors, and stores nothing but scroll positions', async ({
+      page,
+      baseURL
+    }) => {
+      const foreign: string[] = [];
+      page.on('request', (request) => {
+        const url = new URL(request.url());
+        if (url.protocol !== 'data:' && url.origin !== baseURL) foreign.push(request.url());
+      });
+      // CSP violations surface as console errors. The 404 status itself is logged
+      // as a failed resource load, which is expected on the error route.
+      const errors: string[] = [];
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
+      page.on('pageerror', (error) => errors.push(error.message));
+      await page.goto(path);
+      await page.waitForLoadState('networkidle');
+      expect(foreign).toEqual([]);
+      expect(errors.filter((error) => !error.includes('status of 404'))).toEqual([]);
+      expect(await page.context().cookies()).toEqual([]);
+      // SvelteKit keeps scroll positions and snapshots in sessionStorage for
+      // back/forward navigation; the privacy page describes exactly this.
+      const storage = await page.evaluate(() => ({
+        local: Object.keys(localStorage),
+        session: Object.keys(sessionStorage).filter((key) => !key.startsWith('sveltekit:'))
+      }));
+      expect(storage).toEqual({ local: [], session: [] });
     });
 
     test('skip link is the first tab stop and moves focus to main', async ({ page }) => {
@@ -117,7 +159,15 @@ for (const { path, title, nav } of pages) {
 
 test('keyboard reaches every link on the home page in order', async ({ page }) => {
   await page.goto('/');
-  const expected = ['Skip to main content', 'Onihayo', 'Home', 'roadmap', 'source code on GitHub'];
+  const expected = [
+    'Skip to main content',
+    'Onihayo',
+    'Home',
+    'About',
+    'roadmap',
+    'source code on GitHub',
+    'Privacy'
+  ];
   const reached: string[] = [];
   for (let stop = 0; stop < expected.length; stop++) {
     await page.keyboard.press('Tab');

@@ -14,7 +14,8 @@ Onihayo separates **public learning content** from **private learner data**. Eve
 
 ## Rules
 
-- **No personal data today.** In 0.1 the server stores nothing and sets no cookies.
+- **No personal data today.** The server stores nothing and sets no cookies. The only browser storage is SvelteKit's per-tab scroll positions in `sessionStorage`, which are not learner data and never leave the browser.
+- **The Privacy page is the learner-facing record.** `src/routes/privacy/+page.svelte` describes what is stored, where, and for how long. A change that stores new data, sets a cookie, or adds a third party updates that page in the same pull request.
 - **Authorization is by ownership.** Every read or write of account data is scoped by the authenticated user's ID on the server. A user ID from the request body, URL, or client storage is never trusted for authorization.
 - **Cross-user access is impossible by construction and by test.** From 0.9, integration tests assert that user A cannot read, modify, or delete user B's records through any endpoint.
 - **Deletion is real.** Deleting an account removes its rows (cascade) immediately; backups containing it expire within the documented retention window.
