@@ -35,12 +35,6 @@ test.describe('home page', () => {
     const results = await new AxeBuilder({ page }).withTags(['wcag2aa']).analyze();
     expect(results.violations).toEqual([]);
   });
-
-  test('is reachable by keyboard', async ({ page }) => {
-    await page.goto('/');
-    await page.keyboard.press('Tab');
-    await expect(page.getByRole('link', { name: 'roadmap' })).toBeFocused();
-  });
 });
 
 test.describe('security headers', () => {

@@ -8,7 +8,8 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+page.svelte` (home), `+layout.svelte` (root layout), `healthz/+server.ts` (liveness probe).
+- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+page.svelte` (home), `healthz/+server.ts` (liveness probe).
+- `lib/site.ts` — site name, primary navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
 
@@ -27,5 +28,6 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - Svelte 5 runes only (`$state`, `$derived`, `$props`, `$effect`); runes mode is forced in `svelte.config.js`.
 - No `{@html}` with anything that is not a compile-time constant. Learning content is rendered as text, never as HTML.
 - Semantic HTML first: landmarks, one `h1` per page, real buttons and links, labelled inputs. Japanese text carries `lang="ja"`.
+- The root layout owns the landmarks: pages render no `<main>`, `<header>`, or `<footer>` of their own. Every page sets `<title>{pageTitle('…')}</title>` and has exactly one `h1`. A new top-level page adds its entry to `primaryNavigation` if it belongs there, and to the `pages` list in `tests/e2e/layout.spec.ts`.
 - No inline `style` attributes or `<script>` in markup; the CSP blocks them. Use component `<style>` blocks or classes.
 - Unit tests sit beside the code as `*.test.ts` and run in Node (`pnpm test`).

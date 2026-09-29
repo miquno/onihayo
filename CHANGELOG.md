@@ -6,3 +6,4 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 - A first landing page that explains what Onihayo is and that lessons are not available yet.
 - Japanese text uses a Japanese system font where one is available, so kana and kanji show their Japanese forms.
+- Every page has a header with the site name and main navigation, a footer, and a "Skip to main content" link for keyboard and screen reader users.
