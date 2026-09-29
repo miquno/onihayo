@@ -75,6 +75,22 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  image:
+    name: image
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Built with the runner's own Docker; nothing is pushed to a registry.
+      - name: Build production image
+        run: docker build --tag onihayo:ci .
+      - name: Smoke-test the container
+        run: scripts/smoke-test-image.sh onihayo:ci
+
   audit:
     name: audit
     runs-on: ubuntu-latest

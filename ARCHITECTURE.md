@@ -17,19 +17,19 @@ Browser ──HTTPS──▶ TLS reverse proxy / platform edge ──HTTP──�
 
 ## Layers and module boundaries
 
-| Layer                                    | Location                                                                  | May depend on                          | Must not                                                          |
-| ---------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------- |
-| Routes (HTTP + pages)                    | `src/routes/`                                                             | everything in `src/lib/`               | contain learning rules or SQL                                     |
-| UI components                            | `src/lib/ui/`, route-local `.svelte` files                                | domain modules, `svelte`               | import `$lib/server`                                              |
-| Learning content                         | `src/lib/content/`                                                        | nothing app-specific                   | import `svelte`, `$app/*`, or do network I/O                      |
-| Learning engine                          | `src/lib/learning/`                                                       | `content` types                        | import `svelte` or `$app/*`; read clock or `Math.random` directly |
-| SRS / reviews                            | `src/lib/srs/`                                                            | `learning` types                       | same as learning engine                                           |
-| Progress                                 | `src/lib/progress/`                                                       | `content`, `learning`, `srs` types     | trust stored data without validation                              |
-| Validation                               | at each boundary (route handlers, storage adapters, import scripts)       | a single schema library, chosen in 0.6 | be skipped because the client "already checked"                   |
-| Server-only: security, persistence, auth | `src/lib/server/`                                                         | anything                               | be imported by client code (SvelteKit enforces this)              |
-| Infrastructure                           | `svelte.config.js`, `src/hooks.server.ts`, `.github/`, `docs/deployment/` | —                                      | —                                                                 |
-| Content pipeline                         | `scripts/content/` (from 0.7)                                             | Node                                   | run at request time                                               |
-| Build tooling                            | `scripts/licences/` (Vite plugin for the Licences page)                   | Node, Vite                             | run at request time                                               |
+| Layer                                    | Location                                                                                | May depend on                          | Must not                                                          |
+| ---------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------- |
+| Routes (HTTP + pages)                    | `src/routes/`                                                                           | everything in `src/lib/`               | contain learning rules or SQL                                     |
+| UI components                            | `src/lib/ui/`, route-local `.svelte` files                                              | domain modules, `svelte`               | import `$lib/server`                                              |
+| Learning content                         | `src/lib/content/`                                                                      | nothing app-specific                   | import `svelte`, `$app/*`, or do network I/O                      |
+| Learning engine                          | `src/lib/learning/`                                                                     | `content` types                        | import `svelte` or `$app/*`; read clock or `Math.random` directly |
+| SRS / reviews                            | `src/lib/srs/`                                                                          | `learning` types                       | same as learning engine                                           |
+| Progress                                 | `src/lib/progress/`                                                                     | `content`, `learning`, `srs` types     | trust stored data without validation                              |
+| Validation                               | at each boundary (route handlers, storage adapters, import scripts)                     | a single schema library, chosen in 0.6 | be skipped because the client "already checked"                   |
+| Server-only: security, persistence, auth | `src/lib/server/`                                                                       | anything                               | be imported by client code (SvelteKit enforces this)              |
+| Infrastructure                           | `svelte.config.js`, `src/hooks.server.ts`, `Dockerfile`, `.github/`, `docs/deployment/` | —                                      | —                                                                 |
+| Content pipeline                         | `scripts/content/` (from 0.7)                                                           | Node                                   | run at request time                                               |
+| Build tooling                            | `scripts/licences/` (Vite plugin for the Licences page)                                 | Node, Vite                             | run at request time                                               |
 
 Only routes and server-only code touch HTTP. Everything under `content`, `learning`, `srs`, and `progress` is plain TypeScript that runs identically in Node (tests), on the server, and in the browser.
 

@@ -1,0 +1,14 @@
+# Allow-list: only what `pnpm install` and `pnpm build` need reaches the Docker
+# build context. Everything else (.env files, .git, node_modules, local build
+# output, test results) stays out, so secrets cannot end up in an image layer.
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!.npmrc
+!svelte.config.js
+!vite.config.ts
+!tsconfig.json
+!src/
+!static/
+!scripts/licences/

@@ -81,4 +81,5 @@ pnpm test             # unit tests (Vitest); `pnpm test <path>` for one file
 pnpm test:e2e         # production build + browser tests (Playwright + axe)
 pnpm format           # apply Prettier
 pnpm audit            # known-vulnerability check (also a CI job)
+docker build --tag onihayo . && scripts/smoke-test-image.sh onihayo   # production image (also a CI job)
 ```

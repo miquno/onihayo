@@ -12,12 +12,30 @@ Learner ──HTTPS──▶ Platform edge / reverse proxy ──HTTP (private)�
                    headers for static files                                  private network, TLS, backups
 ```
 
-- **One container image** built from the repository (`pnpm install --frozen-lockfile && pnpm build`, then run `node build` as a non-root user with only the `build/` output and production files). Adding the Dockerfile is roadmap 0.2.
+- **One container image** built from the repository's `Dockerfile` (see [Container image](#container-image)): `pnpm install --frozen-lockfile && pnpm build`, then `node build` as a non-root user with only the `build/` output and `package.json`.
 - **Stateless app process.** Any number of replicas can run; nothing is stored on local disk. One replica is enough at launch.
 - **Boring hosting.** Any provider that runs a container behind managed TLS works. Two acceptable shapes:
   1. A container platform (PaaS) with managed TLS and, later, managed PostgreSQL in the same region.
   2. A single small VM running the container and a reverse proxy with automatic certificates (for example Caddy), plus a managed or carefully backed-up PostgreSQL.
      The provider is chosen in an ADR at the first deployment. No Kubernetes, service mesh, or multi-service setup.
+
+## Container image
+
+The multi-stage `Dockerfile` builds with pnpm in one stage and copies only the self-contained adapter-node output into the runtime stage. The runtime has no `node_modules`, no npm, Corepack, or pnpm, and no source code. It runs as the unprivileged `node` user (uid 1000); the application files are owned by root, so the process cannot change them. `.dockerignore` is an allow-list, so `.env` files, `.git`, and local build output never reach the build context.
+
+```bash
+docker build --tag onihayo .
+scripts/smoke-test-image.sh onihayo          # optional: the same checks CI runs
+docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --env ORIGIN=https://onihayo.example --publish 3000:3000 onihayo
+```
+
+- **Base image:** `node:24.<minor>.<patch>-trixie-slim`, pinned by tag and digest in the `Dockerfile`'s `NODE_IMAGE` argument. Updating it follows [dependencies.md](../security/dependencies.md).
+- **Defaults baked in:** `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=3000`, `BODY_SIZE_LIMIT=64K`. `ORIGIN` is not baked in; the platform must set it (see below).
+- **Health:** a Docker `HEALTHCHECK` requests `/healthz` every 30 s with the image's own Node, so platforms that honour Docker health status need no extra configuration.
+- **Hardening:** the application writes nothing to disk, so run it with a read-only root filesystem, no Linux capabilities, and `no-new-privileges`, as above. The CI smoke test runs it this way.
+- **Shutdown:** the server stops cleanly on `SIGTERM`, so platform restarts and deploys do not cut requests off mid-response.
+- **CI:** the `image` job builds the image on every pull request and runs `scripts/smoke-test-image.sh` (non-root user, no package manager, healthy, security headers, pages, 404). Nothing is pushed to a registry; publishing images is part of the deployment item.
 
 ## Production configuration
 

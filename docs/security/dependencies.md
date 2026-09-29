@@ -20,6 +20,7 @@ Install with `pnpm add -D <name>` (versions are saved exactly). The 7-day `minim
 - Read the changelog of every package that changes. Major versions get their own pull request and, if they change architecture, an ADR.
 - Run `pnpm verify` and `pnpm test:e2e`.
 - GitHub Actions are updated the same way: new full commit SHA plus the version comment.
+- The container base image (`NODE_IMAGE` in the `Dockerfile`) is updated the same way: an exact Node 24 tag plus its multi-architecture index digest, at least seven days old, taken from the registry (`docker buildx imagetools inspect node:<tag>`). The Node major version stays in step with `.nvmrc`.
 
 ## Vulnerability handling
 

@@ -27,7 +27,7 @@ pnpm verify       # format check, lint, type check, unit tests, production build
 pnpm test:e2e     # browser, accessibility, and security-header tests against the production build
 ```
 
-Production server: `pnpm build && ORIGIN=https://your.domain pnpm start`. See [docs/deployment/hosting.md](docs/deployment/hosting.md).
+Production server: `pnpm build && ORIGIN=https://your.domain pnpm start`, or the container image: `docker build --tag onihayo .` then `docker run --env ORIGIN=https://your.domain --publish 3000:3000 onihayo`. See [docs/deployment/hosting.md](docs/deployment/hosting.md).
 
 ## Documentation
 
