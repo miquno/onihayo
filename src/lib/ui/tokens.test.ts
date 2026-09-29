@@ -53,12 +53,15 @@ const pairs: [foreground: string, background: string, minimum: number][] = [
   ['color-link', 'color-bg', 4.5],
   ['color-link', 'color-surface', 4.5],
   ['color-on-accent', 'color-accent', 4.5],
+  ['color-on-accent', 'color-accent-hover', 4.5],
   ['color-focus', 'color-bg', 3],
   ['color-focus', 'color-surface', 3],
   ['color-border', 'color-bg', 3],
   ['color-border', 'color-surface', 3],
   ['color-accent', 'color-bg', 3],
-  ['color-accent', 'color-surface', 3]
+  ['color-accent', 'color-surface', 3],
+  ['color-accent-hover', 'color-bg', 3],
+  ['color-accent-hover', 'color-surface', 3]
 ];
 
 describe('contrast', () => {

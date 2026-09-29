@@ -12,6 +12,7 @@
   --color-border: #85858f;
   --color-link: #1f4f8a;
   --color-accent: #1f4f8a;
+  --color-accent-hover: #173d6b;
   --color-on-accent: #ffffff;
   --color-focus: #1f4f8a;
 
@@ -43,11 +44,16 @@
   --line-height-body: 1.6;
   --line-height-heading: 1.2;
   --line-height-kana: 1;
+  --font-weight-semibold: 600;
 
-  /* Radius */
+  /* Borders and radius */
+  --border-width: 1px;
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-full: 9999px;
+
+  /* States */
+  --opacity-disabled: 0.55;
 
   /* Focus ring */
   --focus-ring-width: 3px;
@@ -68,6 +74,7 @@
     --color-border: #7a7a88;
     --color-link: #9cc3ff;
     --color-accent: #9cc3ff;
+    --color-accent-hover: #c2daff;
     --color-on-accent: #15161a;
     --color-focus: #9cc3ff;
   }

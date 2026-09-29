@@ -48,7 +48,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **Prerequisites:** 0.1.
 
 - [x] Design tokens as CSS custom properties in `src/lib/ui/`: colors (light and dark), spacing scale, type scale with a Japanese-capable system font stack and a large display size for kana, radius, focus ring, and motion durations that become zero under `prefers-reduced-motion`.
-- [ ] Base components in `src/lib/ui/`: `Button` (primary/secondary, disabled state), `LinkButton`, `Card`, `ProgressBar` (with `role="progressbar"` and value text), `VisuallyHidden`. Each is keyboard operable with a visible focus ring.
+- [x] Base components in `src/lib/ui/`: `Button` (primary/secondary, disabled state), `LinkButton`, `Card`, `ProgressBar` (with `role="progressbar"` and value text), `VisuallyHidden`. Each is keyboard operable with a visible focus ring.
 - [ ] Root layout: skip link to main content, `header` with site name and primary navigation, `main`, `footer`; per-route `<title>`; one `h1` per page; `aria-current` on the active navigation link.
 - [ ] Responsive layout without horizontal scrolling from 320 px to 1440 px wide, and at 200 % zoom.
 - [ ] Error handling: `+error.svelte` for 404 and unexpected errors with a way back home; `handleError` logs an error ID and route without request bodies or personal data, and shows the ID to the learner.
