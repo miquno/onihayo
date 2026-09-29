@@ -18,17 +18,19 @@ GitHub Actions workflows, issue and pull request templates, and code owners. (Na
 - Never use `pull_request_target` or `workflow_run` with untrusted code, and never interpolate `${{ github.event.* }}` text into `run:` scripts — pass it through `env:`.
 - No Dependabot, Renovate, or other automated update bots.
 
-## Required repository settings (applied manually by the owner)
+## Repository settings (applied)
 
 These are not in code; keep this list in sync with the live settings.
 
-- Ruleset for `main`: no deletion, no force-push, pull requests required, required status checks `checks`, `e2e`, `audit`, `DCO`, required code-owner review, required conversation resolution, squash merge only.
-- Squash merge as the only merge method; delete branches after merge.
-- Secret scanning and push protection enabled; private vulnerability reporting enabled; Dependabot **alerts** enabled (alerts only, no update pull requests).
+- Ruleset `main` (ID 24166393), active for the default branch: no deletion, no force-push, no bypass actors; pull requests required with 0 approvals, required conversation resolution, squash merge only; required status checks `checks`, `e2e`, `audit`, `DCO`, each bound to the GitHub Actions app (`integration_id` 15368); branches need not be up to date before merging.
+- Code-owner review is deliberately **not** required while there is a single maintainer: nobody can approve their own pull request and there are no bypass actors, so requiring it would block every change. Only accounts with write access can merge. Turn it on as soon as a second maintainer with write access joins.
+- Squash merge as the only merge method (commit title and message from the pull request title and description); delete branches after merge.
+- Secret scanning and push protection enabled; private vulnerability reporting enabled; Dependabot **alerts** enabled; Dependabot security updates (automatic pull requests) disabled.
 - Actions: default `GITHUB_TOKEN` read-only; workflows may not create or approve pull requests.
 - Code scanning (CodeQL default setup) enabled.
 
 ## Gotchas
 
 - Required check names are the job names. Renaming a job means updating the `main` ruleset in the same change, or every pull request blocks.
-- A skipped job counts as passing for required checks, which is why `CODEOWNERS` owns `.github/` and `scripts/`.
+- Required checks only count when reported by GitHub Actions; a status with the same name from another app or token does not satisfy them.
+- A skipped job counts as passing for required checks. Never add path filters or `if:` conditions that can skip a required job, and review changes to `.github/` and `scripts/` (marked in `CODEOWNERS`) with particular care.

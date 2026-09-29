@@ -26,7 +26,7 @@ For end-to-end tests, install a matching browser once with `pnpm exec playwright
 
 `main` only changes through pull requests. Pull requests are squash-merged, so the pull request title must follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat: add hiragana lesson pages`). Review conversations must be resolved before merging.
 
-Required checks: `checks`, `e2e`, `audit`, and `DCO`. Changes to CI, scripts, dependency configuration, security headers, or security docs also need code-owner review.
+Required checks: `checks`, `e2e`, `audit`, and `DCO`. Changes to CI, scripts, dependency configuration, security headers, or security docs get particularly close review from the maintainer; code-owner review becomes required once there is a second maintainer.
 
 ## Dependencies
 

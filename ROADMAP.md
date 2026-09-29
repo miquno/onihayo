@@ -32,13 +32,12 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] CI: `checks`, `e2e`, `audit`, and `DCO` jobs with read-only permissions and SHA-pinned actions.
 - [x] Governance: `AGENTS.md` (root and folder-local), `CLAUDE.md` pointers, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `LICENSE`, `NOTICE`, `CODEOWNERS`, issue and PR templates, `.env.example`, gitignored `scratch/`.
 - [x] Documentation: architecture, learning model, data ownership, threat model, web security controls, authentication requirements, dependency policy, hosting model, content licensing rules and source register, ADRs 0001–0006.
+- [x] Repository settings applied: ruleset for `main` (pull requests, required checks, squash only, no bypass), secret scanning with push protection, private vulnerability reporting, Dependabot alerts (alerts only), CodeQL default setup, read-only `GITHUB_TOKEN`. See `.github/AGENTS.md`.
 
 **Acceptance criteria:** `pnpm verify` and `pnpm test:e2e` pass locally and in CI; the landing page has no axe violations in light and dark mode and no CSP violations.
 **Required tests:** U (security headers hook, health endpoint), E + A (landing page, headers, 404, cross-origin form rejection, health).
 **Security/privacy:** no cookies, no data stored, no third-party requests. Threat model v1.
 **Content/licensing:** no learning content. Code licence MIT.
-
-**Owner follow-ups (repository settings, not code):** apply the `main` ruleset and settings listed in `.github/AGENTS.md`; enable secret scanning with push protection, private vulnerability reporting, Dependabot alerts (alerts only), and CodeQL default setup.
 
 ---
 
