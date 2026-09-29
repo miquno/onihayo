@@ -62,10 +62,13 @@ test.describe('security headers', () => {
     expect(headers['permissions-policy']).toContain('camera=()');
   });
 
-  test('unknown routes return 404 with hardening headers', async ({ request }) => {
-    const response = await request.get('/this-route-does-not-exist');
-    expect(response.status()).toBe(404);
-    expect(response.headers()['x-content-type-options']).toBe('nosniff');
+  test('unknown routes show a friendly 404 with hardening headers', async ({ page }) => {
+    const response = await page.goto('/this-route-does-not-exist');
+    expect(response?.status()).toBe(404);
+    expect(response?.headers()['x-content-type-options']).toBe('nosniff');
+    await expect(page).toHaveTitle('Page not found — Onihayo');
+    await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/');
   });
 
   test('cross-origin form posts are rejected', async ({ request }) => {

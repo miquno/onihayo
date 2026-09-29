@@ -3,7 +3,10 @@ import { expect, test, type Page } from '@playwright/test';
 
 // Every page route. A new page is added here so it gets the layout, title,
 // keyboard, and accessibility checks below.
-const pages = [{ path: '/', title: 'Onihayo — Learn Japanese from zero to JLPT N5', nav: 'Home' }];
+const pages = [
+  { path: '/', title: 'Onihayo — Learn Japanese from zero to JLPT N5', nav: 'Home' },
+  { path: '/this-route-does-not-exist', title: 'Page not found — Onihayo', nav: null }
+];
 
 /**
  * Horizontal overflow: how far the page scrolls sideways, and every visible
@@ -39,11 +42,15 @@ for (const { path, title, nav } of pages) {
     test('marks the active navigation link', async ({ page }) => {
       await page.goto(path);
       const navigation = page.getByRole('navigation', { name: 'Primary' });
-      await expect(navigation.getByRole('link', { name: nav })).toHaveAttribute(
-        'aria-current',
-        'page'
-      );
-      await expect(navigation.locator('[aria-current]')).toHaveCount(1);
+      if (nav === null) {
+        await expect(navigation.locator('[aria-current]')).toHaveCount(0);
+      } else {
+        await expect(navigation.getByRole('link', { name: nav })).toHaveAttribute(
+          'aria-current',
+          'page'
+        );
+        await expect(navigation.locator('[aria-current]')).toHaveCount(1);
+      }
     });
 
     test('skip link is the first tab stop and moves focus to main', async ({ page }) => {

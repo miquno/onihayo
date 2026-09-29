@@ -1,10 +1,14 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { describe, expect, it } from 'vitest';
-import { handle } from './hooks.server';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { handle, handleError } from './hooks.server';
 import { securityHeaders } from '$lib/server/security-headers';
 
 // The hook only forwards the event to `resolve`, so an empty event is enough.
 const event = {} as RequestEvent;
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('handle', () => {
   it('adds every security header to a resolved response', async () => {
@@ -48,5 +52,68 @@ describe('securityHeaders', () => {
     const policy = securityHeaders['Permissions-Policy'];
     expect(policy).toContain('microphone=()');
     expect(policy).toContain('camera=()');
+  });
+});
+
+describe('handleError', () => {
+  it('does not log expected unmatched-route 404 responses', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    const result = await handleError({
+      error: new Error('Not Found'),
+      event: { route: { id: null } } as RequestEvent,
+      status: 404,
+      message: 'Not Found'
+    });
+
+    expect(result).toEqual({ message: 'Not Found' });
+    expect(log).not.toHaveBeenCalled();
+  });
+
+  it('returns a generic message with the same error ID that it logs', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const privateError = new Error('secret internal detail');
+    const privateRequest = new Request('https://onihayo.example/account/private-value');
+    const errorEvent = {
+      request: privateRequest,
+      route: { id: '/' }
+    } as RequestEvent;
+
+    const result = await handleError({
+      error: privateError,
+      event: errorEvent,
+      status: 500,
+      message: 'Internal Error'
+    });
+
+    expect(result?.message).toBe('Something went wrong.');
+    expect(result?.errorId).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u
+    );
+    expect(log).toHaveBeenCalledOnce();
+    expect(log).toHaveBeenCalledWith('Unexpected application error', {
+      errorId: result?.errorId,
+      route: '/'
+    });
+
+    const logged = JSON.stringify(log.mock.calls);
+    expect(logged).not.toContain(privateError.message);
+    expect(logged).not.toContain(privateRequest.url);
+  });
+
+  it('uses a safe label when no route matched', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    const result = await handleError({
+      error: new Error('failure'),
+      event: { route: { id: null } } as RequestEvent,
+      status: 500,
+      message: 'Internal Error'
+    });
+
+    expect(log).toHaveBeenCalledWith('Unexpected application error', {
+      errorId: result?.errorId,
+      route: 'unmatched'
+    });
   });
 });

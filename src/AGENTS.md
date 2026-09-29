@@ -7,8 +7,8 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.html` — HTML shell. `lang="en"`; no inline scripts or styles (CSP forbids them).
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
-- `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+page.svelte` (home), `healthz/+server.ts` (liveness probe).
+- `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.
+- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `healthz/+server.ts` (liveness probe).
 - `lib/site.ts` — site name, primary navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
