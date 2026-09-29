@@ -10,6 +10,13 @@ const config = {
   },
   kit: {
     adapter: adapter(),
+    typescript: {
+      // Build tooling in scripts/ (such as the Licences page plugin) is type-checked
+      // and linted like application code.
+      config: (/** @type {{ include: string[] }} */ tsconfig) => {
+        tsconfig.include.push('../scripts/**/*.ts');
+      }
+    },
     // Content Security Policy. SvelteKit adds a nonce (server-rendered pages) or a
     // hash (prerendered pages) for its own inline bootstrap script, so no
     // 'unsafe-inline' is needed for scripts. In dev only, SvelteKit adds

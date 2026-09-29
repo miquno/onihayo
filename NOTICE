@@ -15,6 +15,7 @@ Process: docs/content/README.md. Register: docs/content/sources.md.
 Third-party software
 --------------------
 The application is built with open-source packages listed in package.json and
-pinned in pnpm-lock.yaml; each is distributed under its own licence.
-Publishing the licence notices of packages bundled into the production build
-is a roadmap item (see ROADMAP.md, milestone 0.2).
+pinned in pnpm-lock.yaml; each is distributed under its own licence. The
+licence notices of every package bundled into the production build are
+generated at build time and shown on the site's licences page (/licences);
+see scripts/licences/bundled-licences.ts.

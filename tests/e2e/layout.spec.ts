@@ -16,6 +16,11 @@ const pages = [
     title: 'Privacy — Onihayo',
     current: { navigation: 'Site information', link: 'Privacy' }
   },
+  {
+    path: '/licences',
+    title: 'Licences — Onihayo',
+    current: { navigation: 'Site information', link: 'Licences' }
+  },
   { path: '/this-route-does-not-exist', title: 'Page not found — Onihayo', current: null }
 ];
 
@@ -166,7 +171,8 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'About',
     'roadmap',
     'source code on GitHub',
-    'Privacy'
+    'Privacy',
+    'Licences'
   ];
   const reached: string[] = [];
   for (let stop = 0; stop < expected.length; stop++) {

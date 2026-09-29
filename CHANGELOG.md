@@ -10,3 +10,4 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 - Pages fit screens from 320 px wide and stay readable at 200 % zoom without sideways scrolling; long words and links wrap.
 - Missing and unexpected pages now show a friendly way back home; unexpected errors include a reference ID without exposing internal details.
 - An About page explains what Onihayo is and the learning path from zero to JLPT N5, and a Privacy page, linked from every page's footer, explains that Onihayo stores nothing about you and uses no cookies, tracking, or third parties.
+- A Licences page, linked from the footer, lists every open-source package included in Onihayo with its version, licence, and full licence text. The list is generated automatically each time Onihayo is built.

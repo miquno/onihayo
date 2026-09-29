@@ -29,6 +29,7 @@ Browser ──HTTPS──▶ TLS reverse proxy / platform edge ──HTTP──�
 | Server-only: security, persistence, auth | `src/lib/server/`                                                         | anything                               | be imported by client code (SvelteKit enforces this)              |
 | Infrastructure                           | `svelte.config.js`, `src/hooks.server.ts`, `.github/`, `docs/deployment/` | —                                      | —                                                                 |
 | Content pipeline                         | `scripts/content/` (from 0.7)                                             | Node                                   | run at request time                                               |
+| Build tooling                            | `scripts/licences/` (Vite plugin for the Licences page)                   | Node, Vite                             | run at request time                                               |
 
 Only routes and server-only code touch HTTP. Everything under `content`, `learning`, `srs`, and `progress` is plain TypeScript that runs identically in Node (tests), on the server, and in the browser.
 

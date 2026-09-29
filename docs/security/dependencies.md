@@ -8,7 +8,7 @@ Write in the pull request:
 
 1. What it does and why the platform, SvelteKit, or an existing dependency cannot.
 2. Maintenance: recent releases, number of maintainers, open security issues.
-3. Licence (must be compatible with MIT distribution: MIT, ISC, BSD, Apache-2.0, and similar).
+3. Licence (must be compatible with MIT distribution: MIT, ISC, BSD, Apache-2.0, and similar). For packages bundled into the production build this is enforced: the build fails for any licence outside the allowed list in `scripts/licences/bundled-licences.ts`, and extending that list is a reviewed change. Bundled packages appear on the site's Licences page automatically.
 4. Size and whether it ships to the browser.
 5. Whether it needs an install script (if yes, why, and add it to `onlyBuiltDependencies` in `pnpm-workspace.yaml`).
 

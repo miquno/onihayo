@@ -16,7 +16,8 @@ export const primaryNavigation = [
 
 /** Site information linked from the footer, in display order. */
 export const footerNavigation = [
-  { route: '/privacy', label: 'Privacy' }
+  { route: '/privacy', label: 'Privacy' },
+  { route: '/licences', label: 'Licences' }
 ] as const satisfies readonly NavigationEntry[];
 
 /** The document title: "About — Onihayo" for a page, the full site title for the home page. */
