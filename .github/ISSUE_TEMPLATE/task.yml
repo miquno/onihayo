@@ -1,0 +1,31 @@
+name: Task
+description: A scoped roadmap, maintenance, docs, or CI item
+labels: [task]
+body:
+  - type: input
+    id: roadmap-item
+    attributes:
+      label: Roadmap item
+      placeholder: 0.2 — Accessible app shell with skip link and landmarks
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be true once this is done, and why?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included — and what is explicitly out of scope.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] …
+    validations:
+      required: true

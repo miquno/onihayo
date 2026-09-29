@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an improvement to how Onihayo teaches or works
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Learner problem
+      description: What is hard or missing for a learner today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+    validations:
+      required: true
+  - type: textarea
+    id: roadmap
+    attributes:
+      label: Roadmap fit
+      description: Which ROADMAP.md milestone does this belong to, if any?
+  - type: textarea
+    id: content
+    attributes:
+      label: Content sources
+      description: If this needs Japanese learning content, where would it come from and under which licence?

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+/build/
+/.svelte-kit/
+/package/
+
+# Test output
+/test-results/
+/playwright-report/
+/coverage/
+
+# Environment files: never commit real secrets. `.env.example` is the template.
+.env
+.env.*
+!.env.example
+
+# Temporary agent and investigation artifacts. Only the README is tracked.
+/scratch/*
+!/scratch/README.md
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+
+# Vite timestamp files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

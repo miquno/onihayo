@@ -1,0 +1,20 @@
+Onihayo
+Copyright (c) 2026 miquno and Onihayo contributors
+
+The Onihayo source code is licensed under the MIT License (see LICENSE).
+
+Third-party learning data
+-------------------------
+None yet.
+
+Every imported dataset is listed here with its source, licence, required
+attribution, and the repository path that holds it, before it is merged.
+The same attributions are shown to learners on the site's licences page.
+Process: docs/content/README.md. Register: docs/content/sources.md.
+
+Third-party software
+--------------------
+The application is built with open-source packages listed in package.json and
+pinned in pnpm-lock.yaml; each is distributed under its own licence.
+Publishing the licence notices of packages bundled into the production build
+is a roadmap item (see ROADMAP.md, milestone 0.2).

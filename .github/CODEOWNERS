@@ -1,0 +1,13 @@
+# The `main` ruleset requires code-owner review. Owning the CI definition, its
+# scripts, the dependency/supply-chain configuration, and the security policy
+# means a pull request cannot weaken its own gate without owner approval.
+/.github/ @miquno
+/scripts/ @miquno
+/package.json @miquno
+/pnpm-lock.yaml @miquno
+/pnpm-workspace.yaml @miquno
+/svelte.config.js @miquno
+/src/hooks.server.ts @miquno
+/src/lib/server/ @miquno
+/SECURITY.md @miquno
+/docs/security/ @miquno

@@ -1,0 +1,21 @@
+# Single-package repository. This file only carries pnpm settings.
+
+# Supply-chain delay: never resolve a version published less than 7 days ago,
+# which gives the registry and the community time to catch compromised releases.
+minimumReleaseAge: 10080
+
+# Dependency lifecycle scripts are blocked by default. A package may only run
+# install scripts after it is reviewed and listed here; unknown build scripts fail
+# the install instead of being silently skipped.
+strictDepBuilds: true
+onlyBuiltDependencies: []
+
+savePrefix: ''
+
+# Reviewed audit exceptions. Every entry needs a justification here and in
+# docs/security/dependencies.md, and must be re-reviewed when the dependency changes.
+auditConfig:
+  ignoreGhsas:
+    # cookie <0.7.0 via @sveltejs/kit: only exploitable when untrusted input is used
+    # as a cookie name, path, or domain. Onihayo sets no cookies (reviewed 2026-09-29).
+    - GHSA-pxg6-pf52-xh8x
