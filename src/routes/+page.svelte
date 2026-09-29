@@ -23,21 +23,21 @@
   main {
     max-width: 40rem;
     margin: 0 auto;
-    padding: 3rem 1.25rem;
+    padding: var(--space-7) var(--space-5);
   }
 
   h1 {
-    font-size: 2.25rem;
-    line-height: 1.2;
-    margin: 0 0 1rem;
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-heading);
+    margin: 0 0 var(--space-4);
   }
 
   p {
-    color: var(--color-muted);
+    color: var(--color-text-muted);
   }
 
   .lead {
-    font-size: 1.25rem;
+    font-size: var(--font-size-lg);
     color: var(--color-text);
   }
 </style>

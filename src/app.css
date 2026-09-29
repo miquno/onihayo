@@ -1,37 +1,17 @@
 /*
- * Minimal base styles for the 0.1 foundation. The design system (tokens,
- * components, typography scale) is roadmap milestone 0.2.
+ * Base element styles. Values come from the design tokens in
+ * `src/lib/ui/tokens.css`, which the root layout imports first.
  */
 :root {
   color-scheme: light dark;
-  --color-bg: #fbfaf7;
-  --color-text: #1b1b1f;
-  --color-muted: #4a4a55;
-  --color-link: #1f4f8a;
-  --color-focus: #1f4f8a;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    'Hiragino Sans',
-    'Noto Sans JP',
-    'Yu Gothic UI',
-    Meiryo,
-    sans-serif;
-  line-height: 1.6;
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-body);
   background: var(--color-bg);
   color: var(--color-text);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #15161a;
-    --color-text: #ececf1;
-    --color-muted: #b9b9c6;
-    --color-link: #9cc3ff;
-    --color-focus: #9cc3ff;
-  }
+:lang(ja) {
+  font-family: var(--font-family-ja);
 }
 
 body {
@@ -60,8 +40,8 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -5,3 +5,4 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 ## Unreleased
 
 - A first landing page that explains what Onihayo is and that lessons are not available yet.
+- Japanese text uses a Japanese system font where one is available, so kana and kanji show their Japanese forms.

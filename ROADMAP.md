@@ -47,7 +47,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** a consistent site with header, navigation, footer, About/Privacy/Licences pages, and friendly error pages, usable on phones and desktops, reachable at a public HTTPS address.
 **Prerequisites:** 0.1.
 
-- [ ] Design tokens as CSS custom properties in `src/lib/ui/`: colors (light and dark), spacing scale, type scale with a Japanese-capable system font stack and a large display size for kana, radius, focus ring, and motion durations that become zero under `prefers-reduced-motion`.
+- [x] Design tokens as CSS custom properties in `src/lib/ui/`: colors (light and dark), spacing scale, type scale with a Japanese-capable system font stack and a large display size for kana, radius, focus ring, and motion durations that become zero under `prefers-reduced-motion`.
 - [ ] Base components in `src/lib/ui/`: `Button` (primary/secondary, disabled state), `LinkButton`, `Card`, `ProgressBar` (with `role="progressbar"` and value text), `VisuallyHidden`. Each is keyboard operable with a visible focus ring.
 - [ ] Root layout: skip link to main content, `header` with site name and primary navigation, `main`, `footer`; per-route `<title>`; one `h1` per page; `aria-current` on the active navigation link.
 - [ ] Responsive layout without horizontal scrolling from 320 px to 1440 px wide, and at 200 % zoom.

@@ -5,15 +5,15 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 ## Map
 
 - `app.html` — HTML shell. `lang="en"`; no inline scripts or styles (CSP forbids them).
-- `app.css` — base styles imported by the root layout. Replaced by design tokens in milestone 0.2.
+- `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders. Owned by `CODEOWNERS`.
 - `routes/` — URL structure. `+page.svelte` (home), `+layout.svelte` (root layout), `healthz/+server.ts` (liveness probe).
+- `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
 
 ## Planned layout (create a folder only when its roadmap item needs it)
 
-- `lib/ui/` — shared, presentational design-system components (0.2).
 - `lib/content/` — typed learning content and loaders; no UI, no I/O beyond reading bundled data (0.3).
 - `lib/learning/` — practice sessions, answer checking, normalization, seeded randomness (0.3).
 - `lib/progress/` — learner progress model and storage adapters (0.6).

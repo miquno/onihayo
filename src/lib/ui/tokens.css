@@ -1,0 +1,81 @@
+/*
+ * Design tokens. Every color, spacing, type, radius, focus, and motion value
+ * used in the application comes from here. Colors are 6-digit hex so that
+ * `tokens.test.ts` can check their contrast pairs against WCAG AA.
+ */
+:root {
+  /* Colors (light) */
+  --color-bg: #fbfaf7;
+  --color-surface: #ffffff;
+  --color-text: #1b1b1f;
+  --color-text-muted: #4a4a55;
+  --color-border: #85858f;
+  --color-link: #1f4f8a;
+  --color-accent: #1f4f8a;
+  --color-on-accent: #ffffff;
+  --color-focus: #1f4f8a;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Typography. System fonts only: no web fonts, no third-party requests. */
+  --font-family-base:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic UI',
+    Meiryo, sans-serif;
+  /* Japanese fonts first, so kana and kanji use Japanese glyph forms. */
+  --font-family-ja:
+    'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Noto Sans CJK JP',
+    'Yu Gothic UI', 'Yu Gothic', Meiryo, system-ui, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2.25rem;
+  /* A single kana or kanji shown on its own, e.g. in a lesson or practice card. */
+  --font-size-kana: clamp(4rem, 3rem + 6vw, 7rem);
+  --line-height-body: 1.6;
+  --line-height-heading: 1.2;
+  --line-height-kana: 1;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-full: 9999px;
+
+  /* Focus ring */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #15161a;
+    --color-surface: #202127;
+    --color-text: #ececf1;
+    --color-text-muted: #b9b9c6;
+    --color-border: #7a7a88;
+    --color-link: #9cc3ff;
+    --color-accent: #9cc3ff;
+    --color-on-accent: #15161a;
+    --color-focus: #9cc3ff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+}
