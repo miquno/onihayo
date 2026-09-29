@@ -5,7 +5,7 @@ Browser tests. Unit tests do not live here; they sit next to the code in `src/` 
 ## Map
 
 - `e2e/foundation.spec.ts` — the production server's baseline: landing page renders without console errors (which also catches CSP violations), axe WCAG 2.2 A/AA scan in light and dark mode, security headers, 404 handling, cross-origin form rejection, and `/healthz`.
-- `e2e/layout.spec.ts` — for every page in its `pages` list: shell landmarks, one `h1`, page title, `aria-current` on the active navigation link, skip link moving focus to `main`, and axe in light and dark mode. Also the keyboard tab order on the home page.
+- `e2e/layout.spec.ts` — for every page in its `pages` list: shell landmarks, one `h1`, page title, `aria-current` on the active navigation link, skip link moving focus to `main`, no horizontal overflow at 320, 768, 1280, and 1440 px and at 200 % zoom, and axe in light and dark mode. Also the keyboard tab order on the home page.
 
 ## Rules
 

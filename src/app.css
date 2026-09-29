@@ -16,6 +16,9 @@
 
 body {
   margin: 0;
+  /* Long words, URLs, and package names break instead of widening the page
+     (reflow down to 320 px, WCAG 1.4.10). Only breaks where a line would overflow. */
+  overflow-wrap: anywhere;
 }
 
 .app-root {

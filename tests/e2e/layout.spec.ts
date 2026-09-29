@@ -1,9 +1,28 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 // Every page route. A new page is added here so it gets the layout, title,
 // keyboard, and accessibility checks below.
 const pages = [{ path: '/', title: 'Onihayo — Learn Japanese from zero to JLPT N5', nav: 'Home' }];
+
+/**
+ * Horizontal overflow: how far the page scrolls sideways, and every visible
+ * element that sticks out of the viewport (which also catches clipped content).
+ */
+async function overflow(page: Page) {
+  return page.evaluate(() => {
+    const width = document.documentElement.clientWidth;
+    const offenders = [...document.body.querySelectorAll('*')]
+      .filter((element) => {
+        const box = element.getBoundingClientRect();
+        return box.width > 0 && box.height > 0 && (box.left < -0.5 || box.right > width + 0.5);
+      })
+      .map(
+        (element) => `${element.tagName.toLowerCase()} "${element.textContent.trim().slice(0, 40)}"`
+      );
+    return { scroll: document.documentElement.scrollWidth - width, offenders };
+  });
+}
 
 for (const { path, title, nav } of pages) {
   test.describe(`layout on ${path}`, () => {
@@ -38,6 +57,42 @@ for (const { path, title, nav } of pages) {
 
       await page.keyboard.press('Enter');
       await expect(page.getByRole('main')).toBeFocused();
+    });
+
+    for (const width of [320, 768, 1280, 1440]) {
+      test(`does not overflow at ${String(width)} px wide`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 800 });
+        await page.goto(path);
+        expect(await overflow(page)).toEqual({ scroll: 0, offenders: [] });
+      });
+    }
+
+    test('does not overflow and keeps text size at 200 % zoom', async ({ browser }) => {
+      // 200 % browser zoom on a 1280 px window lays the page out like a 640 CSS px
+      // viewport with two device pixels per CSS pixel.
+      const context = await browser.newContext({
+        viewport: { width: 640, height: 400 },
+        deviceScaleFactor: 2
+      });
+      const page = await context.newPage();
+      await page.goto(path);
+      expect(await overflow(page)).toEqual({ scroll: 0, offenders: [] });
+      // Text is sized in rem, so zoom enlarges it instead of the layout shrinking it.
+      const bodySize = await page
+        .locator('main p')
+        .first()
+        .evaluate((p) => getComputedStyle(p).fontSize);
+      expect(parseFloat(bodySize)).toBeGreaterThanOrEqual(16);
+      await context.close();
+    });
+
+    test('skip link is fully visible when focused at 320 px', async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 640 });
+      await page.goto(path);
+      await page.keyboard.press('Tab');
+      await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeInViewport({
+        ratio: 1
+      });
     });
 
     for (const colorScheme of ['light', 'dark'] as const) {

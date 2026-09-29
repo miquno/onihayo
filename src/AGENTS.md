@@ -28,6 +28,7 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - Svelte 5 runes only (`$state`, `$derived`, `$props`, `$effect`); runes mode is forced in `svelte.config.js`.
 - No `{@html}` with anything that is not a compile-time constant. Learning content is rendered as text, never as HTML.
 - Semantic HTML first: landmarks, one `h1` per page, real buttons and links, labelled inputs. Japanese text carries `lang="ja"`.
+- Pages reflow from 320 px wide and at 200 % zoom without horizontal scrolling: no fixed widths or heights on content, sizes in `rem`, `max-width` and wrapping flex or grid for layout. `layout.spec.ts` checks every page for overflow.
 - The root layout owns the landmarks: pages render no `<main>`, `<header>`, or `<footer>` of their own. Every page sets `<title>{pageTitle('…')}</title>` and has exactly one `h1`. A new top-level page adds its entry to `primaryNavigation` if it belongs there, and to the `pages` list in `tests/e2e/layout.spec.ts`.
 - No inline `style` attributes or `<script>` in markup; the CSP blocks them. Use component `<style>` blocks or classes.
 - Unit tests sit beside the code as `*.test.ts` and run in Node (`pnpm test`).
