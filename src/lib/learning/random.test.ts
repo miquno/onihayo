@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createSeededRandom, maxSeed, randomInt, type RandomSource } from './random';
+import { createSeededRandom, maxSeed, parseSeed, randomInt, type RandomSource } from './random';
 
 function take(random: RandomSource, count: number): number[] {
   return Array.from({ length: count }, () => random.next());
@@ -80,6 +80,40 @@ describe('randomInt', () => {
     const random = createSeededRandom(1);
     for (const count of [0, -1, 2.5, Number.NaN]) {
       expect(() => randomInt(random, count)).toThrow(RangeError);
+    }
+  });
+});
+
+describe('parseSeed', () => {
+  it('reads plain decimal seeds from 0 to maxSeed', () => {
+    expect(parseSeed('0')).toBe(0);
+    expect(parseSeed('42')).toBe(42);
+    expect(parseSeed(String(maxSeed))).toBe(maxSeed);
+  });
+
+  it('rejects everything else', () => {
+    const rejected = [
+      null,
+      '',
+      ' 42',
+      '42 ',
+      '+42',
+      '-1',
+      '042',
+      '4.2',
+      '1e3',
+      '0x10',
+      '４２',
+      String(maxSeed + 1),
+      '99999999999',
+      'seed'
+    ];
+    for (const text of rejected) expect(parseSeed(text), String(text)).toBeUndefined();
+  });
+
+  it('accepts exactly what createSeededRandom accepts', () => {
+    for (const text of ['0', '1', String(maxSeed)]) {
+      expect(() => createSeededRandom(parseSeed(text) ?? -1)).not.toThrow();
     }
   });
 });

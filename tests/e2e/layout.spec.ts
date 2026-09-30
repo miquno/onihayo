@@ -28,6 +28,11 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
   },
   {
+    path: '/hiragana/ka/practice?seed=1',
+    title: 'Practice: K row — Hiragana — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
+  },
+  {
     path: '/hiragana/gya',
     title: 'Combined sounds: gy, j, by, py — Hiragana — Onihayo',
     current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }

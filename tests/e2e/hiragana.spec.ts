@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { hiragana } from '../../src/lib/content/kana/hiragana';
 
 // The hiragana lessons journey: from the header to the lesson list, then
 // through every lesson with "Next lesson", using only the keyboard.
@@ -49,4 +50,105 @@ test('an unknown lesson shows the friendly 404 page', async ({ page }) => {
   const response = await page.goto('/hiragana/xyz');
   expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible();
+});
+
+// Readings by character, straight from the dataset, so the test can answer.
+const romaji = new Map(hiragana.map((kana) => [kana.character, kana.romaji]));
+
+test('keyboard-only learner practises a lesson and sees a summary', async ({ page }) => {
+  await page.goto('/hiragana/sa');
+  await page.getByRole('link', { name: 'Practise this lesson' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Practice: S row');
+
+  const input = page.getByLabel('Romaji for this hiragana');
+  const prompt = page.getByRole('main').locator('p[lang="ja"]');
+  const feedback = page.getByRole('status');
+  await input.focus();
+
+  // Answers stay in the browser: no request while practising.
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+
+  await page.keyboard.press('Enter');
+  await expect(feedback).toHaveText('Type the romaji first, then press Enter.');
+
+  let firstMissed = '';
+  for (let question = 1; question <= 10; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 10`
+    );
+    const character = (await prompt.textContent()) ?? '';
+    const reading = romaji.get(character) ?? '';
+    if (question === 1) {
+      firstMissed = character;
+      await input.fill('xyz');
+      await page.keyboard.press('Enter');
+      await expect(feedback).toHaveText(`Not quite. ${character} is ${reading}. You typed “xyz”.`);
+    } else {
+      // Accepted alternatives count as correct; answers are normalized first.
+      const typed = character === 'し' ? ' SI ' : reading;
+      await input.fill(typed);
+      await page.keyboard.press('Enter');
+      await expect(feedback).toHaveText(`Correct. ${character} is ${reading}.`);
+    }
+    await expect(input).toBeFocused();
+    await page.keyboard.press('Enter');
+  }
+
+  const results = page.getByRole('heading', { level: 2, name: 'Results' });
+  await expect(results).toBeFocused();
+  await expect(page.getByText('You answered 9 of 10 correctly (90 %).')).toBeVisible();
+  await expect(page.getByRole('main').getByRole('listitem')).toHaveText([
+    `${firstMissed} ${romaji.get(firstMissed) ?? ''}, missed once`
+  ]);
+  expect(requests).toEqual([]);
+
+  await page.getByRole('button', { name: 'Practise again' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
+  await expect(input).toBeFocused();
+  await expect(input).toHaveValue('');
+});
+
+test('the same seed gives the same question order', async ({ page }) => {
+  const order = async () => {
+    await page.goto('/hiragana/ka/practice?seed=42');
+    const input = page.getByLabel('Romaji for this hiragana');
+    const prompt = page.getByRole('main').locator('p[lang="ja"]');
+    const asked: string[] = [];
+    for (let question = 1; question <= 10; question++) {
+      await expect(page.getByRole('progressbar')).toHaveAttribute(
+        'aria-valuetext',
+        `${String(question)} of 10`
+      );
+      const character = (await prompt.textContent()) ?? '';
+      asked.push(character);
+      await input.fill(romaji.get(character) ?? '');
+      await input.press('Enter');
+      await input.press('Enter');
+    }
+    return asked;
+  };
+  const first = await order();
+  expect(await order()).toEqual(first);
+  expect(new Set(first)).toEqual(new Set(['か', 'き', 'く', 'け', 'こ']));
+});
+
+test('practice works with the buttons alone, as on a touch screen', async ({ page }) => {
+  await page.goto('/hiragana/a/practice?seed=3');
+  const input = page.getByLabel('Romaji for this hiragana');
+  const prompt = page.getByRole('main').locator('p[lang="ja"]');
+  for (let question = 1; question <= 10; question++) {
+    await input.fill(romaji.get((await prompt.textContent()) ?? '') ?? '');
+    await page.getByRole('button', { name: 'Check' }).click();
+    await expect(page.getByRole('status')).toContainText('Correct.');
+    await page.getByRole('button', { name: 'Next' }).click();
+  }
+  await expect(page.getByText('You answered 10 of 10 correctly (100 %).')).toBeVisible();
+  await expect(page.getByText('No mistakes.')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Practise again' }).click();
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
 });

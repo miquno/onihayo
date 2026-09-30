@@ -14,7 +14,7 @@
 <p class="lead">Learn Japanese from absolute zero to JLPT N5 in one structured place.</p>
 <p>
   Onihayo is in early development. The first lessons teach
-  <span lang="ja">ひらがな</span> (hiragana); practice and more lessons follow.
+  <span lang="ja">ひらがな</span> (hiragana), each with its own practice; more lessons follow.
 </p>
 <p>
   Development follows a public, milestone-based

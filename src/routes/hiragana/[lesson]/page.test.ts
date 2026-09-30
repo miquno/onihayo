@@ -75,8 +75,11 @@ describe('hiragana lesson page', () => {
     expect(body).toContain('Pronounced shi, as in "sheep", never si.');
   });
 
-  it('links to the next lesson and back to the list', () => {
+  it('links to its practice, the next lesson, and back to the list', () => {
     const { body } = renderLesson('ka');
+    expect(body).toMatch(
+      /<a href="\/hiragana\/ka\/practice"[^>]*>\s*Practise this lesson\s*<\/a>/u
+    );
     expect(body).toMatch(/<a href="\/hiragana\/sa"[^>]*>\s*Next lesson: S row\s*<\/a>/u);
     expect(body).toContain('<a href="/hiragana">All hiragana lessons</a>');
   });
@@ -84,6 +87,7 @@ describe('hiragana lesson page', () => {
   it('ends the last lesson without a next link', () => {
     const { body } = renderLesson('gya');
     expect(body).not.toContain('Next lesson');
+    expect(body).toContain('<a href="/hiragana/gya/practice"');
     expect(body).toContain('That was the last hiragana lesson');
     expect(body).toContain('<a href="/hiragana">All hiragana lessons</a>');
   });

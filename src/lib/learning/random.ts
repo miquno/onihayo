@@ -35,6 +35,17 @@ export function createSeededRandom(seed: number): RandomSource {
   };
 }
 
+/**
+ * A seed from untrusted text, such as a URL parameter: plain decimal digits
+ * for an integer from 0 to `maxSeed`, or `undefined` for anything else
+ * (signs, spaces, exponents, fractions, leading zeros, out-of-range values).
+ */
+export function parseSeed(text: string | null): number | undefined {
+  if (text === null || !/^(?:0|[1-9]\d{0,9})$/u.test(text)) return undefined;
+  const seed = Number(text);
+  return seed <= maxSeed ? seed : undefined;
+}
+
 /** A uniformly chosen integer from 0 to `count - 1`, e.g. an index into a list of `count` items. */
 export function randomInt(random: RandomSource, count: number): number {
   if (!Number.isSafeInteger(count) || count < 1) {
