@@ -11,6 +11,7 @@ interface NavigationEntry {
 /** Primary navigation in the header, in display order. A new top-level page adds its entry here. */
 export const primaryNavigation = [
   { route: '/', label: 'Home' },
+  { route: '/hiragana', label: 'Hiragana' },
   { route: '/about', label: 'About' }
 ] as const satisfies readonly NavigationEntry[];
 

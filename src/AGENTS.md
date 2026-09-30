@@ -8,11 +8,11 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `licences/` (licences of every bundled package, from `virtual:bundled-licences`; server-rendered only, `csr = false`), `healthz/+server.ts` (liveness probe).
+- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `hiragana/` (the hiragana lesson list and one page per lesson at `hiragana/[lesson]`; unknown slugs answer 404), `licences/` (licences of every bundled package, from `virtual:bundled-licences`; server-rendered only, `csr = false`), `healthz/+server.ts` (liveness probe).
 - `lib/licences.ts` — the `BundledPackage` type shared by the Licences page and its build plugin (`scripts/licences/`).
 - `bundled-licences.d.ts` — type of the `virtual:bundled-licences` module (`null` in the dev server).
 - `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
-- `lib/content/` — typed learning content: the content model and Onihayo-authored kana data (CC BY-SA 4.0). See its `AGENTS.md`.
+- `lib/content/` — typed learning content: the content model, Onihayo-authored kana data and hiragana lessons (CC BY-SA 4.0), and lesson helpers. See its `AGENTS.md`.
 - `lib/learning/` — the learning engine: answer normalization, the seeded random source, and the practice session state machine. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.

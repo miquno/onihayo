@@ -71,3 +71,24 @@ export interface KanaRecord {
   readonly alternatives: readonly string[];
   readonly origin: ContentOrigin;
 }
+
+/**
+ * A kana lesson: one or more consecutive rows of one class, taught together.
+ * The lesson teaches every kana in its rows, in dataset order.
+ */
+export interface KanaLesson {
+  /**
+   * Stable lesson ID, `lesson.hiragana.<first row>`. Never renamed or reused:
+   * lesson progress will refer to it. The part after the last dot is the URL slug.
+   */
+  readonly id: `lesson.hiragana.${KanaRow}`;
+  /** Short English title, e.g. "K row". */
+  readonly title: string;
+  /** The rows taught, in gojūon order. */
+  readonly rows: readonly KanaRow[];
+  /** How the lesson's kana are pronounced, as plain text. */
+  readonly note: string;
+  /** Notes for kana that do not sound the way their romaji suggests, keyed by item ID. Plain text. */
+  readonly kanaNotes: Readonly<Partial<Record<KanaRecord['id'], string>>>;
+  readonly origin: ContentOrigin;
+}
