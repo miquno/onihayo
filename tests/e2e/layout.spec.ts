@@ -202,6 +202,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Home',
     'Hiragana',
     'About',
+    'Start here: Vowels',
     'roadmap',
     'source code on GitHub',
     'Privacy',
@@ -220,5 +221,5 @@ test('after the skip link, Tab continues inside main', async ({ page }) => {
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'roadmap' })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Start here: Vowels' })).toBeFocused();
 });

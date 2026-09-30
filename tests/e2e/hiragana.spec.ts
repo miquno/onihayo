@@ -178,3 +178,53 @@ test('the chart is reachable from the lesson list and exposes table semantics', 
   const characters = page.getByRole('table').locator('[lang="ja"]');
   await expect(characters).toHaveCount(104);
 });
+
+// Milestone 0.3 acceptance: a new learner goes from the home page through
+// every hiragana lesson and its practice with the keyboard alone.
+test('keyboard-only learner goes from the home page through every lesson and practice', async ({
+  page
+}) => {
+  test.slow();
+  await page.goto('/');
+  await page.getByRole('link', { name: /^Start here:/u }).focus();
+  await page.keyboard.press('Enter');
+
+  const input = page.getByLabel('Romaji for this hiragana');
+  const prompt = page.getByRole('main').locator('p[lang="ja"]');
+  const lessons: string[] = [];
+
+  for (;;) {
+    // Wait for the lesson page before reading it.
+    const practise = page.getByRole('link', { name: 'Practise this lesson' });
+    await expect(practise).toBeVisible();
+    const title = (await page.getByRole('heading', { level: 1 }).textContent()) ?? '';
+    lessons.push(title);
+    const total = await page.getByRole('main').getByRole('listitem').count();
+
+    await practise.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(`Practice: ${title}`);
+    for (let question = 1; question <= total * 2; question++) {
+      await expect(page.getByRole('progressbar')).toHaveAttribute(
+        'aria-valuetext',
+        `${String(question)} of ${String(total * 2)}`
+      );
+      await input.fill(romaji.get((await prompt.textContent()) ?? '') ?? '');
+      await input.press('Enter');
+      await input.press('Enter');
+    }
+    await expect(page.getByRole('heading', { level: 2, name: 'Results' })).toBeFocused();
+    await expect(page.getByText(/correctly \(100 %\)\.$/u)).toBeVisible();
+
+    const next = page.getByRole('link', { name: /^Next lesson:/u });
+    if ((await next.count()) === 0) break;
+    await next.focus();
+    await page.keyboard.press('Enter');
+  }
+
+  expect(lessons).toHaveLength(18);
+  expect(lessons[0]).toBe('Vowels');
+  await page.getByRole('link', { name: 'All hiragana lessons' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { level: 1, name: 'Hiragana' })).toBeVisible();
+});
