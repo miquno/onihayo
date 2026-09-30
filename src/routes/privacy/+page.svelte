@@ -12,7 +12,7 @@
 
 <h1>Privacy</h1>
 <p class="lead">Onihayo does not collect, store, or share any personal data.</p>
-<p class="updated">Last updated: <time datetime="2026-09-29">29 September 2026</time></p>
+<p class="updated">Last updated: <time datetime="2026-09-30">30 September 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 <p>Nothing about you. There are no accounts and nothing to sign up for.</p>
@@ -21,6 +21,10 @@
   each page you visited in the current tab, so the Back button returns you to the same place. This
   stays on your device, is never sent to Onihayo, and your browser deletes it when you close the
   tab.
+</p>
+<p>
+  When you practise, your answers are checked in your browser. They are never sent to Onihayo or
+  saved, and they are gone when you leave the page.
 </p>
 
 <h2>No tracking and no third parties</h2>
