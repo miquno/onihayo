@@ -30,7 +30,7 @@ Entry point for anyone — human or coding agent — changing Onihayo. This file
 - `docs/decisions/` — architecture decision records (ADRs)
 - `docs/content/` — content provenance and licensing rules, source register
 - `docs/deployment/hosting.md` — hosting model and production assumptions
-- Folder-local docs: `src/AGENTS.md`, `src/lib/content/AGENTS.md`, `src/lib/ui/AGENTS.md`, `src/lib/server/AGENTS.md`, `tests/AGENTS.md`, `scripts/AGENTS.md`, `.github/AGENTS.md`. A new top-level source folder gets its own `AGENTS.md` (and a one-line `CLAUDE.md` containing `@AGENTS.md`) in the same pull request.
+- Folder-local docs: `src/AGENTS.md`, `src/lib/content/AGENTS.md`, `src/lib/learning/AGENTS.md`, `src/lib/ui/AGENTS.md`, `src/lib/server/AGENTS.md`, `tests/AGENTS.md`, `scripts/AGENTS.md`, `.github/AGENTS.md`. A new top-level source folder gets its own `AGENTS.md` (and a one-line `CLAUDE.md` containing `@AGENTS.md`) in the same pull request.
 
 ## Engineering rules
 
