@@ -33,6 +33,10 @@
   {/each}
 </ol>
 
+<p>
+  To see every character at once, open the <a href={resolve('/hiragana/chart')}>hiragana chart</a>.
+</p>
+
 <style>
   h1 {
     font-size: var(--font-size-2xl);

@@ -8,7 +8,7 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `hiragana/` (the hiragana lesson list, one page per lesson at `hiragana/[lesson]`, and its practice at `hiragana/[lesson]/practice`: runs entirely in the browser, sends and stores nothing, `?seed=` replays a question order; unknown slugs answer 404), `licences/` (licences of every bundled package, from `virtual:bundled-licences`; server-rendered only, `csr = false`), `healthz/+server.ts` (liveness probe).
+- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `hiragana/` (the hiragana lesson list, the chart of all hiragana as tables at `hiragana/chart`, one page per lesson at `hiragana/[lesson]`, and its practice at `hiragana/[lesson]/practice`: runs entirely in the browser, sends and stores nothing, `?seed=` replays a question order; unknown slugs answer 404), `licences/` (licences of every bundled package, from `virtual:bundled-licences`; server-rendered only, `csr = false`), `healthz/+server.ts` (liveness probe).
 - `lib/licences.ts` — the `BundledPackage` type shared by the Licences page and its build plugin (`scripts/licences/`).
 - `bundled-licences.d.ts` — type of the `virtual:bundled-licences` module (`null` in the dev server).
 - `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
@@ -16,6 +16,7 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `lib/learning/` — the learning engine: answer normalization, the seeded random source, and the practice session state machine. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
+- `lib/testing/` — helpers for unit tests only: `withoutHydrationMarkers()` strips Svelte's hydration comments from server-rendered markup (repeating until nothing changes, so no comment can survive a removal).
 
 ## Planned layout (create a folder only when its roadmap item needs it)
 

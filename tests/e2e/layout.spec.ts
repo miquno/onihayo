@@ -23,6 +23,11 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Hiragana' }
   },
   {
+    path: '/hiragana/chart',
+    title: 'Hiragana chart — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
+  },
+  {
     path: '/hiragana/a',
     title: 'Vowels — Hiragana — Onihayo',
     current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }

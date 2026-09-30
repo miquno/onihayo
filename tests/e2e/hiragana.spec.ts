@@ -152,3 +152,29 @@ test('practice works with the buttons alone, as on a touch screen', async ({ pag
   await page.getByRole('button', { name: 'Practise again' }).click();
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
 });
+
+test('the chart is reachable from the lesson list and exposes table semantics', async ({
+  page
+}) => {
+  await page.goto('/hiragana');
+  await page.getByRole('link', { name: 'hiragana chart' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hiragana chart');
+
+  const basic = page.getByRole('table', { name: 'Basic hiragana' });
+  await expect(basic.getByRole('columnheader')).toHaveText(['a', 'i', 'u', 'e', 'o']);
+  const kaRow = basic.getByRole('row').filter({ has: page.getByRole('rowheader', { name: 'ka' }) });
+  await expect(kaRow.getByRole('cell')).toHaveText(['か ka', 'き ki', 'く ku', 'け ke', 'こ ko']);
+  const yaRow = basic.getByRole('row').filter({ has: page.getByRole('rowheader', { name: 'ya' }) });
+  await expect(yaRow.getByRole('cell')).toHaveText(['や ya', '', 'ゆ yu', '', 'よ yo']);
+
+  await expect(
+    page.getByRole('table', { name: 'Dakuten and handakuten' }).getByRole('rowheader')
+  ).toHaveText(['ga', 'za', 'da', 'ba', 'pa']);
+  await expect(
+    page.getByRole('table', { name: 'Combined sounds' }).getByRole('columnheader')
+  ).toHaveText(['ya', 'yu', 'yo']);
+
+  const characters = page.getByRole('table').locator('[lang="ja"]');
+  await expect(characters).toHaveCount(104);
+});

@@ -3,6 +3,7 @@ import { render } from 'svelte/server';
 import { describe, expect, it, vi } from 'vitest';
 import { createSeededRandom, maxSeed } from '$lib/learning/random';
 import { currentItem, startSession } from '$lib/learning/session';
+import { withoutHydrationMarkers } from '$lib/testing/html';
 
 vi.mock('$app/paths', () => ({
   resolve: (path: string, params: Record<string, string> = {}) =>
@@ -61,7 +62,7 @@ describe('hiragana practice page', () => {
   const { head, body } = render(PracticePage, {
     props: { data, params: { lesson: 'ka' } }
   });
-  const html = body.replace(/<!--[\s\S]*?-->/gu, '');
+  const html = withoutHydrationMarkers(body);
 
   it('has its own title and a single h1', () => {
     expect(head).toContain('<title>Practice: K row — Hiragana — Onihayo</title>');

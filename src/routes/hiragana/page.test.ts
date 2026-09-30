@@ -19,13 +19,18 @@ describe('hiragana lesson list', () => {
   });
 
   it('lists every lesson in order, linked by its slug', () => {
-    const links = [...body.matchAll(/<a href="(\/hiragana\/[^"]+)">([^<]+)<\/a>/gu)].map(
+    const list = /<ol[^>]*>([\s\S]*?)<\/ol>/u.exec(body)?.[1] ?? '';
+    const links = [...list.matchAll(/<a href="(\/hiragana\/[^"]+)">([^<]+)<\/a>/gu)].map(
       ([, href, title]) => `${href ?? ''} ${title ?? ''}`
     );
     expect(links).toHaveLength(18);
     expect(links[0]).toBe('/hiragana/a Vowels');
     expect(links[1]).toBe('/hiragana/ka K row');
     expect(links.at(-1)).toBe('/hiragana/gya Combined sounds: gy, j, by, py');
+  });
+
+  it('links to the hiragana chart', () => {
+    expect(body).toContain('<a href="/hiragana/chart">hiragana chart</a>');
   });
 
   it('previews each lesson’s kana in Japanese', () => {

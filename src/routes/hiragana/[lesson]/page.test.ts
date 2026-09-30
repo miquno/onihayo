@@ -1,6 +1,7 @@
 import { isHttpError } from '@sveltejs/kit';
 import { render } from 'svelte/server';
 import { describe, expect, it, vi } from 'vitest';
+import { withoutHydrationMarkers } from '$lib/testing/html';
 
 vi.mock('$app/paths', () => ({
   resolve: (path: string, params: Record<string, string> = {}) =>
@@ -21,7 +22,7 @@ function renderLesson(lesson: string) {
   const { head, body } = render(LessonPage, {
     props: { data: loadLesson(lesson), params: { lesson } }
   });
-  return { head, body: body.replace(/<!--[\s\S]*?-->/gu, '') };
+  return { head, body: withoutHydrationMarkers(body) };
 }
 
 describe('hiragana lesson load', () => {
