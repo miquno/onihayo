@@ -54,7 +54,7 @@ Entry point for anyone — human or coding agent — changing Onihayo. This file
 
 - Never copy content from Nihondex, WaniKani, Bunpro, commercial textbooks, paid dictionaries, or commercial apps. Never scrape learning websites.
 - Before importing a dataset: identify the source, verify and document the licence, document attribution and transformations, and add validation tests. Rules and register: `docs/content/`.
-- Keep imported, generated, and Onihayo-authored content distinguishable.
+- Keep imported, generated, and Onihayo-authored content distinguishable. Code is MIT; Onihayo-authored content is CC BY-SA 4.0 (ADR 0006), with a `LICENSE` file in each authored-content directory.
 
 ## Security reminders
 

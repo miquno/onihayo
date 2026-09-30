@@ -2,6 +2,10 @@ Onihayo
 Copyright (c) 2026 miquno and Onihayo contributors
 
 The Onihayo source code is licensed under the MIT License (see LICENSE).
+Learning content written for Onihayo is licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International licence (CC BY-SA 4.0), attributed to
+"Onihayo contributors"; each directory of authored content contains the licence
+text. See docs/decisions/0006-code-and-content-licensing.md.
 
 Third-party learning data
 -------------------------

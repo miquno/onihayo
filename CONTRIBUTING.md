@@ -53,4 +53,4 @@ git push --force-with-lease
 
 ## Licensing
 
-Contributions are licensed under the [MIT License](LICENSE), except content that the contribution explicitly marks as third-party with its own licence (see [NOTICE](NOTICE)).
+Code contributions are licensed under the [MIT License](LICENSE). Onihayo-authored learning content (explanations, notes, mnemonics, example sentences, exercises) is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) and attributed to "Onihayo contributors" ([ADR 0006](docs/decisions/0006-code-and-content-licensing.md)). Third-party content keeps its own licence and is marked as such (see [NOTICE](NOTICE)).

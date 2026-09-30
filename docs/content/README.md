@@ -36,4 +36,4 @@ A pull request that imports data without all six steps is not merged.
 
 ## Licences
 
-Code is MIT. The licence for Onihayo-authored content is proposed in [ADR 0006](../decisions/0006-code-and-content-licensing.md) and must be decided before the first authored content is merged. Imported data keeps its own licence.
+Code is MIT. Onihayo-authored content is licensed under CC BY-SA 4.0, attributed to "Onihayo contributors" ([ADR 0006](../decisions/0006-code-and-content-licensing.md)); every directory of authored content carries a `LICENSE` file with the CC BY-SA 4.0 legal code. Imported data keeps its own licence.

@@ -40,4 +40,4 @@ Production server: `pnpm build && ORIGIN=https://your.domain pnpm start`, or the
 
 ## License
 
-Code is released under the [MIT License](LICENSE). Third-party learning data, when added, keeps its own licence; see [NOTICE](NOTICE) and [docs/content/](docs/content/README.md).
+Code is released under the [MIT License](LICENSE). Learning content written for Onihayo is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Third-party learning data, when added, keeps its own licence; see [NOTICE](NOTICE) and [docs/content/](docs/content/README.md).
