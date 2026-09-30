@@ -31,8 +31,14 @@
 </ul>
 
 <nav class="lesson-navigation" aria-label="Lessons">
+  <LinkButton href={resolve('/hiragana/[lesson]/practice', { lesson: data.slug })}>
+    Practise this lesson
+  </LinkButton>
   {#if data.next}
-    <LinkButton href={resolve('/hiragana/[lesson]', { lesson: data.next.slug })}>
+    <LinkButton
+      variant="secondary"
+      href={resolve('/hiragana/[lesson]', { lesson: data.next.slug })}
+    >
       Next lesson: {data.next.title}
     </LinkButton>
   {:else}

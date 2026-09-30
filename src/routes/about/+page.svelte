@@ -69,8 +69,8 @@
 
 <h2>Where Onihayo is today</h2>
 <p>
-  Onihayo is in early development. The first lessons, for hiragana, are available; practice,
-  katakana, and everything after them follow a public
+  Onihayo is in early development. The first lessons and their practice, for hiragana, are
+  available; katakana and everything after them follow a public
   <a href="https://github.com/miquno/onihayo/blob/main/ROADMAP.md">roadmap</a>.
 </p>
 <p>Onihayo is an independent project and is not affiliated with the organisers of the JLPT.</p>
