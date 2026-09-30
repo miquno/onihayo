@@ -3,9 +3,14 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import Button from './Button.svelte';
 import Card from './Card.svelte';
+import { kanaChart } from '$lib/content/chart';
+import { katakana } from '$lib/content/kana/katakana';
+import type { KanaClass } from '$lib/content/model';
+import KanaCharts from './KanaCharts.svelte';
 import KanaLesson from './KanaLesson.svelte';
 import KanaPractice from './KanaPractice.svelte';
 import LessonList from './LessonList.svelte';
+import LessonPractice from './LessonPractice.svelte';
 import LinkButton from './LinkButton.svelte';
 import ProgressBar from './ProgressBar.svelte';
 import VisuallyHidden from './VisuallyHidden.svelte';
@@ -187,6 +192,31 @@ describe('all components', () => {
           next: null,
           allLessonsHref: '/katakana',
           finished: text('t')
+        }
+      }).body,
+      render(LessonPractice, {
+        props: {
+          practice: {
+            slug: 'v',
+            title: 'w',
+            kana: [{ id: 'x', character: 'ア', romaji: 'a', accepted: ['a'] }],
+            questionCount: 1,
+            seed: 0,
+            next: null
+          },
+          kanaName: 'katakana',
+          lessonHref: '/katakana/a',
+          nextHref: null,
+          allLessonsHref: '/katakana'
+        }
+      }).body,
+      render(KanaCharts, {
+        props: {
+          charts: [kanaChart(katakana, 'extended')],
+          titles: { basic: 'y', dakuten: 'y', yoon: 'y', extended: 'y' },
+          description: createRawSnippet((kanaClass: () => KanaClass) => ({
+            render: () => `<span>${kanaClass()}</span>`
+          }))
         }
       }).body
     ];

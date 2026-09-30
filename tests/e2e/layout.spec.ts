@@ -48,6 +48,16 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Katakana' }
   },
   {
+    path: '/katakana/chart',
+    title: 'Katakana chart — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
+    path: '/katakana/ka/practice?seed=1',
+    title: 'Practice: K row — Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
     path: '/katakana/ka',
     title: 'K row — Katakana — Onihayo',
     current: { navigation: 'Primary', link: 'Katakana', state: 'true' }

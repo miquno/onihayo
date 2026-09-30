@@ -88,10 +88,10 @@ describe('katakana lesson page', () => {
     expect(renderLesson('sa').body).not.toContain('<section');
   });
 
-  it('practises the lesson’s rows in the kana quiz and links onwards', () => {
+  it('links to its practice, the next lesson, and back to the list', () => {
     const { body } = renderLesson('kya');
     expect(body).toMatch(
-      /<a href="\/quiz\/practice\?rows=katakana\.kya&amp;rows=katakana\.sha&amp;rows=katakana\.cha"[^>]*>\s*Practise this lesson\s*<\/a>/u
+      /<a href="\/katakana\/kya\/practice"[^>]*>\s*Practise this lesson\s*<\/a>/u
     );
     expect(body).toMatch(/<a href="\/katakana\/nya"[^>]*>\s*Next lesson: Combined sounds/u);
     expect(body).toContain('<a href="/katakana">All katakana lessons</a>');

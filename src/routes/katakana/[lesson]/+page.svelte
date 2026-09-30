@@ -1,6 +1,5 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { rowSelectionSearch } from '$lib/content/selection';
   import { pageTitle } from '$lib/site';
   import KanaLesson from '$lib/ui/KanaLesson.svelte';
   import type { PageProps } from './$types';
@@ -12,13 +11,10 @@
   <title>{pageTitle(`${data.title} — Katakana`)}</title>
 </svelte:head>
 
-<!-- Practice runs in the kana quiz with this lesson's rows selected. -->
 <KanaLesson
   lesson={data}
   scriptName="Katakana"
-  practiceHref={resolve(
-    `/quiz/practice${rowSelectionSearch(data.rows.map((row) => `katakana.${row}` as const))}`
-  )}
+  practiceHref={resolve('/katakana/[lesson]/practice', { lesson: data.slug })}
   next={data.next
     ? {
         href: resolve('/katakana/[lesson]', { lesson: data.next.slug }),

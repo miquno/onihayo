@@ -111,7 +111,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Extended katakana needed by N5 loanwords as a separate class (ティ, ディ, ファ, フィ, フェ, フォ, ウィ, ウェ, ウォ, シェ, ジェ, チェ) with validation tests.
 - [x] Katakana lessons with authored notes, including the long-vowel mark ー and small ッ.
 - [x] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
-- [ ] Katakana practice and chart pages reusing the 0.3 components and session without copying them.
+- [x] Katakana practice and chart pages reusing the 0.3 components and session without copying them.
 
 **Acceptance criteria:** same as 0.3 for katakana; no katakana-specific branches in session logic.
 **Required tests:** D (katakana inventory, extended class), U (mixed pools), E + A (katakana lesson → practice journey).

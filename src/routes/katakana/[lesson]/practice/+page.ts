@@ -1,14 +1,14 @@
 import { error } from '@sveltejs/kit';
-import { hiragana } from '$lib/content/kana/hiragana';
-import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
+import { katakana } from '$lib/content/kana/katakana';
+import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
 import { lessonPractice } from '$lib/ui/practice';
 import type { PageLoad } from './$types';
 
 export const load = (({ params, url }) => {
   // The slug comes from the URL: only an exact match with a known lesson is served.
   const practice = lessonPractice(
-    hiraganaLessons,
-    hiragana,
+    katakanaLessons,
+    katakana,
     params.lesson,
     url.searchParams.get('seed')
   );
