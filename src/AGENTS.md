@@ -13,13 +13,12 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `bundled-licences.d.ts` — type of the `virtual:bundled-licences` module (`null` in the dev server).
 - `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
 - `lib/content/` — typed learning content: the content model and Onihayo-authored kana data (CC BY-SA 4.0). See its `AGENTS.md`.
-- `lib/learning/` — the learning engine: answer normalization and the seeded random source. See its `AGENTS.md`.
+- `lib/learning/` — the learning engine: answer normalization, the seeded random source, and the practice session state machine. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
 
 ## Planned layout (create a folder only when its roadmap item needs it)
 
-- `lib/learning/` — practice sessions and answer checking (0.3).
 - `lib/progress/` — learner progress model and storage adapters (0.6).
 - `lib/srs/` — review scheduling (0.8).
 - `lib/server/db/`, `lib/server/auth/` — persistence and authentication (0.9).
