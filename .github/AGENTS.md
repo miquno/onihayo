@@ -23,7 +23,7 @@ GitHub Actions workflows, issue and pull request templates, and code owners. (Na
 
 These are not in code; keep this list in sync with the live settings.
 
-- Ruleset `main` (ID 24166393), active for the default branch: no deletion, no force-push, no bypass actors; pull requests required with 0 approvals, required conversation resolution, squash merge only; required status checks `checks`, `e2e`, `audit`, `DCO`, each bound to the GitHub Actions app (`integration_id` 15368); branches need not be up to date before merging.
+- Ruleset `main` (ID 24257899), active for the default branch: no deletion, no force-push, no bypass actors; pull requests required with 0 approvals, required conversation resolution, squash merge only; required status checks `checks`, `e2e`, `audit`, `DCO`, each bound to the GitHub Actions app (`integration_id` 15368); branches need not be up to date before merging.
 - Code-owner review is deliberately **not** required while there is a single maintainer: nobody can approve their own pull request and there are no bypass actors, so requiring it would block every change. Only accounts with write access can merge. Turn it on as soon as a second maintainer with write access joins.
 - Squash merge as the only merge method (commit title and message from the pull request title and description); delete branches after merge.
 - Secret scanning and push protection enabled; private vulnerability reporting enabled; Dependabot **alerts** enabled; Dependabot security updates (automatic pull requests) disabled.
