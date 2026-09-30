@@ -3,6 +3,7 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import Button from './Button.svelte';
 import Card from './Card.svelte';
+import KanaPractice from './KanaPractice.svelte';
 import LinkButton from './LinkButton.svelte';
 import ProgressBar from './ProgressBar.svelte';
 import VisuallyHidden from './VisuallyHidden.svelte';
@@ -103,6 +104,33 @@ describe('VisuallyHidden', () => {
   });
 });
 
+describe('KanaPractice', () => {
+  const kana = [
+    { id: 'kana.katakana.a', character: 'ア', romaji: 'a', accepted: ['a'] },
+    { id: 'kana.katakana.shi', character: 'シ', romaji: 'shi', accepted: ['shi', 'si'] }
+  ];
+  const { body } = render(KanaPractice, {
+    props: { kana, questionCount: 4, seed: 1, kanaName: 'katakana', nextStep: text('Next') }
+  });
+
+  it('names the kind of kana in the instructions and the field label', () => {
+    expect(body).toContain('Type the romaji for each katakana, then press Enter.');
+    expect(body).toMatch(/<label for="answer"[^>]*>Romaji for this katakana<\/label>/u);
+  });
+
+  it('asks the first question in Japanese, with a progress bar over every question', () => {
+    expect(body).toMatch(/<p class="character[^"]*" id="prompt" lang="ja">[アシ]<\/p>/u);
+    expect(attributes(body, 'div', 'role="progressbar"').get('aria-valuetext')).toBe('1 of 4');
+  });
+
+  it('has an answer field that is never submitted and an empty live region', () => {
+    const input = attributes(body, 'input', 'id="answer"');
+    expect(input.get('aria-describedby')).toBe('prompt');
+    expect(input.has('name')).toBe(false);
+    expect(body).toMatch(/<div class="feedback[^"]*" role="status">(?:<!--[^>]*-->|\s)*<\/div>/u);
+  });
+});
+
 describe('all components', () => {
   it('render no inline style attributes, which the CSP would block', () => {
     const bodies = [
@@ -110,7 +138,16 @@ describe('all components', () => {
       render(LinkButton, { props: { href: '/', children: text('b') } }).body,
       render(Card, { props: { children: text('c') } }).body,
       render(ProgressBar, { props: { label: 'd', value: 30 } }).body,
-      render(VisuallyHidden, { props: { children: text('e') } }).body
+      render(VisuallyHidden, { props: { children: text('e') } }).body,
+      render(KanaPractice, {
+        props: {
+          kana: [{ id: 'f', character: 'ア', romaji: 'a', accepted: ['a'] }],
+          questionCount: 1,
+          seed: 0,
+          kanaName: 'kana',
+          nextStep: text('g')
+        }
+      }).body
     ];
     for (const body of bodies) expect(body).not.toMatch(/\sstyle=/);
   });

@@ -42,6 +42,16 @@ const pages: PageCase[] = [
     title: 'Combined sounds: gy, j, by, py — Hiragana — Onihayo',
     current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
   },
+  {
+    path: '/quiz',
+    title: 'Kana quiz — Onihayo',
+    current: { navigation: 'Primary', link: 'Kana quiz' }
+  },
+  {
+    path: '/quiz/practice?rows=hiragana.a&rows=katakana.kya&seed=1',
+    title: 'Kana quiz: 8 kana — Onihayo',
+    current: { navigation: 'Primary', link: 'Kana quiz', state: 'true' }
+  },
   { path: '/about', title: 'About — Onihayo', current: { navigation: 'Primary', link: 'About' } },
   {
     path: '/privacy',
@@ -201,6 +211,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Onihayo',
     'Home',
     'Hiragana',
+    'Kana quiz',
     'About',
     'Start here: Vowels',
     'roadmap',

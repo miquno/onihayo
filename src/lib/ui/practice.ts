@@ -1,4 +1,25 @@
+import type { KanaRecord } from '$lib/content/model';
 import type { SessionSummary } from '$lib/learning/session';
+
+/** What `KanaPractice` needs to know about one kana. */
+export interface PracticeKana {
+  readonly id: string;
+  readonly character: string;
+  /** The reading shown after an answer. */
+  readonly romaji: string;
+  /** Every answer that counts as correct, the romaji first. */
+  readonly accepted: readonly string[];
+}
+
+/** A kana record as practice needs it: the romaji and every alternative are accepted. */
+export function practiceKana(record: KanaRecord): PracticeKana {
+  return {
+    id: record.id,
+    character: record.character,
+    romaji: record.romaji,
+    accepted: [record.romaji, ...record.alternatives]
+  };
+}
 
 /**
  * A fresh seed for a new practice session. Not security-relevant: it only

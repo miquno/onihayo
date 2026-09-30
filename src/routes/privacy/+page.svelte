@@ -24,7 +24,8 @@
 </p>
 <p>
   When you practise, your answers are checked in your browser. They are never sent to Onihayo or
-  saved, and they are gone when you leave the page.
+  saved, and they are gone when you leave the page. The rows you pick for the kana quiz are part of
+  the page address, like any link, so you can bookmark a quiz; Onihayo does not store them.
 </p>
 
 <h2>No tracking and no third parties</h2>

@@ -107,11 +107,11 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **Prerequisites:** 0.3.
 
 - [x] Katakana characters added to the kana dataset for all 104 sounds, with IDs `kana.katakana.<sound>`.
+- [x] Kana quiz: pick any rows of hiragana and katakana from a grid of row tiles (an "All" switch per group that shows a partial selection, the selected count always visible, starting with nothing selected prevented with an explanation) and practise them together through the shared practice component and session; the selection travels in the URL.
 - [ ] Extended katakana needed by N5 loanwords as a separate class (ティ, ディ, ファ, フィ, フェ, フォ, ウィ, ウェ, ウォ, シェ, ジェ, チェ) with validation tests.
 - [ ] Katakana lessons with authored notes, including the long-vowel mark ー and small ッ.
 - [ ] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
 - [ ] Katakana practice and chart pages reusing the 0.3 components and session without copying them.
-- [ ] Mixed practice: practise any selection of hiragana and katakana lessons together.
 
 **Acceptance criteria:** same as 0.3 for katakana; no katakana-specific branches in session logic.
 **Required tests:** D (katakana inventory, extended class), U (mixed pools), E + A (katakana lesson → practice journey).
