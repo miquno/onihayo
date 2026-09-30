@@ -6,7 +6,8 @@ Onihayo's learning content as typed, versioned data ([ADR 0003](../../../docs/de
 
 - `model.ts` — the content model: `ContentOrigin`, dataset `Provenance`, and the kana types (`KanaRecord`, `KanaClass`, `kanaRows` in gojūon order).
 - `kana/` — Onihayo-authored kana data under CC BY-SA 4.0 (`kana/LICENSE`). `hiragana.ts`: the 46 basic hiragana, 25 with dakuten/handakuten, and 33 yōon, in gojūon order, with the dataset's `provenance`.
-- `hiragana.test.ts` — the hiragana inventory, readings, accepted alternatives, ID scheme, and origin.
+- `hiragana.test.ts` — what the data says: the hiragana inventory, readings, accepted alternatives, ID scheme, and origin.
+- `kana-dataset.test.ts` — dataset validation: exact counts per class, unique IDs and characters (precomposed hiragana), non-empty lowercase romaji, no duplicate alternatives, complete rows in gojūon order within one class, and an origin on every record.
 
 ## Rules
 
@@ -15,5 +16,6 @@ Onihayo's learning content as typed, versioned data ([ADR 0003](../../../docs/de
 - Every record has a stable ID (`kana.hiragana.shi`) that is never renamed or reused, because learner progress refers to it, and states its `origin` (`imported`, `generated`, or `authored`). Every dataset exports its `provenance`.
 - Kana IDs use the Hepburn reading; where two kana share a reading, the later one uses its Nihon-shiki spelling (ぢ → `di`, づ → `du`).
 - Romaji is Hepburn. `alternatives` lists every other spelling practice accepts, and nothing more: Kunrei-shiki and Nihon-shiki spellings where they differ, `o` for を, and `nn` for ん.
-- Kana are stored precomposed (NFC). Content is text: never HTML or Markdown to be rendered as markup.
+- Kana are stored precomposed (NFC); romaji and alternatives are lowercase ASCII letters, the form answers are compared in. A dataset change keeps `kana-dataset.test.ts` passing; never loosen a validation rule to admit a record.
+- Content is text: never HTML or Markdown to be rendered as markup.
 - Authored Japanese is reviewed by a fluent speaker before release; the pull request notes the review.

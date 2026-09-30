@@ -78,7 +78,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **Prerequisites:** 0.2. ADR 0006 (content licence) decided.
 
 - [x] Kana dataset in `src/lib/content/kana/`, authored for Onihayo: the 46 basic hiragana, 25 with dakuten/handakuten, and 33 yōon, each with a stable ID (e.g. `kana.hiragana.shi`), row, class, Hepburn romaji, and accepted alternatives (`si`, `tu`, …); every record marked `authored`.
-- [ ] Dataset validation tests: exact counts per class, unique IDs and characters, non-empty romaji, no duplicate alternatives, rows in gojūon order.
+- [x] Dataset validation tests: exact counts per class, unique IDs and characters, non-empty romaji, no duplicate alternatives, rows in gojūon order.
 - [ ] Answer normalization in `src/lib/learning/normalize.ts`: Unicode NFKC (full-width letters become ASCII), trim, lowercase; inner spaces kept.
 - [ ] Seedable random source in `src/lib/learning/random.ts` (small, well-known PRNG) with an interface the whole engine uses.
 - [ ] Practice session state machine in `src/lib/learning/session.ts`: asking → answered → next / finished; no immediate repeats when the pool has two or more items; records answers with timestamps from an injected clock.
