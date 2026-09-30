@@ -18,6 +18,11 @@ describe('privacy page', () => {
     expect(body).toContain('No scripts, fonts, images, or embeds from other websites.');
   });
 
+  it('says that practice answers stay in the browser', () => {
+    expect(body).toContain('your answers are checked in your browser');
+    expect(body).toContain('never sent to Onihayo or');
+  });
+
   it('says what error logs contain and what they leave out', () => {
     expect(body).toContain('it logs a random error ID and which kind of page failed');
     expect(body).toContain(

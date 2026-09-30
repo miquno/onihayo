@@ -86,6 +86,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Lesson practice page, linked from each lesson page as "Practise this lesson": see a hiragana, type its romaji, instant feedback; after a miss the correct answer is shown and announced via a polite live region; Enter submits and advances; a summary at the end (accuracy, missed characters).
 - [x] Hiragana chart page: all hiragana in a gojūon grid, marked up as a table with row and column headers, each character with `lang="ja"`.
 - [x] Home page "Start here" call to action leading to the first hiragana lesson.
+- [ ] Fluent-speaker review of the authored hiragana lesson notes, recorded in a pull request (**owner arranges the reviewer**).
 
 **Acceptance criteria:**
 
