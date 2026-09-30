@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { findLesson, lessonKana, lessonSlug, nextLesson } from './lessons';
+import {
+  findLesson,
+  lessonDetails,
+  lessonKana,
+  lessonSlug,
+  lessonSummaries,
+  nextLesson
+} from './lessons';
 import type { KanaLesson, KanaRecord } from './model';
 
 function lesson(id: KanaLesson['id'], rows: KanaLesson['rows']): KanaLesson {
@@ -67,5 +74,55 @@ describe('lessonKana', () => {
       'kana.hiragana.wo',
       'kana.hiragana.n'
     ]);
+  });
+});
+
+describe('lessonSummaries', () => {
+  it('lists every lesson with its slug, title, and characters', () => {
+    const records = [
+      { ...kana('kana.hiragana.a', 'a'), character: 'あ' },
+      { ...kana('kana.hiragana.ka', 'ka'), character: 'か' }
+    ];
+    expect(lessonSummaries([vowels, kRow], records)).toEqual([
+      { slug: 'a', title: 'lesson.hiragana.a', characters: ['あ'] },
+      { slug: 'ka', title: 'lesson.hiragana.ka', characters: ['か'] }
+    ]);
+  });
+});
+
+describe('lessonDetails', () => {
+  const marks = [
+    {
+      mark: 'ー',
+      name: 'Long vowel mark',
+      note: 'Note.',
+      examples: [{ word: 'ケーキ', romaji: 'kēki', meaning: 'cake' }]
+    }
+  ];
+  const kLesson: KanaLesson = {
+    ...lesson('lesson.katakana.ka', ['ka']),
+    kanaNotes: { 'kana.katakana.ki': 'A note.' },
+    marks
+  };
+  const records = [kana('kana.katakana.ka', 'ka'), kana('kana.katakana.ki', 'ka')];
+
+  it('gives position, kana with their notes, marks, and the next lesson', () => {
+    const details = lessonDetails([kLesson, wAndN], records, 'ka');
+    expect(details).toMatchObject({ slug: 'ka', number: 1, total: 2, rows: ['ka'], marks });
+    expect(details?.kana.map(({ id, note }) => [id, note])).toEqual([
+      ['kana.katakana.ka', undefined],
+      ['kana.katakana.ki', 'A note.']
+    ]);
+    expect(details?.next).toEqual({ slug: 'wa', title: 'lesson.hiragana.wa' });
+  });
+
+  it('has no marks and no next lesson where there are none', () => {
+    const details = lessonDetails(lessons, [], 'wa');
+    expect(details?.marks).toEqual([]);
+    expect(details?.next).toBeNull();
+  });
+
+  it('is undefined for an unknown slug', () => {
+    expect(lessonDetails(lessons, [], 'zz')).toBeUndefined();
   });
 });

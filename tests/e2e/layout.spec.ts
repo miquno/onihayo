@@ -43,6 +43,21 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
   },
   {
+    path: '/katakana',
+    title: 'Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana' }
+  },
+  {
+    path: '/katakana/ka',
+    title: 'K row — Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
+    path: '/katakana/wi',
+    title: 'Loanword sounds: w, sh, j, ch — Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
     path: '/quiz',
     title: 'Kana quiz — Onihayo',
     current: { navigation: 'Primary', link: 'Kana quiz' }
@@ -211,6 +226,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Onihayo',
     'Home',
     'Hiragana',
+    'Katakana',
     'Kana quiz',
     'About',
     'Start here: Vowels',

@@ -3,7 +3,9 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import Button from './Button.svelte';
 import Card from './Card.svelte';
+import KanaLesson from './KanaLesson.svelte';
 import KanaPractice from './KanaPractice.svelte';
+import LessonList from './LessonList.svelte';
 import LinkButton from './LinkButton.svelte';
 import ProgressBar from './ProgressBar.svelte';
 import VisuallyHidden from './VisuallyHidden.svelte';
@@ -146,6 +148,36 @@ describe('all components', () => {
           seed: 0,
           kanaName: 'kana',
           nextStep: text('g')
+        }
+      }).body,
+      render(LessonList, {
+        props: { lessons: [{ href: '/katakana/a', title: 'i', characters: ['ア'] }] }
+      }).body,
+      render(KanaLesson, {
+        props: {
+          lesson: {
+            slug: 'j',
+            number: 1,
+            total: 1,
+            title: 'k',
+            note: 'l',
+            rows: ['ka'],
+            kana: [{ id: 'm', character: 'カ', romaji: 'ka', note: 'n' }],
+            marks: [
+              {
+                mark: 'ー',
+                name: 'o',
+                note: 'p',
+                examples: [{ word: 'ケーキ', romaji: 'kēki', meaning: 'q' }]
+              }
+            ],
+            next: null
+          },
+          scriptName: 'Katakana',
+          practiceHref: '/quiz/practice',
+          next: null,
+          allLessonsHref: '/katakana',
+          finished: text('t')
         }
       }).body
     ];
