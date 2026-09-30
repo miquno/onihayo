@@ -1,5 +1,6 @@
 import { render } from 'svelte/server';
 import { describe, expect, it, vi } from 'vitest';
+import { withoutHydrationMarkers } from '$lib/testing/html';
 
 vi.mock('$app/paths', () => ({ resolve: (path: string) => path }));
 
@@ -8,7 +9,7 @@ import { load } from './+page';
 
 describe('hiragana chart page', () => {
   const { head, body } = render(ChartPage, { props: { data: load(), params: {} } });
-  const html = body.replace(/<!--[\s\S]*?-->/gu, '');
+  const html = withoutHydrationMarkers(body);
 
   it('has its own title and a single h1', () => {
     expect(head).toContain('<title>Hiragana chart — Onihayo</title>');
