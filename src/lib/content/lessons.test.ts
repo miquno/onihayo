@@ -102,9 +102,13 @@ describe('lessonDetails', () => {
   const kLesson: KanaLesson = {
     ...lesson('lesson.katakana.ka', ['ka']),
     kanaNotes: { 'kana.katakana.ki': 'A note.' },
-    marks
+    marks,
+    lookAlikes: [{ kana: ['kana.katakana.ka', 'kana.katakana.ki'], note: 'Look closely.' }]
   };
-  const records = [kana('kana.katakana.ka', 'ka'), kana('kana.katakana.ki', 'ka')];
+  const records = [
+    { ...kana('kana.katakana.ka', 'ka'), character: 'カ', romaji: 'ka' },
+    { ...kana('kana.katakana.ki', 'ka'), character: 'キ', romaji: 'ki' }
+  ];
 
   it('gives position, kana with their notes, marks, and the next lesson', () => {
     const details = lessonDetails([kLesson, wAndN], records, 'ka');
@@ -116,9 +120,22 @@ describe('lessonDetails', () => {
     expect(details?.next).toEqual({ slug: 'wa', title: 'lesson.hiragana.wa' });
   });
 
+  it('gives look-alikes with the characters and romaji of their kana', () => {
+    expect(lessonDetails([kLesson], records, 'ka')?.lookAlikes).toEqual([
+      {
+        kana: [
+          { character: 'カ', romaji: 'ka' },
+          { character: 'キ', romaji: 'ki' }
+        ],
+        note: 'Look closely.'
+      }
+    ]);
+  });
+
   it('has no marks and no next lesson where there are none', () => {
     const details = lessonDetails(lessons, [], 'wa');
     expect(details?.marks).toEqual([]);
+    expect(details?.lookAlikes).toEqual([]);
     expect(details?.next).toBeNull();
   });
 

@@ -171,6 +171,15 @@ describe('all components', () => {
                 examples: [{ word: 'ケーキ', romaji: 'kēki', meaning: 'q' }]
               }
             ],
+            lookAlikes: [
+              {
+                kana: [
+                  { character: 'シ', romaji: 'shi' },
+                  { character: 'ツ', romaji: 'tsu' }
+                ],
+                note: 'u'
+              }
+            ],
             next: null
           },
           scriptName: 'Katakana',

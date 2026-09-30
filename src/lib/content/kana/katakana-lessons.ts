@@ -11,7 +11,9 @@ import type { KanaLesson, Provenance } from '../model';
  * them in order teaches every katakana once. The K row also teaches the long
  * vowel mark ー and the T row the small ッ, each with example words that use
  * only katakana taught so far. Notes describe pronunciation for an
- * English-speaking beginner.
+ * English-speaking beginner. Look-alike notes tell apart katakana that are easy
+ * to confuse (シ and ツ, ソ and ン, …) in the lesson that teaches the last of
+ * them.
  */
 
 export const provenance: Provenance = {
@@ -42,6 +44,12 @@ export const katakanaLessons: readonly KanaLesson[] = [
         name: 'Long vowel mark',
         note: 'The long vowel mark ー holds the vowel before it for one more beat. Katakana words use it where hiragana would add a vowel kana. Romaji writes the long vowel with a line on top, like ē, or doubled, like ee.',
         examples: [{ word: 'ケーキ', romaji: 'kēki', meaning: 'cake' }]
+      }
+    ],
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.ku', 'kana.katakana.ke'],
+        note: 'ク is a short stroke and a line that runs along the top and bends down into a long tail. ケ has a flat line that sticks out to the right, and its long stroke hangs from the middle of that line.'
       }
     ],
     origin: 'authored'
@@ -76,6 +84,20 @@ export const katakanaLessons: readonly KanaLesson[] = [
         ]
       }
     ],
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.shi', 'kana.katakana.tsu'],
+        note: 'Both have two short strokes and a long one. In シ the short strokes lie flat, one above the other on the left, and the long stroke sweeps up from the bottom. In ツ the short strokes stand side by side along the top, and the long stroke falls from the top right.'
+      },
+      {
+        kana: ['kana.katakana.ku', 'kana.katakana.ta'],
+        note: 'タ is ク with one more short stroke inside.'
+      },
+      {
+        kana: ['kana.katakana.chi', 'kana.katakana.te'],
+        note: 'テ has two flat lines, one above the other, with a stroke hanging from the lower one. チ starts with a short sloping stroke at the top, and its long stroke crosses the flat line.'
+      }
+    ],
     origin: 'authored'
   },
   {
@@ -84,6 +106,12 @@ export const katakanaLessons: readonly KanaLesson[] = [
     rows: ['na'],
     note: 'Put an n sound before each vowel: na, ni, nu, ne, no.',
     kanaNotes: {},
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.su', 'kana.katakana.nu'],
+        note: 'Both start with a line across that turns down to the lower left. In ス the second stroke is short and goes from the middle out to the lower right. In ヌ the second stroke crosses the first, like an x.'
+      }
+    ],
     origin: 'authored'
   },
   {
@@ -103,6 +131,12 @@ export const katakanaLessons: readonly KanaLesson[] = [
     rows: ['ma'],
     note: 'Put an m sound before each vowel: ma, mi, mu, me, mo.',
     kanaNotes: {},
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.a', 'kana.katakana.ma'],
+        note: 'Both start with a line across that turns down. ア continues with a long stroke from the middle, curving down to the left. マ ends with a short stroke down to the right, under the first one.'
+      }
+    ],
     origin: 'authored'
   },
   {
@@ -111,6 +145,12 @@ export const katakanaLessons: readonly KanaLesson[] = [
     rows: ['ya'],
     note: 'Like its hiragana row, this row has only three kana: ya, yu, and yo.',
     kanaNotes: {},
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.ko', 'kana.katakana.yu'],
+        note: 'コ is a box open on the left, and its bottom line ends at the corner. In ユ the bottom line is longer and sticks out past the right side.'
+      }
+    ],
     origin: 'authored'
   },
   {
@@ -119,6 +159,12 @@ export const katakanaLessons: readonly KanaLesson[] = [
     rows: ['ra'],
     note: 'The same quick tap of the tongue as in hiragana. Loanwords use this row for both an English r and an English l.',
     kanaNotes: {},
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.ru', 'kana.katakana.re'],
+        note: 'レ is one stroke: down, then up to the right. ル has two: a short curve on the left and, beside it, a stroke like レ.'
+      }
+    ],
     origin: 'authored'
   },
   {
@@ -130,6 +176,16 @@ export const katakanaLessons: readonly KanaLesson[] = [
       'kana.katakana.wo':
         'Pronounced o. You will rarely see it: it appears almost only when a whole sentence is written in katakana.'
     },
+    lookAlikes: [
+      {
+        kana: ['kana.katakana.so', 'kana.katakana.n'],
+        note: 'In ソ the short stroke stands at the top, almost upright, and the long stroke comes down from the top right. In ン the short stroke lies flatter on the left, and the long stroke sweeps up from the bottom left, as in シ.'
+      },
+      {
+        kana: ['kana.katakana.u', 'kana.katakana.fu', 'kana.katakana.wa'],
+        note: 'ワ is a short line down on the left and a line across the top that bends down. ウ is ワ with a short stroke on top. フ has only the line across that bends down, with no short line on the left.'
+      }
+    ],
     origin: 'authored'
   },
   {

@@ -59,6 +59,11 @@ export interface LessonDetails {
     readonly note: string | undefined;
   }[];
   readonly marks: readonly MarkNote[];
+  /** Look-alike kana to tell apart, with their characters and romaji. */
+  readonly lookAlikes: readonly {
+    readonly kana: readonly { readonly character: string; readonly romaji: string }[];
+    readonly note: string;
+  }[];
   readonly next: { readonly slug: string; readonly title: string } | null;
 }
 
@@ -85,6 +90,13 @@ export function lessonDetails(
       note: lesson.kanaNotes[record.id]
     })),
     marks: lesson.marks ?? [],
+    lookAlikes: (lesson.lookAlikes ?? []).map(({ kana: ids, note }) => ({
+      kana: ids.flatMap((id) => {
+        const record = kana.find((candidate) => candidate.id === id);
+        return record === undefined ? [] : [{ character: record.character, romaji: record.romaji }];
+      }),
+      note
+    })),
     next: next === undefined ? null : { slug: lessonSlug(next), title: next.title }
   };
 }

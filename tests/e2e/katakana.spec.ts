@@ -46,8 +46,18 @@ test('keyboard-only learner reaches every katakana lesson in order', async ({ pa
       await page.keyboard.press('Enter');
     }
   }
-  // The long vowel mark and the small ッ are each taught once, along the way.
-  expect(marks).toEqual(['K row: ー Long vowel mark', 'T row: ッ Small tsu']);
+  // Look-alikes and the marks ー and ッ come up along the way, where they are taught.
+  expect(marks).toEqual([
+    'K row: Easy to mix up',
+    'K row: ー Long vowel mark',
+    'T row: Easy to mix up',
+    'T row: ッ Small tsu',
+    'N row: Easy to mix up',
+    'M row: Easy to mix up',
+    'Y row: Easy to mix up',
+    'R row: Easy to mix up',
+    'W row and n: Easy to mix up'
+  ]);
 
   await page.getByRole('link', { name: 'All katakana lessons' }).focus();
   await page.keyboard.press('Enter');
@@ -62,6 +72,12 @@ test('lesson pages mark every kana and example word as Japanese', async ({ page 
     'ツ',
     'テ',
     'ト',
+    'シ',
+    'ツ',
+    'ク',
+    'タ',
+    'チ',
+    'テ',
     'ッ',
     'セット',
     'ソックス'
@@ -71,6 +87,16 @@ test('lesson pages mark every kana and example word as Japanese', async ({ page 
     'セット setto, “set”',
     'ソックス sokkusu, “socks”'
   ]);
+});
+
+test('the lesson that teaches ツ tells it apart from シ', async ({ page }) => {
+  await page.goto('/katakana/ta');
+  const section = page.getByRole('region', { name: 'Easy to mix up' });
+  await expect(section.getByRole('listitem')).toHaveCount(3);
+  await expect(section.getByRole('listitem').first()).toContainText('シ shi ツ tsu');
+  await expect(section.getByRole('listitem').first()).toContainText(
+    'In ツ the short strokes stand side by side along the top'
+  );
 });
 
 test('an unknown katakana lesson shows the friendly 404 page', async ({ page }) => {
