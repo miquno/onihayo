@@ -6,6 +6,7 @@ import Card from './Card.svelte';
 import { kanaChart } from '$lib/content/chart';
 import { katakana } from '$lib/content/kana/katakana';
 import type { KanaClass } from '$lib/content/model';
+import type { PracticeItem } from '$lib/learning/practice-item';
 import KanaCharts from './KanaCharts.svelte';
 import KanaLesson from './KanaLesson.svelte';
 import KanaPractice from './KanaPractice.svelte';
@@ -14,6 +15,19 @@ import LessonPractice from './LessonPractice.svelte';
 import LinkButton from './LinkButton.svelte';
 import ProgressBar from './ProgressBar.svelte';
 import VisuallyHidden from './VisuallyHidden.svelte';
+
+/** A practice item with a Japanese prompt and one accepted answer. */
+function practiceItem(id: string, prompt: string, answer: string): PracticeItem {
+  return {
+    id,
+    prompt,
+    promptLang: 'ja',
+    answer,
+    answerLang: null,
+    accepted: [answer],
+    choices: { group: 'test', preferred: [] }
+  };
+}
 
 const text = (value: string) => createRawSnippet(() => ({ render: () => `<span>${value}</span>` }));
 
@@ -112,12 +126,12 @@ describe('VisuallyHidden', () => {
 });
 
 describe('KanaPractice', () => {
-  const kana = [
-    { id: 'kana.katakana.a', character: 'ア', romaji: 'a', accepted: ['a'] },
-    { id: 'kana.katakana.shi', character: 'シ', romaji: 'shi', accepted: ['shi', 'si'] }
+  const items = [
+    practiceItem('kana.katakana.a', 'ア', 'a'),
+    practiceItem('kana.katakana.shi', 'シ', 'shi')
   ];
   const { body } = render(KanaPractice, {
-    props: { kana, questionCount: 4, seed: 1, kanaName: 'katakana', nextStep: text('Next') }
+    props: { items, questionCount: 4, seed: 1, kanaName: 'katakana', nextStep: text('Next') }
   });
 
   it('names the kind of kana in the instructions and the field label', () => {
@@ -148,7 +162,7 @@ describe('all components', () => {
       render(VisuallyHidden, { props: { children: text('e') } }).body,
       render(KanaPractice, {
         props: {
-          kana: [{ id: 'f', character: 'ア', romaji: 'a', accepted: ['a'] }],
+          items: [practiceItem('f', 'ア', 'a')],
           questionCount: 1,
           seed: 0,
           kanaName: 'kana',
@@ -199,7 +213,7 @@ describe('all components', () => {
           practice: {
             slug: 'v',
             title: 'w',
-            kana: [{ id: 'x', character: 'ア', romaji: 'a', accepted: ['a'] }],
+            items: [practiceItem('x', 'ア', 'a')],
             questionCount: 1,
             seed: 0,
             next: null

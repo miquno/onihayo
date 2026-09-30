@@ -10,17 +10,17 @@
 </script>
 
 <svelte:head>
-  <title>{pageTitle(`Kana quiz: ${String(data.kana.length)} kana`)}</title>
+  <title>{pageTitle(`Kana quiz: ${String(data.items.length)} kana`)}</title>
 </svelte:head>
 
-<h1>Kana quiz: {data.kana.length} kana</h1>
+<h1>Kana quiz: {data.items.length} kana</h1>
 
 <noscript>
   <p class="instructions">The quiz needs JavaScript. The lessons and charts work without it.</p>
 </noscript>
 
 <KanaPractice
-  kana={data.kana}
+  items={data.items}
   questionCount={data.questionCount}
   seed={data.seed}
   kanaName={data.kanaName}

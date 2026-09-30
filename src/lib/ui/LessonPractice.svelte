@@ -26,7 +26,7 @@
 </noscript>
 
 <KanaPractice
-  kana={practice.kana}
+  items={practice.items}
   questionCount={practice.questionCount}
   seed={practice.seed}
   {kanaName}

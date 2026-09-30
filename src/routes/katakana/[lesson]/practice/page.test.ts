@@ -25,10 +25,9 @@ describe('katakana practice load', () => {
   it('practises every kana of the lesson twice, accepting the romaji and every alternative', () => {
     const data = loadPractice('ti', '?seed=42');
     expect(data).toMatchObject({ slug: 'ti', questionCount: 12, seed: 42 });
-    expect(data.kana.find((kana) => kana.character === 'ティ')).toEqual({
+    expect(data.items.find((item) => item.prompt === 'ティ')).toMatchObject({
       id: 'kana.katakana.ti',
-      character: 'ティ',
-      romaji: 'ti',
+      answer: 'ti',
       accepted: ['ti', 'thi']
     });
     expect(data.next).toEqual({ slug: 'wi', title: 'Loanword sounds: w, sh, j, ch' });
