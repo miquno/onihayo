@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { hiragana } from '$lib/content/kana/hiragana';
+import { katakana } from '$lib/content/kana/katakana';
 import { normalizeAnswer } from './normalize';
 
 describe('normalizeAnswer', () => {
@@ -56,7 +57,7 @@ describe('normalizeAnswer', () => {
   });
 
   it('leaves every stored kana, romaji, and alternative unchanged, so typed answers can match them', () => {
-    for (const record of hiragana) {
+    for (const record of [...hiragana, ...katakana]) {
       for (const stored of [record.character, record.romaji, ...record.alternatives]) {
         expect(normalizeAnswer(stored)).toBe(stored);
       }
