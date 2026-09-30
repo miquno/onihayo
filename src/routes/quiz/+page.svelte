@@ -17,7 +17,8 @@
   const groupTitles: Record<KanaClass, string> = {
     basic: 'Basic',
     dakuten: 'Dakuten and handakuten',
-    yoon: 'Combined sounds'
+    yoon: 'Combined sounds',
+    extended: 'Loanword sounds'
   };
 
   // The chosen row keys. Starts from the page data; every checkbox writes it.
