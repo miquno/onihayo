@@ -82,8 +82,8 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Answer normalization in `src/lib/learning/normalize.ts`: Unicode NFKC (full-width letters become ASCII), trim, lowercase; inner spaces kept.
 - [x] Seedable random source in `src/lib/learning/random.ts` (small, well-known PRNG) with an interface the whole engine uses.
 - [x] Practice session state machine in `src/lib/learning/session.ts`: asking → answered → next / finished; no immediate repeats when the pool has two or more items; records answers with timestamps from an injected clock.
-- [ ] Hiragana lesson pages: lesson list, per-lesson page showing each character large, its romaji, and an authored note; "Practise this lesson" and "Next lesson" links.
-- [ ] Lesson practice page: see a hiragana, type its romaji, instant feedback; after a miss the correct answer is shown and announced via a polite live region; Enter submits and advances; a summary at the end (accuracy, missed characters).
+- [x] Hiragana lesson pages: lesson list, per-lesson page showing each character large, its romaji, and an authored pronunciation note (per lesson, plus per character where it sounds different from its romaji); "Next lesson" link.
+- [ ] Lesson practice page, linked from each lesson page as "Practise this lesson": see a hiragana, type its romaji, instant feedback; after a miss the correct answer is shown and announced via a polite live region; Enter submits and advances; a summary at the end (accuracy, missed characters).
 - [ ] Hiragana chart page: all hiragana in a gojūon grid, marked up as a table with row and column headers, each character with `lang="ja"`.
 - [ ] Home page "Start here" call to action leading to the first hiragana lesson.
 
