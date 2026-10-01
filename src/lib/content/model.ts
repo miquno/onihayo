@@ -15,6 +15,9 @@ export interface Provenance {
   readonly licence: string;
 }
 
+/** The two kana scripts. Both spell the same sounds; an item ID names its script. */
+export type KanaScript = 'hiragana' | 'katakana';
+
 /**
  * Kana classes: the basic gojūon characters, those with dakuten or handakuten
  * (が, ぱ, …), and yōon combinations with a small ゃ, ゅ, or ょ (きゃ, …).
@@ -59,9 +62,12 @@ export type KanaRow = (typeof kanaRows)[number];
 
 /** One kana as a learning item. */
 export interface KanaRecord {
-  /** Stable item ID, `kana.hiragana.<sound>`. Never renamed or reused: progress refers to it. */
-  readonly id: `kana.hiragana.${string}`;
-  /** The kana itself, precomposed (NFC): が is one code point. */
+  /**
+   * Stable item ID, `kana.<script>.<sound>` (`kana.hiragana.shi`, `kana.katakana.shi`).
+   * Never renamed or reused: progress refers to it.
+   */
+  readonly id: `kana.${KanaScript}.${string}`;
+  /** The kana itself, precomposed (NFC): が and ガ are one code point each. */
   readonly character: string;
   readonly row: KanaRow;
   readonly class: KanaClass;

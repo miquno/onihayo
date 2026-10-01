@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { hiragana } from './kana/hiragana';
-import { kanaRows, type KanaClass, type KanaRecord } from './model';
+import { katakana } from './kana/katakana';
+import { kanaRows, type KanaClass, type KanaRecord, type KanaScript } from './model';
 
 /*
  * Dataset validation (D): structural rules every kana record must satisfy, so
  * that lessons, practice, and progress can rely on them. What the data says
- * (the inventory and its readings) is checked in hiragana.test.ts.
+ * (the inventory and its readings) is checked in hiragana.test.ts and
+ * katakana.test.ts.
  */
 
 function duplicates(values: readonly string[]): string[] {
@@ -13,9 +15,27 @@ function duplicates(values: readonly string[]): string[] {
 }
 
 const classOrder: readonly KanaClass[] = ['basic', 'dakuten', 'yoon'];
-const records: readonly KanaRecord[] = hiragana;
 
-describe('kana dataset validation', () => {
+/** Per script: the dataset, one precomposed kana, and one kana followed by a small ya/yu/yo. */
+const datasets: readonly {
+  script: KanaScript;
+  records: readonly KanaRecord[];
+  single: RegExp;
+  yoon: RegExp;
+}[] = [
+  { script: 'hiragana', records: hiragana, single: /^[ぁ-ゖ]$/u, yoon: /^[ぁ-ゖ][ゃゅょ]$/u },
+  { script: 'katakana', records: katakana, single: /^[ァ-ヶ]$/u, yoon: /^[ァ-ヶ][ャュョ]$/u }
+];
+
+describe('kana datasets together', () => {
+  it('share no IDs or characters', () => {
+    const all = datasets.flatMap(({ records }) => records);
+    expect(duplicates(all.map((kana) => kana.id))).toEqual([]);
+    expect(duplicates(all.map((kana) => kana.character))).toEqual([]);
+  });
+});
+
+describe.each(datasets)('$script dataset validation', ({ script, records, single, yoon }) => {
   it('has exact counts per class', () => {
     const counts = Object.fromEntries(
       classOrder.map((kanaClass) => [
@@ -27,18 +47,18 @@ describe('kana dataset validation', () => {
     expect(records).toHaveLength(104);
   });
 
-  it('has unique IDs of the form kana.hiragana.<sound>', () => {
+  it(`has unique IDs of the form kana.${script}.<sound>`, () => {
     const ids = records.map((kana) => kana.id);
     expect(duplicates(ids)).toEqual([]);
-    for (const id of ids) expect(id).toMatch(/^kana\.hiragana\.[a-z]+$/);
+    for (const id of ids) expect(id).toMatch(new RegExp(`^kana\\.${script}\\.[a-z]+$`));
   });
 
-  it('has unique characters, each a precomposed hiragana or hiragana + small ya/yu/yo', () => {
+  it(`has unique characters, each a precomposed ${script} or ${script} + small ya/yu/yo`, () => {
     const characters = records.map((kana) => kana.character);
     expect(duplicates(characters)).toEqual([]);
     for (const kana of records) {
       expect(kana.character).toBe(kana.character.normalize('NFC'));
-      const pattern = kana.class === 'yoon' ? /^[ぁ-ゖ][ゃゅょ]$/u : /^[ぁ-ゖ]$/u;
+      const pattern = kana.class === 'yoon' ? yoon : single;
       expect(kana.character, kana.id).toMatch(pattern);
     }
   });

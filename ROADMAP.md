@@ -106,7 +106,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** katakana lessons, practice, and chart; mixed hiragana/katakana practice.
 **Prerequisites:** 0.3.
 
-- [ ] Katakana characters added to the kana dataset for all 104 sounds, with IDs `kana.katakana.<sound>`.
+- [x] Katakana characters added to the kana dataset for all 104 sounds, with IDs `kana.katakana.<sound>`.
 - [ ] Extended katakana needed by N5 loanwords as a separate class (ティ, ディ, ファ, フィ, フェ, フォ, ウィ, ウェ, ウォ, シェ, ジェ, チェ) with validation tests.
 - [ ] Katakana lessons with authored notes, including the long-vowel mark ー and small ッ.
 - [ ] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
