@@ -139,14 +139,19 @@ describe('kana quiz practice page', () => {
     );
     expect(page).toContain('Choose the katakana for each romaji.');
     expect(page).toMatch(
-      /<div class="options[^"]*" role="group" aria-labelledby="choice-label" aria-describedby="prompt">/u
+      /<div class="options[^"]*" role="group" aria-labelledby="choice-label" aria-describedby="prompt choice-hint">/u
     );
     expect(page).toMatch(/<p class="label[^"]*" id="choice-label">Katakana for this romaji<\/p>/u);
+    expect(page).toMatch(/<p class="hint[^"]*" id="choice-hint">\s*Press a number to choose/u);
+    // Each option: its number key for screen readers, the number shown, then the kana.
     const options = [
       ...page.matchAll(
-        /<button type="button" id="option-(\d)" class="option[^"]*">\s*<span lang="ja">([^<]+)<\/span>/gu
+        /<button type="button" id="option-(\d)" class="option[^"]*" aria-keyshortcuts="(\d)">\s*<span class="option-number[^"]*" aria-hidden="true">(\d)<\/span>\s*<span lang="ja">([^<]+)<\/span>/gu
       )
-    ].map(([, index, text]) => `${index ?? ''}:${text ?? ''}`);
+    ].map(([, index, shortcut, shown, text]) => {
+      expect([shortcut, shown]).toEqual([String(Number(index) + 1), String(Number(index) + 1)]);
+      return `${index ?? ''}:${text ?? ''}`;
+    });
     expect(options).toHaveLength(4);
     expect(options.map((option) => option.slice(0, 1))).toEqual(['0', '1', '2', '3']);
     for (const option of options) expect(option.slice(2)).toMatch(/^[ァ-ヶ][ャュョァィゥェォ]?$/u);

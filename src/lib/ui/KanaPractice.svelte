@@ -19,6 +19,7 @@
   import ProgressBar from './ProgressBar.svelte';
   import VisuallyHidden from './VisuallyHidden.svelte';
   import type { PracticeItem } from '$lib/learning/practice-item';
+  import { choiceKeyAction, optionShortcut } from './choice-keys';
   import { ignoreNextSubmit, imeKeydown, type ImeEvent } from './ime';
   import {
     answerLabel,
@@ -135,6 +136,19 @@
     document.getElementById('next-question')?.focus();
   }
 
+  /** Number keys choose, arrow keys and Home/End move between the options (see choice-keys.ts). */
+  function handleOptionKey(event: KeyboardEvent, index: number) {
+    const action = choiceKeyAction(event, index, options.length);
+    if (action === undefined) return;
+    event.preventDefault();
+    if (action.type === 'focus') {
+      document.getElementById(`option-${String(action.index)}`)?.focus();
+    } else {
+      const option = options[action.index];
+      if (option !== undefined) void choose(option.text);
+    }
+  }
+
   async function finish() {
     session = finishSession(session);
     await tick();
@@ -167,7 +181,15 @@
     <p class="character" id="prompt" lang={current.shown.lang}>{current.shown.text}</p>
     {#if mode.input === 'choose'}
       <p class="label" id="choice-label">{answerLabel(current)}</p>
-      <div class="options" role="group" aria-labelledby="choice-label" aria-describedby="prompt">
+      <p class="hint" id="choice-hint">
+        Press a number to choose, or move with the arrow keys and press Enter.
+      </p>
+      <div
+        class="options"
+        role="group"
+        aria-labelledby="choice-label"
+        aria-describedby="prompt choice-hint"
+      >
         {#each options as option, index (option.itemId)}
           {@const key = normalizeAnswer(option.text)}
           {@const correct = current.accepted.includes(key)}
@@ -181,8 +203,14 @@
               answered?.given === key && 'chosen'
             ]}
             disabled={answered !== undefined}
+            aria-keyshortcuts={optionShortcut(index)}
             onclick={() => choose(option.text)}
+            onkeydown={(event) => {
+              handleOptionKey(event, index);
+            }}
           >
+            <!-- The number is the key to press; `aria-keyshortcuts` tells screen readers. -->
+            <span class="option-number" aria-hidden="true">{index + 1}</span>
             <span lang={option.lang}>{option.text}</span>
             {#if answered && correct}
               <VisuallyHidden>(correct answer)</VisuallyHidden>
@@ -314,6 +342,12 @@
     font-weight: var(--font-weight-semibold);
   }
 
+  .hint {
+    margin: 0 0 var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
   .options {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
@@ -322,6 +356,10 @@
   }
 
   .option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
     padding: var(--space-3);
     font: inherit;
     font-size: var(--font-size-xl);
@@ -331,6 +369,12 @@
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-md);
     cursor: pointer;
+  }
+
+  .option-number {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
   }
 
   .option:hover:not(:disabled) {
