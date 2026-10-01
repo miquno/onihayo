@@ -120,7 +120,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 ---
 
-## 0.5 — Shared practice engine
+## 0.5 — Shared practice engine ✅
 
 **Goal:** one practice engine with several question modes that any content type can use.
 **User-visible result:** a practice setup page where learners pick kana sets and a mode — type the reading, choose the reading, choose the character, or type the kana — with results and "retry mistakes".
@@ -132,7 +132,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Type-the-kana mode: the prompt shows romaji and the learner types kana with their OS input method; Enter during IME composition never submits; answers compared after NFKC normalization.
 - [x] Practice setup page: choose scripts, lessons/rows, mode, and length (10, 20, 50, endless); selection count always visible; starting with nothing selected is prevented with an explanation.
 - [x] Choice keyboard support: number keys 1–4 select options; arrow keys move between options; focus management after each question.
-- [ ] Results: accuracy, time, missed items ordered by misses; "Practise again" and "Retry mistakes".
+- [x] Results: accuracy, time, missed items ordered by misses; "Practise again" and "Retry mistakes".
 
 **Acceptance criteria:** every mode is fully keyboard operable and screen-reader announced; the engine has no kana-specific code outside the kana adapter.
 **Required tests:** U (each mode, distractor rules incl. small pools, IME composition guard as pure logic, results maths), E + A (setup → session → results in two modes).

@@ -73,7 +73,8 @@ describe('hiragana practice page', () => {
     const session = startSession({
       items: data.items.map(({ id, accepted }) => ({ id, accepted })),
       questionCount: data.questionCount,
-      random: createSeededRandom(7)
+      random: createSeededRandom(7),
+      clock: () => 0
     });
     const first = data.items.find((item) => item.id === currentItem(session)?.id);
     expect(html).toMatch(

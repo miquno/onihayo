@@ -28,7 +28,7 @@ function ticking(start = 1_000_000): Clock {
 }
 
 function start(questionCount: number, seed = 1, items = pool): PracticeSession {
-  return startSession({ items, questionCount, random: createSeededRandom(seed) });
+  return startSession({ items, questionCount, random: createSeededRandom(seed), clock: () => 0 });
 }
 
 function askedIds(session: PracticeSession): string[] {
@@ -58,7 +58,13 @@ describe('startSession', () => {
     expect(session.phase).toBe('asking');
     expect(currentItem(session)).toBe(session.items[session.order[0] ?? -1]);
     expect(questionProgress(session)).toEqual({ current: 1, total: 6 });
-    expect(summarize(session)).toEqual({ answered: 0, correct: 0, accuracy: 0, missed: [] });
+    expect(summarize(session)).toEqual({
+      answered: 0,
+      correct: 0,
+      accuracy: 0,
+      missed: [],
+      durationMs: 0
+    });
   });
 
   it('asks exactly the requested number of questions', () => {
@@ -111,18 +117,19 @@ describe('startSession', () => {
 
   it('rejects an empty pool, duplicate IDs, missing or blank accepted answers, and bad question counts', () => {
     const random = createSeededRandom(1);
+    const clock = ticking();
     const first = pool[0] as SessionItem;
-    expect(() => startSession({ items: [], questionCount: 1, random })).toThrow(RangeError);
-    expect(() => startSession({ items: [first, first], questionCount: 1, random })).toThrow(
+    expect(() => startSession({ items: [], questionCount: 1, random, clock })).toThrow(RangeError);
+    expect(() => startSession({ items: [first, first], questionCount: 1, random, clock })).toThrow(
       RangeError
     );
     for (const accepted of [[], [' '], ['shi', '']]) {
       expect(() =>
-        startSession({ items: [{ id: 'x', accepted }], questionCount: 1, random })
+        startSession({ items: [{ id: 'x', accepted }], questionCount: 1, random, clock })
       ).toThrow(RangeError);
     }
     for (const questionCount of [0, -1, 1.5, Number.NaN]) {
-      expect(() => startSession({ items: pool, questionCount, random })).toThrow(RangeError);
+      expect(() => startSession({ items: pool, questionCount, random, clock })).toThrow(RangeError);
     }
   });
 });
@@ -211,6 +218,60 @@ describe('nextQuestion', () => {
   });
 });
 
+describe('session time', () => {
+  it('records the start once, from the injected clock', () => {
+    const session = startSession({
+      items: pool,
+      questionCount: 3,
+      random: createSeededRandom(1),
+      clock: ticking(5000)
+    });
+    expect(session.startedAt).toBe(6000);
+    expect(nextQuestion(submitAnswer(session, 'a', ticking())).startedAt).toBe(6000);
+  });
+
+  it('measures the duration from the start to the last answer', () => {
+    const clock = ticking(0);
+    let session = startSession({
+      items: pool,
+      questionCount: 3,
+      random: createSeededRandom(1),
+      clock
+    });
+    expect(summarize(session).durationMs).toBe(0);
+    // The clock advances a second per reading: started at 1 s, answers at 2 s, 3 s, and 4 s.
+    for (let question = 0; question < 3; question++) {
+      session = nextQuestion(submitAnswer(session, 'a', clock));
+    }
+    expect(session.phase).toBe('finished');
+    expect(summarize(session).durationMs).toBe(3000);
+  });
+
+  it('does not count time after the last answer, e.g. before an endless session is finished', () => {
+    const clock = ticking(0);
+    let session = startSession({
+      items: pool,
+      questionCount: 1000,
+      random: createSeededRandom(1),
+      clock
+    });
+    session = nextQuestion(submitAnswer(session, 'a', clock));
+    clock();
+    clock();
+    expect(summarize(finishSession(session)).durationMs).toBe(1000);
+  });
+
+  it('never reports a negative duration when the clock goes backwards', () => {
+    const session = startSession({
+      items: pool,
+      questionCount: 1,
+      random: createSeededRandom(1),
+      clock: () => 10_000
+    });
+    expect(summarize(submitAnswer(session, 'a', () => 4000)).durationMs).toBe(0);
+  });
+});
+
 describe('finishSession', () => {
   it('ends a session while a question is being asked, counting only what was answered', () => {
     let session = start(1000);
@@ -235,7 +296,8 @@ describe('finishSession', () => {
       answered: 0,
       correct: 0,
       accuracy: 0,
-      missed: []
+      missed: [],
+      durationMs: 0
     });
   });
 
@@ -253,7 +315,9 @@ describe('summarize', () => {
       answered: 6,
       correct: 6,
       accuracy: 1,
-      missed: []
+      missed: [],
+      // Started at 0; the sixth answer comes at 1 006 000 on the ticking clock.
+      durationMs: 1_006_000
     });
   });
 

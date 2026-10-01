@@ -23,12 +23,14 @@
   import { ignoreNextSubmit, imeKeydown, type ImeEvent } from './ime';
   import {
     answerLabel,
+    durationText,
     instructionsText,
     missedItems,
     missesText,
     optionSeed,
     randomSeed,
-    resultText
+    resultText,
+    retryRounds
   } from './practice';
 
   // See one side of an item and type the other, or choose it from options;
@@ -62,18 +64,27 @@
     moreLinks
   }: Props = $props();
 
-  function newSession(sessionSeed: number) {
-    return startSession({
-      items: sessionItems(mode, items),
-      questionCount,
-      random: createSeededRandom(sessionSeed)
-    });
+  /** What one session practises: all items, or only the mistakes of the session before. */
+  interface Run {
+    readonly items: readonly PracticeItem[];
+    readonly questionCount: number;
+    readonly endless: boolean;
+    readonly seed: number;
   }
 
-  // Re-derived when the props change (another lesson or selection); reassigned
-  // by every answer and by "Practise again".
-  let session = $derived(newSession(seed));
-  let activeSeed = $derived(seed);
+  // The run follows the props (another lesson or selection) until "Practise
+  // again" or "Retry mistakes" starts another one.
+  let run = $derived<Run>({ items, questionCount, endless, seed });
+
+  // A new session for every run; reassigned by every answer.
+  let session = $derived(
+    startSession({
+      items: sessionItems(mode, run.items),
+      questionCount: run.questionCount,
+      random: createSeededRandom(run.seed),
+      clock: Date.now
+    })
+  );
   let answer = $state('');
   let blankSubmitted = $state(false);
   let input: HTMLInputElement | undefined = $state();
@@ -85,7 +96,8 @@
   const answered = $derived(lastAnswer(session));
   const progress = $derived(questionProgress(session));
   const summary = $derived(summarize(session));
-  const instructions = $derived(instructionsText(items.map((item) => question(mode, item))));
+  const instructions = $derived(instructionsText(run.items.map((item) => question(mode, item))));
+  const missed = $derived(missedItems(summary, items));
   // The same seed and position always give the same options in the same order.
   const options = $derived(
     mode.input === 'choose' && currentPracticeItem
@@ -93,7 +105,7 @@
           mode,
           currentPracticeItem,
           pool ?? items,
-          createSeededRandom(optionSeed(activeSeed, session.position))
+          createSeededRandom(optionSeed(run.seed, session.position))
         )
       : []
   );
@@ -155,9 +167,24 @@
     resultsHeading?.focus();
   }
 
+  /** The whole practice again, in a new order. */
   async function practiseAgain() {
-    activeSeed = randomSeed();
-    session = newSession(activeSeed);
+    await startRun({ items, questionCount, endless, seed: randomSeed() });
+  }
+
+  /** Only the items missed in the session just finished, each asked `retryRounds` times. */
+  async function retryMistakes() {
+    const mistakes = missed.map(({ item }) => item);
+    await startRun({
+      items: mistakes,
+      questionCount: mistakes.length * retryRounds,
+      endless: false,
+      seed: randomSeed()
+    });
+  }
+
+  async function startRun(next: Run) {
+    run = next;
     answer = '';
     blankSubmitted = false;
     await tick();
@@ -168,7 +195,7 @@
 {#if session.phase !== 'finished' && current}
   <p class="instructions">{instructions}</p>
 
-  {#if endless}
+  {#if run.endless}
     <p class="endless">
       <span>Question {progress.current}</span>
       <Button variant="secondary" onclick={finish}>Finish</Button>
@@ -273,7 +300,7 @@
       <p>Type the {current.solution.name} first, then press Enter.</p>
     {:else if session.position > 0}
       <VisuallyHidden>
-        Question {progress.current}{endless ? '' : ` of ${String(progress.total)}`}:
+        Question {progress.current}{run.endless ? '' : ` of ${String(progress.total)}`}:
         <span lang={current.shown.lang}>{current.shown.text}</span>
       </VisuallyHidden>
     {/if}
@@ -281,10 +308,11 @@
 {:else}
   <h2 tabindex="-1" bind:this={resultsHeading}>Results</h2>
   <p class="result">{resultText(summary)}</p>
+  <p>Time: {durationText(summary.durationMs)}.</p>
   {#if summary.missed.length > 0}
     <p>Characters to look at again:</p>
     <ul class="missed">
-      {#each missedItems(summary, items) as { item, misses } (item.id)}
+      {#each missed as { item, misses } (item.id)}
         <li>
           <span class="missed-prompt" lang={item.promptLang}>{item.prompt}</span>
           <span lang={item.answerLang}>{item.answer}</span>, {missesText(misses)}
@@ -297,6 +325,9 @@
 
   <nav class="actions" aria-label="Next steps">
     {@render nextStep()}
+    {#if missed.length > 0}
+      <Button variant="secondary" onclick={retryMistakes}>Retry mistakes</Button>
+    {/if}
     <Button variant="secondary" onclick={practiseAgain}>Practise again</Button>
     {@render moreLinks?.()}
   </nav>

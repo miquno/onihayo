@@ -443,3 +443,101 @@ test('options are chosen with number keys and reached with arrow keys', async ({
   await expect(page.getByRole('heading', { level: 2, name: 'Results' })).toBeFocused();
   await expect(page.getByText('You answered 9 of 10 correctly (90 %).')).toBeVisible();
 });
+
+// Results: accuracy, time, missed items ordered by misses, and a retry of
+// only the mistakes.
+test('results show the time and the mistakes, and "Retry mistakes" practises only those', async ({
+  page
+}) => {
+  await page.goto('/quiz/practice?rows=hiragana.a&length=10&seed=7');
+  const input = page.getByLabel('Romaji for this hiragana');
+  const prompt = page.locator('#prompt');
+  const romajiFor = new Map(hiragana.map((kana) => [kana.character, kana.romaji]));
+
+  // あ is missed every time it comes up (twice in ten questions), い once.
+  let missedI = false;
+  for (let question = 1; question <= 10; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 10`
+    );
+    const character = (await prompt.textContent()) ?? '';
+    const miss = character === 'あ' || (character === 'い' && !missedI);
+    if (character === 'い') missedI = true;
+    await input.fill(miss ? 'x' : (romajiFor.get(character) ?? ''));
+    await input.press('Enter');
+    await input.press('Enter');
+  }
+
+  const results = page.getByRole('heading', { level: 2, name: 'Results' });
+  await expect(results).toBeFocused();
+  await expect(page.getByText('You answered 7 of 10 correctly (70 %).')).toBeVisible();
+  await expect(page.getByText(/^Time: \d+ seconds?\.$/u)).toBeVisible();
+  // Most misses first.
+  await expect(page.getByRole('main').getByRole('listitem')).toHaveText([
+    'あ a, missed 2 times',
+    'い i, missed once'
+  ]);
+
+  // Retry only the two missed kana, twice each, in the same mode.
+  await page.getByRole('button', { name: 'Retry mistakes' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(input).toBeFocused();
+  const retried = new Set<string>();
+  for (let question = 1; question <= 4; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 4`
+    );
+    const character = (await prompt.textContent()) ?? '';
+    retried.add(character);
+    await input.fill(romajiFor.get(character) ?? '');
+    await input.press('Enter');
+    await expect(page.getByRole('status')).toContainText('Correct.');
+    await input.press('Enter');
+  }
+  expect(retried).toEqual(new Set(['あ', 'い']));
+  await expect(results).toBeFocused();
+  await expect(page.getByText('You answered 4 of 4 correctly (100 %).')).toBeVisible();
+  await expect(page.getByText('No mistakes.')).toBeVisible();
+  // Nothing left to retry; "Practise again" brings back the whole selection.
+  await expect(page.getByRole('button', { name: 'Retry mistakes' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Practise again' }).click();
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
+});
+
+test('mistakes of a choice quiz are retried with options, and of an endless one with an end', async ({
+  page
+}) => {
+  await page.goto(
+    '/quiz/practice?rows=katakana.sa&mode=choose-the-character&length=endless&seed=5'
+  );
+  const options = page.getByRole('group', { name: 'Katakana for this romaji' }).getByRole('button');
+  const katakanaFor = new Map(katakana.map((kana) => [kana.romaji, kana.character]));
+  const texts = async () =>
+    (await options.locator('[lang="ja"]').allTextContents()).map((text) => text.trim());
+
+  // One wrong choice, then finish the endless quiz.
+  const reading = (await page.locator('#prompt').textContent()) ?? '';
+  const right = katakanaFor.get(reading) ?? '';
+  const wrong = (await texts()).find((text) => text !== right) ?? '';
+  await options.filter({ hasText: wrong }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'Finish' }).click();
+  await expect(page.getByText('You answered 0 of 1 correctly (0 %).')).toBeVisible();
+
+  // The retry asks only that kana, twice, with a progress bar and four options.
+  await page.getByRole('button', { name: 'Retry mistakes' }).click();
+  await expect(page.getByRole('button', { name: 'Finish' })).toHaveCount(0);
+  for (let question = 1; question <= 2; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 2`
+    );
+    await expect(page.locator('#prompt')).toHaveText(reading);
+    expect(await texts()).toHaveLength(4);
+    await options.filter({ hasText: right }).click();
+    await page.getByRole('button', { name: 'Next' }).click();
+  }
+  await expect(page.getByText('You answered 2 of 2 correctly (100 %).')).toBeVisible();
+});

@@ -37,6 +37,8 @@ export interface PracticeSession {
   /** Index into `order` of the current question; `order.length` once finished. */
   readonly position: number;
   readonly answers: readonly AnswerRecord[];
+  /** When the session started, from the injected clock. */
+  readonly startedAt: number;
 }
 
 export interface SessionOptions {
@@ -45,6 +47,8 @@ export interface SessionOptions {
   /** How many questions to ask. */
   readonly questionCount: number;
   readonly random: RandomSource;
+  /** Read once, for the session's start time. */
+  readonly clock: Clock;
 }
 
 /**
@@ -57,7 +61,12 @@ export interface SessionOptions {
  * asked twice in a row, including across rounds. The same options and seed
  * always give the same order.
  */
-export function startSession({ items, questionCount, random }: SessionOptions): PracticeSession {
+export function startSession({
+  items,
+  questionCount,
+  random,
+  clock
+}: SessionOptions): PracticeSession {
   if (items.length === 0) throw new RangeError('A session needs at least one item.');
   if (new Set(items.map((item) => item.id)).size !== items.length) {
     throw new RangeError('Session item IDs must be unique.');
@@ -79,7 +88,8 @@ export function startSession({ items, questionCount, random }: SessionOptions): 
     items,
     order: questionOrder(items.length, questionCount, random),
     position: 0,
-    answers: []
+    answers: [],
+    startedAt: clock()
   };
 }
 
@@ -172,6 +182,8 @@ export interface SessionSummary {
   readonly accuracy: number;
   /** Items answered wrongly at least once, most misses first, then in the order first missed. */
   readonly missed: readonly { readonly itemId: string; readonly misses: number }[];
+  /** Milliseconds from the start of the session to its last answer; 0 before anything is answered. */
+  readonly durationMs: number;
 }
 
 /** Results of the answers recorded so far; the end-of-session summary once finished. */
@@ -189,6 +201,8 @@ export function summarize(session: PracticeSession): SessionSummary {
     // Map keeps first-miss order, and the sort is stable.
     missed: [...misses]
       .map(([itemId, count]) => ({ itemId, misses: count }))
-      .sort((a, b) => b.misses - a.misses)
+      .sort((a, b) => b.misses - a.misses),
+    // A clock that goes backwards (the device's time was changed) counts as no time.
+    durationMs: Math.max(0, (answers.at(-1)?.answeredAt ?? session.startedAt) - session.startedAt)
   };
 }

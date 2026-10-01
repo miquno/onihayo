@@ -47,6 +47,22 @@ export function answerLabel(question: Question): string {
   return `${name.charAt(0).toUpperCase()}${name.slice(1)} for this ${question.shown.name}`;
 }
 
+/** "45 seconds", "1 minute 5 seconds", "2 minutes": a duration rounded to whole seconds. */
+export function durationText(milliseconds: number): string {
+  const total = Math.max(0, Math.round(milliseconds / 1000));
+  const minutes = Math.floor(total / 60);
+  const seconds = total % 60;
+  const count = (value: number, unit: string) =>
+    `${String(value)} ${unit}${value === 1 ? '' : 's'}`;
+  if (minutes === 0) return count(seconds, 'second');
+  return seconds === 0
+    ? count(minutes, 'minute')
+    : `${count(minutes, 'minute')} ${count(seconds, 'second')}`;
+}
+
+/** How often each missed item is asked when the learner retries their mistakes. */
+export const retryRounds = 2;
+
 /** "missed once", "missed 2 times". */
 export function missesText(misses: number): string {
   return misses === 1 ? 'missed once' : `missed ${String(misses)} times`;
