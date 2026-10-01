@@ -53,3 +53,16 @@ export function randomInt(random: RandomSource, count: number): number {
   }
   return Math.floor(random.next() * count);
 }
+
+/**
+ * A copy of `values` in a uniformly random order (Fisher–Yates). The same
+ * random source state always gives the same order.
+ */
+export function shuffled<T>(values: readonly T[], random: RandomSource): T[] {
+  const result = [...values];
+  for (let last = result.length - 1; last > 0; last--) {
+    const pick = randomInt(random, last + 1);
+    [result[last], result[pick]] = [result[pick] as T, result[last] as T];
+  }
+  return result;
+}

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { createSeededRandom, maxSeed, parseSeed, randomInt, type RandomSource } from './random';
+import {
+  createSeededRandom,
+  maxSeed,
+  parseSeed,
+  randomInt,
+  shuffled,
+  type RandomSource
+} from './random';
 
 function take(random: RandomSource, count: number): number[] {
   return Array.from({ length: count }, () => random.next());
@@ -115,5 +122,36 @@ describe('parseSeed', () => {
     for (const text of ['0', '1', String(maxSeed)]) {
       expect(() => createSeededRandom(parseSeed(text) ?? -1)).not.toThrow();
     }
+  });
+});
+
+describe('shuffled', () => {
+  const letters = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+  it('returns every value once, in a new array', () => {
+    const result = shuffled(letters, createSeededRandom(3));
+    expect(result).not.toBe(letters);
+    expect([...result].sort()).toEqual(letters);
+    expect(letters).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+  });
+
+  it('gives the same order for the same seed and different orders across seeds', () => {
+    expect(shuffled(letters, createSeededRandom(3))).toEqual(
+      shuffled(letters, createSeededRandom(3))
+    );
+    const orders = new Set(
+      Array.from({ length: 20 }, (_, seed) => shuffled(letters, createSeededRandom(seed)).join(''))
+    );
+    expect(orders.size).toBeGreaterThan(10);
+  });
+
+  it('follows the random source: picks for the last position first', () => {
+    // 0.0 picks index 0 for position 2, then 0.99 keeps position 1 in place.
+    expect(shuffled(['a', 'b', 'c'], fixed(0, 0.99))).toEqual(['c', 'b', 'a']);
+  });
+
+  it('handles empty and single-value lists without using the source', () => {
+    expect(shuffled([], fixed())).toEqual([]);
+    expect(shuffled(['a'], fixed())).toEqual(['a']);
   });
 });

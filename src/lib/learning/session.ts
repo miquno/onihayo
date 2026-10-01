@@ -1,5 +1,5 @@
 import { normalizeAnswer } from './normalize';
-import { randomInt, type RandomSource } from './random';
+import { randomInt, shuffled, type RandomSource } from './random';
 
 /** Milliseconds since the Unix epoch. Injected so tests control time. */
 export type Clock = () => number;
@@ -96,14 +96,12 @@ function questionOrder(poolSize: number, questionCount: number, random: RandomSo
   return order;
 }
 
-/** 0 … size - 1 in a uniformly random order (Fisher–Yates). */
+/** 0 … size - 1 in a uniformly random order. */
 function shuffledIndexes(size: number, random: RandomSource): number[] {
-  const indexes = Array.from({ length: size }, (_, index) => index);
-  for (let last = size - 1; last > 0; last--) {
-    const pick = randomInt(random, last + 1);
-    [indexes[last], indexes[pick]] = [indexes[pick] as number, indexes[last] as number];
-  }
-  return indexes;
+  return shuffled(
+    Array.from({ length: size }, (_, index) => index),
+    random
+  );
 }
 
 /** The item being asked or just answered; `undefined` once the session is finished. */
