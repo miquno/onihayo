@@ -5,8 +5,9 @@
   import Card from './Card.svelte';
   import LinkButton from './LinkButton.svelte';
 
-  // One kana lesson: every kana large with its romaji and notes, the marks the
-  // lesson introduces with example words, and links onwards.
+  // One kana lesson: every kana large with its romaji and notes, look-alikes to
+  // tell apart, the marks the lesson introduces with example words, and links
+  // onwards.
   interface Props {
     lesson: LessonDetails;
     /** "Hiragana" or "Katakana". */
@@ -39,6 +40,28 @@
     </li>
   {/each}
 </ul>
+
+{#if lesson.lookAlikes.length > 0}
+  <section class="look-alikes" aria-labelledby="look-alikes">
+    <h2 id="look-alikes">Easy to mix up</h2>
+    <ul>
+      {#each lesson.lookAlikes as lookAlike (lookAlike.note)}
+        <li>
+          <p class="compared">
+            {#each lookAlike.kana as { character, romaji } (character)}
+              <!-- The trailing space keeps the kana apart when read as text; it never shows. -->
+              <span class="compared-kana"
+                ><span class="compared-character" lang="ja">{character}</span>
+                {`${romaji} `}</span
+              >
+            {/each}
+          </p>
+          <p>{lookAlike.note}</p>
+        </li>
+      {/each}
+    </ul>
+  </section>
+{/if}
 
 {#each lesson.marks as mark, index (mark.mark)}
   <section class="mark" aria-labelledby="mark-{index}">
@@ -121,8 +144,34 @@
     color: var(--color-text-muted);
   }
 
-  .mark {
+  .mark,
+  .look-alikes {
     margin: 0 0 var(--space-6);
+  }
+
+  .look-alikes ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .look-alikes li + li {
+    margin-top: var(--space-4);
+  }
+
+  .look-alikes p {
+    margin: 0;
+  }
+
+  .compared {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+  }
+
+  .compared-character {
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-heading);
   }
 
   .examples {

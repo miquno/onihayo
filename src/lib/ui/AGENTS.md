@@ -14,7 +14,7 @@ The design system: tokens and shared, presentational components. Components rend
 - `VisuallyHidden.svelte` — text for screen readers only.
 - `KanaPractice.svelte` — the kana practice used by lesson practice and the kana quiz: see a kana, type its romaji, feedback in a polite live region, Enter checks and moves on, a summary at the end with "Practise again". Runs entirely in the browser on the session from `$lib/learning/session`; the page supplies the kana, question count, seed, what to call a prompt (`kanaName`), and the result links as snippets. Helpers in `practice.ts`: `PracticeKana`, `practiceKana()` (a kana record with its accepted answers), `randomSeed()`, `resultText()`, `missesText()`, `missedItems()`.
 - `LessonList.svelte` — the numbered list of a script's lessons, each linked with a preview of its kana (`lang="ja"`).
-- `KanaLesson.svelte` — one kana lesson page for either script: title and position, the pronunciation note, each kana large with its romaji and note, a section per mark (ー, ッ) with example words, and the lesson navigation. The page supplies the hrefs (from `resolve()`), the link onwards, and a snippet for the end of the last lesson.
+- `KanaLesson.svelte` — one kana lesson page for either script: title and position, the pronunciation note, each kana large with its romaji and note, an "Easy to mix up" section for look-alikes, a section per mark (ー, ッ) with example words, and the lesson navigation. The page supplies the hrefs (from `resolve()`), the link onwards, and a snippet for the end of the last lesson.
 - `components.test.ts` — server-renders each component and checks roles, ARIA attributes, native elements, and that no inline `style` is emitted.
 
 ## Rules

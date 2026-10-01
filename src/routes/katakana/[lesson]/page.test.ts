@@ -69,7 +69,22 @@ describe('katakana lesson page', () => {
     expect(body).toMatch(/<span class="word[^"]*" lang="ja">ケーキ<\/span>\s*kēki, “cake”/u);
   });
 
-  it('has no mark section where the lesson introduces none', () => {
+  it('tells look-alikes apart in their own section, with each kana in Japanese', () => {
+    const { body } = renderLesson('wa');
+    const section = /<section[^>]*aria-labelledby="look-alikes"[^>]*>([\s\S]*?)<\/section>/u.exec(
+      body
+    )?.[1];
+    expect(section).toMatch(/<h2 id="look-alikes"[^>]*>Easy to mix up<\/h2>/u);
+    const compared = [
+      ...(section ?? '').matchAll(
+        /<span class="compared-character[^"]*" lang="ja">([^<]+)<\/span>/gu
+      )
+    ].map(([, character]) => character);
+    expect(compared).toEqual(['ソ', 'ン', 'ウ', 'フ', 'ワ']);
+    expect(section).toContain('In ン the short stroke lies flatter on the left');
+  });
+
+  it('has no look-alike or mark section where the lesson has none', () => {
     expect(renderLesson('sa').body).not.toContain('<section');
   });
 

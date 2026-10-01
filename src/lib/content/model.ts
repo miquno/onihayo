@@ -116,6 +116,17 @@ export interface MarkNote {
 }
 
 /**
+ * How to tell apart kana that look alike, such as シ and ツ. Shown in the
+ * lesson that teaches the last of them, so every one is familiar by then.
+ */
+export interface LookAlikeNote {
+  /** The kana compared, two or three item IDs in the order they are taught. */
+  readonly kana: readonly KanaRecord['id'][];
+  /** What sets them apart, as plain text. */
+  readonly note: string;
+}
+
+/**
  * A kana lesson: one or more consecutive rows of one class, taught together.
  * The lesson teaches every kana in its rows, in dataset order.
  */
@@ -135,5 +146,7 @@ export interface KanaLesson {
   readonly kanaNotes: Readonly<Partial<Record<KanaRecord['id'], string>>>;
   /** Marks this lesson introduces, if any. */
   readonly marks?: readonly MarkNote[];
+  /** Look-alike kana to tell apart, if any; at least one of each set is taught here. */
+  readonly lookAlikes?: readonly LookAlikeNote[];
   readonly origin: ContentOrigin;
 }

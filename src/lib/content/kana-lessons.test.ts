@@ -96,6 +96,32 @@ describe.each(scripts)('$script lessons validation', ({ script, lessons, kana, p
     }
   });
 
+  it('compare look-alikes only once all of them are taught, at least one in the lesson itself', () => {
+    const order = new Map(kana.map((record, index) => [record.id as string, index]));
+    const known = new Set<string>();
+    const sets: string[] = [];
+    for (const lesson of lessons) {
+      const taught = lessonKana(lesson, kana).map((record) => record.id as string);
+      for (const id of taught) known.add(id);
+      for (const { kana: ids, note } of lesson.lookAlikes ?? []) {
+        const context = `${ids.join(' ')} in ${lesson.id}`;
+        expect(ids.length, context).toBeGreaterThanOrEqual(2);
+        expect(ids.length, context).toBeLessThanOrEqual(3);
+        for (const id of ids) expect(known, context).toContain(id);
+        expect(
+          ids.some((id) => taught.includes(id)),
+          context
+        ).toBe(true);
+        const positions = ids.map((id) => order.get(id) ?? -1);
+        expect(positions, context).toEqual(positions.toSorted((a, b) => a - b));
+        expect(new Set(positions).size, context).toBe(ids.length);
+        expectPlainText(note, context);
+        sets.push(ids.join(' '));
+      }
+    }
+    expect(new Set(sets).size).toBe(sets.length);
+  });
+
   it('are authored for Onihayo under CC BY-SA 4.0', () => {
     for (const lesson of lessons) expect(lesson.origin).toBe('authored');
     expect(provenance).toEqual({ source: 'Onihayo contributors', licence: 'CC-BY-SA-4.0' });
@@ -108,6 +134,20 @@ describe('katakana lessons', () => {
       (lesson.marks ?? []).map(({ mark }) => `${lessonSlug(lesson)} ${mark}`)
     );
     expect(marks).toEqual(['ka ー', 'ta ッ']);
+  });
+
+  it('tell apart the look-alikes beginners confuse most, where the second one is taught', () => {
+    const where = new Map(
+      katakanaLessons.flatMap((lesson) =>
+        (lesson.lookAlikes ?? []).map(({ kana: ids }) => [
+          ids.map((id) => katakana.find((record) => record.id === id)?.character).join(''),
+          lessonSlug(lesson)
+        ])
+      )
+    );
+    expect(where.get('シツ')).toBe('ta');
+    expect(where.get('ソン')).toBe('wa');
+    expect(where.get('クケ')).toBe('ka');
   });
 
   it('end with two lessons of loanword sounds covering every extended katakana', () => {

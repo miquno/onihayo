@@ -110,7 +110,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Kana quiz: pick any rows of hiragana and katakana from a grid of row tiles (an "All" switch per group that shows a partial selection, the selected count always visible, starting with nothing selected prevented with an explanation) and practise them together through the shared practice component and session; the selection travels in the URL.
 - [x] Extended katakana needed by N5 loanwords as a separate class (ティ, ディ, ファ, フィ, フェ, フォ, ウィ, ウェ, ウォ, シェ, ジェ, チェ) with validation tests.
 - [x] Katakana lessons with authored notes, including the long-vowel mark ー and small ッ.
-- [ ] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
+- [x] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
 - [ ] Katakana practice and chart pages reusing the 0.3 components and session without copying them.
 
 **Acceptance criteria:** same as 0.3 for katakana; no katakana-specific branches in session logic.
