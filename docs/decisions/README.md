@@ -12,6 +12,7 @@ Write an ADR when a change adds a runtime dependency with lasting impact, change
 | [0004](0004-postgresql-and-drizzle.md)             | PostgreSQL and Drizzle for server-side user data     | Accepted (implemented in 0.9) |
 | [0005](0005-dependency-and-supply-chain-policy.md) | Dependency and supply-chain policy                   | Accepted                      |
 | [0006](0006-code-and-content-licensing.md)         | Code and content licensing                           | Accepted                      |
+| [0007](0007-hosting-provider-and-region.md)        | Hosting provider and region                          | Proposed                      |
 
 ## Template
 
