@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { maxSeed } from '$lib/learning/random';
+import { createSeededRandom, maxSeed } from '$lib/learning/random';
 import { hiragana } from '$lib/content/kana/hiragana';
 import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
 import { katakana } from '$lib/content/kana/katakana';
@@ -12,6 +12,7 @@ import {
   lessonPractice,
   missedItems,
   missesText,
+  optionSeed,
   randomSeed,
   resultText
 } from './practice';
@@ -115,5 +116,30 @@ describe('instructionsText and answerLabel', () => {
     expect(instructionsText([a, ka].map((item) => question(typeTheKana, item)))).toBe(
       'Type the hiragana or katakana for each romaji, then press Enter.'
     );
+  });
+});
+
+describe('instructionsText for choice modes', () => {
+  it('asks to choose instead of to type', () => {
+    const [, chooseTheReading, chooseTheCharacter] = questionModes;
+    const item = kanaPracticeItems(katakana, katakanaLessons)[0];
+    if (item === undefined) throw new Error('missing kana');
+    expect(instructionsText([question(chooseTheReading, item)])).toBe(
+      'Choose the romaji for each katakana.'
+    );
+    expect(instructionsText([question(chooseTheCharacter, item)])).toBe(
+      'Choose the katakana for each romaji.'
+    );
+  });
+});
+
+describe('optionSeed', () => {
+  it('is a valid seed that depends on the session seed and the position', () => {
+    const seeds = [0, 1, 2, 3].map((position) => optionSeed(42, position));
+    for (const seed of seeds) expect(() => createSeededRandom(seed)).not.toThrow();
+    expect(new Set(seeds).size).toBe(4);
+    expect(optionSeed(42, 0)).not.toBe(optionSeed(43, 0));
+    expect(optionSeed(42, 3)).toBe(optionSeed(42, 3));
+    expect(() => createSeededRandom(optionSeed(maxSeed, 999))).not.toThrow();
   });
 });

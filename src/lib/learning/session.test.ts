@@ -3,6 +3,7 @@ import { hiragana } from '$lib/content/kana/hiragana';
 import { createSeededRandom } from './random';
 import {
   currentItem,
+  finishSession,
   lastAnswer,
   nextQuestion,
   questionProgress,
@@ -207,6 +208,42 @@ describe('nextQuestion', () => {
     const times = finished.answers.map((answer) => answer.answeredAt);
     expect(times).toEqual([...times].sort((a, b) => a - b));
     expect(new Set(times).size).toBe(5);
+  });
+});
+
+describe('finishSession', () => {
+  it('ends a session while a question is being asked, counting only what was answered', () => {
+    let session = start(1000);
+    session = nextQuestion(submitAnswer(session, 'a', ticking()));
+    session = nextQuestion(submitAnswer(session, 'nope', ticking()));
+    const finished = finishSession(session);
+    expect(finished.phase).toBe('finished');
+    expect(summarize(finished)).toMatchObject({ answered: 2 });
+    expect(finished.answers).toBe(session.answers);
+  });
+
+  it('ends a session right after an answer, keeping that answer', () => {
+    const answered = submitAnswer(start(1000), 'a', ticking());
+    const finished = finishSession(answered);
+    expect(finished.phase).toBe('finished');
+    expect(summarize(finished).answered).toBe(1);
+    expect(lastAnswer(finished)).toBeUndefined();
+  });
+
+  it('ends a session before anything is answered with an empty summary', () => {
+    expect(summarize(finishSession(start(10)))).toEqual({
+      answered: 0,
+      correct: 0,
+      accuracy: 0,
+      missed: []
+    });
+  });
+
+  it('leaves a finished session as it is and accepts no more answers', () => {
+    const finished = finishSession(start(10));
+    expect(finishSession(finished)).toBe(finished);
+    expect(() => submitAnswer(finished, 'a', ticking())).toThrow();
+    expect(() => nextQuestion(finished)).toThrow();
   });
 });
 

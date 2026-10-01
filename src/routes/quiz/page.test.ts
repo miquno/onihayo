@@ -29,6 +29,27 @@ describe('kana quiz load', () => {
     expect(loadQuiz().selected).toEqual(['hiragana.a']);
   });
 
+  it('offers the four modes and four lengths, starting with typing the reading and 20 questions', () => {
+    const data = loadQuiz();
+    expect(data.modes).toEqual([
+      { id: 'type-the-reading', name: 'Type the reading' },
+      { id: 'choose-the-reading', name: 'Choose the reading' },
+      { id: 'choose-the-character', name: 'Choose the character' },
+      { id: 'type-the-kana', name: 'Type the kana' }
+    ]);
+    expect(data.lengths).toEqual(['10', '20', '50', 'endless']);
+    expect([data.mode, data.length]).toEqual(['type-the-reading', '20']);
+  });
+
+  it('takes a mode and a length from the URL by exact value only', () => {
+    const data = loadQuiz('?mode=choose-the-character&length=endless');
+    expect([data.mode, data.length]).toEqual(['choose-the-character', 'endless']);
+    for (const search of ['?mode=nope&length=30', '?mode=__proto__&length=', '?mode=&length=020']) {
+      const fallback = loadQuiz(search);
+      expect([fallback.mode, fallback.length], search).toEqual(['type-the-reading', '20']);
+    }
+  });
+
   it('takes a selection from the URL, keeping only known rows', () => {
     expect(loadQuiz('?rows=katakana.kya&rows=nope&rows=hiragana.ka').selected).toEqual([
       'hiragana.ka',
@@ -80,7 +101,37 @@ describe('kana quiz page', () => {
     expect(html).toMatch(
       /<section[^>]*aria-labelledby="script-katakana"[^>]*>\s*<h2 id="script-katakana"[^>]*>Katakana<\/h2>/u
     );
-    expect(html.match(/<legend[^>]*>/gu)).toHaveLength(3 + 4);
+    // Mode and length, then three groups of hiragana and four of katakana.
+    expect(html.match(/<legend[^>]*>/gu)).toHaveLength(2 + 3 + 4);
+  });
+
+  it('offers mode and length as named radio groups that work without JavaScript', () => {
+    const radios = (name: string) =>
+      [
+        ...html.matchAll(
+          new RegExp(`<input type="radio" name="${name}" value="([^"]+)"( checked)?`, 'gu')
+        )
+      ].map(([, value, checked]) => `${value ?? ''}${checked ? '*' : ''}`);
+    expect(radios('mode')).toEqual([
+      'type-the-reading*',
+      'choose-the-reading',
+      'choose-the-character',
+      'type-the-kana'
+    ]);
+    expect(radios('length')).toEqual(['10', '20*', '50', 'endless']);
+    expect(html).toContain('See romaji, type the kana with a Japanese keyboard.');
+    expect(html).toContain('Endless, until you finish');
+  });
+
+  it('checks the mode and length that come from the URL', () => {
+    const page = withoutHydrationMarkers(
+      render(QuizPage, {
+        props: { data: loadQuiz('?mode=type-the-kana&length=50'), params: {} }
+      }).body
+    );
+    expect(page).toMatch(/<input type="radio" name="mode" value="type-the-kana" checked/u);
+    expect(page).toMatch(/<input type="radio" name="length" value="50" checked/u);
+    expect(page.match(/<input type="radio"[^>]* checked/gu)).toHaveLength(2);
   });
 
   it('leaves out the "All" checkboxes, which need JavaScript, when rendered on the server', () => {

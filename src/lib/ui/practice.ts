@@ -20,11 +20,25 @@ export function resultText(summary: SessionSummary): string {
   return `You answered ${String(summary.correct)} of ${String(summary.answered)} correctly (${String(percent)} %).`;
 }
 
-/** "Type the romaji for each hiragana or katakana, then press Enter." */
+/**
+ * "Type the romaji for each hiragana or katakana, then press Enter.", or
+ * "Choose the katakana for each romaji." when the answers are chosen.
+ */
 export function instructionsText(questions: readonly Question[]): string {
   const names = (side: 'shown' | 'solution') =>
     [...new Set(questions.map((question) => question[side].name))].join(' or ');
-  return `Type the ${names('solution')} for each ${names('shown')}, then press Enter.`;
+  return questions[0]?.input === 'choose'
+    ? `Choose the ${names('solution')} for each ${names('shown')}.`
+    : `Type the ${names('solution')} for each ${names('shown')}, then press Enter.`;
+}
+
+/**
+ * The seed for the options of one question: derived from the session's seed
+ * and the question's position, so a seed replays the options as well as the
+ * question order.
+ */
+export function optionSeed(sessionSeed: number, position: number): number {
+  return (sessionSeed + Math.imul(position + 1, 0x9e3779b1)) >>> 0;
 }
 
 /** The label of the answer field: "Romaji for this katakana", "Hiragana for this romaji". */

@@ -3,6 +3,8 @@
   import { resolve } from '$app/paths';
   import type { KanaClass, KanaScript } from '$lib/content/model';
   import type { KanaRowKey } from '$lib/content/selection';
+  import type { PracticeLength } from '$lib/learning/length';
+  import type { QuestionModeId } from '$lib/learning/modes';
   import { pageTitle } from '$lib/site';
   import Button from '$lib/ui/Button.svelte';
   import VisuallyHidden from '$lib/ui/VisuallyHidden.svelte';
@@ -19,6 +21,20 @@
     dakuten: 'Dakuten and handakuten',
     yoon: 'Combined sounds',
     extended: 'Loanword sounds'
+  };
+
+  // What each mode asks for, in the learner's words. A new mode must be described here.
+  const modeDescriptions: Record<QuestionModeId, string> = {
+    'type-the-reading': 'See a kana, type its romaji.',
+    'choose-the-reading': 'See a kana, pick its romaji from four options.',
+    'choose-the-character': 'See romaji, pick the kana from four options.',
+    'type-the-kana': 'See romaji, type the kana with a Japanese keyboard.'
+  };
+  const lengthLabels: Record<PracticeLength, string> = {
+    '10': '10 questions',
+    '20': '20 questions',
+    '50': '50 questions',
+    endless: 'Endless, until you finish'
   };
 
   // The chosen row keys. Starts from the page data; every checkbox writes it.
@@ -66,7 +82,7 @@
 </svelte:head>
 
 <h1>Kana quiz</h1>
-<p class="lead">Pick the rows you want to practise, from hiragana, katakana, or both.</p>
+<p class="lead">Pick how you want to practise and which rows, from hiragana, katakana, or both.</p>
 <p>
   New to kana? Learn them one row at a time in the <a href={resolve('/hiragana')}
     >hiragana lessons</a
@@ -74,6 +90,31 @@
 </p>
 
 <form method="GET" action={resolve('/quiz/practice')} onsubmit={handleSubmit}>
+  <section class="script" aria-labelledby="how">
+    <h2 id="how">How to practise</h2>
+    <fieldset class="choices">
+      <legend>Mode</legend>
+      {#each data.modes as mode (mode.id)}
+        <label class="choice">
+          <input type="radio" name="mode" value={mode.id} checked={mode.id === data.mode} />
+          <span>
+            <span class="choice-name">{mode.name}</span>
+            <span class="choice-hint">{modeDescriptions[mode.id]}</span>
+          </span>
+        </label>
+      {/each}
+    </fieldset>
+    <fieldset class="choices">
+      <legend>Length</legend>
+      {#each data.lengths as length (length)}
+        <label class="choice">
+          <input type="radio" name="length" value={length} checked={length === data.length} />
+          <span class="choice-name">{lengthLabels[length]}</span>
+        </label>
+      {/each}
+    </fieldset>
+  </section>
+
   {#each data.scripts as { script, groups } (script)}
     <section class="script" aria-labelledby="script-{script}">
       <h2 id="script-{script}">{scriptTitles[script]}</h2>
@@ -174,6 +215,37 @@
     margin: 0;
     padding: 0;
     font-weight: var(--font-weight-semibold);
+  }
+
+  .choices {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .choices legend {
+    width: 100%;
+    margin-bottom: var(--space-2);
+  }
+
+  .choice {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    cursor: pointer;
+  }
+
+  .choice input {
+    flex: none;
+    align-self: center;
+  }
+
+  .choice-name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .choice-hint {
+    color: var(--color-text-muted);
   }
 
   .all {

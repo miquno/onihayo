@@ -7,6 +7,11 @@
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
+
+  // Both values are validated IDs, so they need no escaping.
+  const setup = $derived(
+    `&mode=${data.mode.id}${data.length === null ? '' : `&length=${data.length}`}`
+  );
 </script>
 
 <svelte:head>
@@ -21,14 +26,17 @@
 
 <KanaPractice
   items={data.items}
+  pool={data.pool}
   questionCount={data.questionCount}
+  endless={data.length === 'endless'}
   seed={data.seed}
   mode={data.mode}
 >
   {#snippet nextStep()}
-    <!-- Back to the selection page with the same rows chosen. -->
-    <LinkButton href={resolve(`/quiz${rowSelectionSearch(data.rows)}`)}>Change selection</LinkButton
-    >
+    <!-- Back to the setup page with the same rows, mode, and length chosen. -->
+    <LinkButton href={resolve(`/quiz${rowSelectionSearch(data.rows)}${setup}`)}>
+      Change selection
+    </LinkButton>
   {/snippet}
 </KanaPractice>
 

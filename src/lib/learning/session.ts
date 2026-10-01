@@ -27,6 +27,7 @@ export interface AnswerRecord {
  * session.
  *
  *     asking ──submitAnswer──▶ answered ──nextQuestion──▶ asking … or finished
+ *     asking or answered ──finishSession──▶ finished
  */
 export interface PracticeSession {
   readonly phase: 'asking' | 'answered' | 'finished';
@@ -153,6 +154,15 @@ export function nextQuestion(session: PracticeSession): PracticeSession {
   }
   const position = session.position + 1;
   return { ...session, phase: position < session.order.length ? 'asking' : 'finished', position };
+}
+
+/**
+ * Ends a session early, e.g. an endless one: `finished` with the answers given
+ * so far. A question that is being asked and not answered is not counted.
+ * Finishing a finished session changes nothing.
+ */
+export function finishSession(session: PracticeSession): PracticeSession {
+  return session.phase === 'finished' ? session : { ...session, phase: 'finished' };
 }
 
 export interface SessionSummary {
