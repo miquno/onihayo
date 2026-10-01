@@ -269,7 +269,8 @@ test('keyboard-only learner sets up a choose-the-character quiz of 10 questions'
     );
     const reading = (await page.locator('#prompt').textContent()) ?? '';
     const right = katakanaFor.get(reading) ?? '';
-    const texts = await options.getByRole('button').allTextContents();
+    // The kana of each option; its number key is shown beside it.
+    const texts = await options.getByRole('button').locator('[lang="ja"]').allTextContents();
     // Four katakana, the right one among them exactly once.
     expect(texts).toHaveLength(4);
     expect(texts.filter((text) => text.trim() === right)).toHaveLength(1);
@@ -361,4 +362,84 @@ test('the same seed gives the same options in the same order', async ({ page }) 
   const first = await firstOptions();
   expect(first).toHaveLength(5);
   expect(await firstOptions()).toEqual(first);
+});
+
+// Choice keyboard support: number keys choose, arrow keys move, and focus
+// follows the learner from question to question.
+test('options are chosen with number keys and reached with arrow keys', async ({ page }) => {
+  await page.goto('/quiz/practice?rows=katakana.sa&mode=choose-the-character&length=10&seed=4');
+  const options = page.getByRole('group', { name: 'Katakana for this romaji' }).getByRole('button');
+  const feedback = page.getByRole('status');
+  const next = page.getByRole('button', { name: 'Next' });
+  const katakanaFor = new Map(katakana.map((kana) => [kana.romaji, kana.character]));
+  await expect(options).toHaveCount(4);
+  await expect(options.nth(2)).toHaveAttribute('aria-keyshortcuts', '3');
+
+  // A number pressed while the focus is elsewhere does nothing.
+  await page.keyboard.press('1');
+  await expect(feedback).toHaveText('');
+
+  // Arrow keys, Home, and End move between the options and wrap around.
+  await options.first().focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(options.nth(1)).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(options.nth(2)).toBeFocused();
+  await page.keyboard.press('End');
+  await expect(options.nth(3)).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect(options.first()).toBeFocused();
+  await page.keyboard.press('ArrowLeft');
+  await expect(options.nth(3)).toBeFocused();
+  await page.keyboard.press('ArrowUp');
+  await expect(options.nth(2)).toBeFocused();
+  await page.keyboard.press('Home');
+  await expect(options.first()).toBeFocused();
+  await expect(feedback).toHaveText('');
+
+  const numberOf = async (wanted: 'right' | 'wrong') => {
+    const reading = (await page.locator('#prompt').textContent()) ?? '';
+    const texts = (await options.locator('[lang="ja"]').allTextContents()).map((text) =>
+      text.trim()
+    );
+    const right = texts.indexOf(katakanaFor.get(reading) ?? '');
+    const index = wanted === 'right' ? right : (right + 1) % texts.length;
+    return { key: String(index + 1), reading, text: texts[index] ?? '', right: texts[right] ?? '' };
+  };
+
+  // The number of the right option answers the question; focus goes to "Next".
+  const first = await numberOf('right');
+  await page.keyboard.press(first.key);
+  await expect(feedback).toHaveText(`Correct. ${first.reading} is ${first.right}.`);
+  await expect(next).toBeFocused();
+  // Numbers do nothing once the question is answered.
+  await page.keyboard.press('1');
+  await expect(feedback).toHaveText(`Correct. ${first.reading} is ${first.right}.`);
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
+
+  // Enter moves on, and focus lands on the first option of the next question.
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '2 of 10');
+  await expect(options.first()).toBeFocused();
+  const second = await numberOf('wrong');
+  await page.keyboard.press(second.key);
+  await expect(feedback).toHaveText(
+    `Not quite. ${second.reading} is ${second.right}. You chose “${second.text}”.`
+  );
+  await expect(next).toBeFocused();
+
+  // The rest of the quiz with numbers and Enter alone.
+  await page.keyboard.press('Enter');
+  for (let question = 3; question <= 10; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 10`
+    );
+    await expect(options.first()).toBeFocused();
+    await page.keyboard.press((await numberOf('right')).key);
+    await expect(next).toBeFocused();
+    await page.keyboard.press('Enter');
+  }
+  await expect(page.getByRole('heading', { level: 2, name: 'Results' })).toBeFocused();
+  await expect(page.getByText('You answered 9 of 10 correctly (90 %).')).toBeVisible();
 });
