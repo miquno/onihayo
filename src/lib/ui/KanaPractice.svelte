@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { tick } from 'svelte';
-  import { question, questionModes, sessionItems } from '$lib/learning/modes';
+  import { question, questionModes, sessionItems, type QuestionMode } from '$lib/learning/modes';
   import { createSeededRandom } from '$lib/learning/random';
   import {
     currentItem,
@@ -16,27 +16,39 @@
   import ProgressBar from './ProgressBar.svelte';
   import VisuallyHidden from './VisuallyHidden.svelte';
   import type { PracticeItem } from '$lib/learning/practice-item';
-  import { missedItems, missesText, randomSeed, resultText } from './practice';
+  import { ignoreNextSubmit, imeKeydown, type ImeEvent } from './ime';
+  import {
+    answerLabel,
+    instructionsText,
+    missedItems,
+    missesText,
+    randomSeed,
+    resultText
+  } from './practice';
 
-  // See a prompt, type its answer, get feedback; a summary at the end. Runs
-  // entirely in the browser: answers are never sent or stored.
+  // See one side of an item, type the other, get feedback; a summary at the
+  // end. Runs entirely in the browser: answers are never sent or stored.
   interface Props {
     items: readonly PracticeItem[];
+    /** A typed question mode; "type the reading" unless given. */
+    mode?: QuestionMode;
     questionCount: number;
     /** The seed of the first session; "Practise again" picks a new one. */
     seed: number;
-    /** What to call one prompt in the instructions and the field label, e.g. "hiragana" or "kana". */
-    kanaName: string;
     /** The first link of the results (the recommended next step). */
     nextStep: Snippet;
     /** Further links after "Practise again". */
     moreLinks?: Snippet;
   }
 
-  let { items, questionCount, seed, kanaName, nextStep, moreLinks }: Props = $props();
-
-  // The one typed mode so far: see the kana, type its reading.
-  const [mode] = questionModes;
+  let {
+    items,
+    mode = questionModes[0],
+    questionCount,
+    seed,
+    nextStep,
+    moreLinks
+  }: Props = $props();
 
   function newSession(sessionSeed: number) {
     return startSession({
@@ -60,10 +72,20 @@
   const answered = $derived(lastAnswer(session));
   const progress = $derived(questionProgress(session));
   const summary = $derived(summarize(session));
+  const instructions = $derived(instructionsText(items.map((item) => question(mode, item))));
+
+  // Enter that confirms an input-method composition must not submit (see ime.ts).
+  let ignoringSubmit = false;
+  function track(event: ImeEvent): boolean {
+    const ignored = event.type === 'submit' && ignoringSubmit;
+    ignoringSubmit = ignoreNextSubmit(ignoringSubmit, event);
+    return ignored;
+  }
 
   async function handleSubmit(event: SubmitEvent) {
     // Answers never leave the browser: the form is handled here, never sent.
     event.preventDefault();
+    if (track({ type: 'submit' })) return;
     if (session.phase === 'asking') {
       const updated = submitAnswer(session, answer, Date.now);
       blankSubmitted = updated === session;
@@ -87,13 +109,13 @@
 </script>
 
 {#if session.phase !== 'finished' && current}
-  <p class="instructions">Type the romaji for each {kanaName}, then press Enter.</p>
+  <p class="instructions">{instructions}</p>
 
   <ProgressBar label="Question" value={progress.current} max={progress.total} />
 
   <form class="question" onsubmit={handleSubmit}>
     <p class="character" id="prompt" lang={current.shown.lang}>{current.shown.text}</p>
-    <label for="answer">Romaji for this {kanaName}</label>
+    <label for="answer">{answerLabel(current)}</label>
     <div class="answer-row">
       <!-- No `name`: without JavaScript nothing is submitted, so answers never reach a URL. -->
       <input
@@ -101,6 +123,16 @@
         type="text"
         bind:this={input}
         bind:value={answer}
+        lang={current.solution.lang}
+        onkeydown={(event) => {
+          track(imeKeydown(event));
+        }}
+        onkeyup={() => {
+          track({ type: 'keyup' });
+        }}
+        oncompositionend={() => {
+          track({ type: 'compositionend' });
+        }}
         readonly={answered !== undefined}
         aria-describedby="prompt"
         autocomplete="off"
@@ -125,7 +157,7 @@
         <strong lang={current.solution.lang}>{current.solution.text}</strong>. You typed “{answered.given}”.
       </p>
     {:else if blankSubmitted}
-      <p>Type the romaji first, then press Enter.</p>
+      <p>Type the {current.solution.name} first, then press Enter.</p>
     {:else if session.position > 0}
       <VisuallyHidden>
         Question {progress.current} of {progress.total}:

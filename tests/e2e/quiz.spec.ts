@@ -49,7 +49,8 @@ test('keyboard-only learner picks rows of both scripts and finishes a quiz', asy
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
 
-  const input = page.getByLabel('Romaji for this kana');
+  // Mixed scripts: each question names its own script.
+  const input = page.getByLabel(/^Romaji for this (?:hiragana|katakana)$/u);
   const prompt = page.getByRole('main').locator('p[lang="ja"]');
   const asked = new Set<string>();
   for (let question = 1; question <= 20; question++) {
@@ -119,4 +120,108 @@ test('the same seed gives the same question order', async ({ page }) => {
   const first = await order();
   expect(await order()).toEqual(first);
   expect(new Set(first)).toEqual(new Set(['サ', 'シ', 'ス', 'セ', 'ソ']));
+});
+
+// Type-the-kana mode: the question shows romaji and the learner types kana.
+test('type-the-kana mode asks for kana and accepts every kana that reads that way', async ({
+  page
+}) => {
+  await page.goto('/quiz/practice?rows=hiragana.da&mode=type-the-kana&seed=3');
+  await expect(
+    page.getByText('Type the hiragana for each romaji, then press Enter.')
+  ).toBeVisible();
+  const input = page.getByLabel('Hiragana for this romaji');
+  await expect(input).toHaveAttribute('lang', 'ja');
+  const prompt = page.locator('#prompt');
+  const feedback = page.getByRole('status');
+  // "ji" is じ as well as ぢ, "zu" ず as well as づ: the usual kana is accepted for the rare one.
+  const typed = new Map([
+    ['da', 'だ'],
+    ['ji', 'じ'],
+    ['zu', 'ず'],
+    ['de', 'で'],
+    ['do', 'ど']
+  ]);
+  const solution = new Map([
+    ['da', 'だ'],
+    ['ji', 'ぢ'],
+    ['zu', 'づ'],
+    ['de', 'で'],
+    ['do', 'ど']
+  ]);
+  for (let question = 1; question <= 10; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 10`
+    );
+    const reading = (await prompt.textContent()) ?? '';
+    if (question === 1) {
+      // Romaji is not kana.
+      await input.fill(reading);
+      await input.press('Enter');
+      await expect(feedback).toHaveText(
+        `Not quite. ${reading} is ${solution.get(reading) ?? ''}. You typed “${reading}”.`
+      );
+    } else {
+      await input.fill(typed.get(reading) ?? '');
+      await input.press('Enter');
+      await expect(feedback).toHaveText(`Correct. ${reading} is ${solution.get(reading) ?? ''}.`);
+    }
+    await input.press('Enter');
+  }
+  await expect(page.getByText('You answered 9 of 10 correctly (90 %).')).toBeVisible();
+});
+
+test('typed kana are compared after NFKC normalization: half-width katakana count', async ({
+  page
+}) => {
+  await page.goto('/quiz/practice?rows=katakana.sa&mode=type-the-kana&seed=3');
+  const input = page.getByLabel('Katakana for this romaji');
+  const halfWidth = new Map([
+    ['sa', 'ｻ'],
+    ['shi', 'ｼ'],
+    ['su', 'ｽ'],
+    ['se', 'ｾ'],
+    ['so', 'ｿ']
+  ]);
+  for (let question = 1; question <= 10; question++) {
+    await input.fill(halfWidth.get((await page.locator('#prompt').textContent()) ?? '') ?? '');
+    await input.press('Enter');
+    await expect(page.getByRole('status')).toContainText('Correct.');
+    await input.press('Enter');
+  }
+  await expect(page.getByText('You answered 10 of 10 correctly (100 %).')).toBeVisible();
+});
+
+test('Enter during an input-method composition does not submit the answer', async ({ page }) => {
+  await page.goto('/quiz/practice?rows=hiragana.a&mode=type-the-kana&seed=3');
+  const input = page.getByLabel('Hiragana for this romaji');
+  const feedback = page.getByRole('status');
+  const reading = (await page.locator('#prompt').textContent()) ?? '';
+  const kana = new Map([
+    ['a', 'あ'],
+    ['i', 'い'],
+    ['u', 'う'],
+    ['e', 'え'],
+    ['o', 'お']
+  ]).get(reading);
+  await input.focus();
+
+  // Compose the kana as an input method does, then press Enter while composing.
+  const devtools = await page.context().newCDPSession(page);
+  await devtools.send('Input.imeSetComposition', {
+    text: kana ?? '',
+    selectionStart: 1,
+    selectionEnd: 1
+  });
+  await expect(input).toHaveValue(kana ?? '');
+  await page.keyboard.press('Enter');
+  await expect(feedback).toHaveText('');
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
+
+  // Confirm the composition; the next Enter is a real one and checks the answer.
+  await devtools.send('Input.insertText', { text: kana ?? '' });
+  await expect(input).toHaveValue(kana ?? '');
+  await page.keyboard.press('Enter');
+  await expect(feedback).toHaveText(`Correct. ${reading} is ${kana ?? ''}.`);
 });

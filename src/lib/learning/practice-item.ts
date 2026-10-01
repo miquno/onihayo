@@ -32,13 +32,23 @@ export interface PracticeItem {
   /** What the learner sees and answers about, e.g. `シ`. */
   readonly prompt: string;
   readonly promptLang: TextLang;
+  /** What to call the prompt side in instructions and labels, e.g. `katakana`. */
+  readonly promptName: string;
   /** The answer shown after a question, e.g. `shi`. */
   readonly answer: string;
   readonly answerLang: TextLang;
+  /** What to call the answer side in instructions and labels, e.g. `romaji`. */
+  readonly answerName: string;
   /**
    * Every answer that counts as correct, `answer` first, already in the form
    * `normalizeAnswer()` produces: typed answers are compared with it.
    */
   readonly accepted: readonly string[];
+  /**
+   * Every prompt that counts as correct when the question shows the answer
+   * and asks for the prompt, `prompt` first, in normalized form: for the
+   * reading "ji", ぢ is as right as じ.
+   */
+  readonly acceptedPrompts: readonly string[];
   readonly choices: ChoiceCandidates;
 }

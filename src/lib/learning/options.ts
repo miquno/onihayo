@@ -56,41 +56,27 @@ export function choiceOptions(
     others.filter((candidate) => !preferredIds.has(candidate.id))
   ];
 
+  const accepted = question(mode, item).accepted;
   const taken = new Set([optionKey(mode, item)]);
   const distractors: PracticeItem[] = [];
   for (const tier of tiers) {
     for (const candidate of shuffled(tier, random)) {
       if (distractors.length === count - 1) break;
       const key = optionKey(mode, candidate);
-      if (taken.has(key) || alsoCorrect(mode, item, candidate)) continue;
+      // A right answer too (ぢ next to じ for "ji"), or a text that is already an option.
+      if (accepted.includes(key) || taken.has(key)) continue;
       taken.add(key);
       distractors.push(candidate);
     }
   }
 
-  return shuffled([item, ...distractors], random).map((option) => ({
-    itemId: option.id,
-    ...itemSide(option, mode.respond)
-  }));
+  return shuffled([item, ...distractors], random).map((option) => {
+    const { text, lang } = itemSide(option, mode.respond);
+    return { itemId: option.id, text, lang };
+  });
 }
 
 /** The text an item contributes as an option, in the form options are compared in. */
 function optionKey(mode: QuestionMode, item: PracticeItem): string {
   return normalizeAnswer(itemSide(item, mode.respond).text);
-}
-
-/**
- * Whether choosing `candidate` would be a right answer to the question about
- * `item`: its option text is accepted, or what the question shows is one of
- * the candidate's own accepted answers (the reading "ji" fits ぢ as well as じ).
- */
-function alsoCorrect(mode: QuestionMode, item: PracticeItem, candidate: PracticeItem): boolean {
-  if (question(mode, item).accepted.includes(optionKey(mode, candidate))) return true;
-  const shown = normalizeAnswer(itemSide(item, mode.ask).text);
-  return question(reversed(mode), candidate).accepted.includes(shown);
-}
-
-/** The same mode asked the other way round. */
-function reversed(mode: QuestionMode): QuestionMode {
-  return { ...mode, ask: mode.respond, respond: mode.ask };
 }

@@ -40,11 +40,6 @@ export function rowSelectionSearch(keys: readonly KanaRowKey[]): `?${string}` {
   return `?${params.toString()}`;
 }
 
-/** The scripts a selection draws from, in display order. */
-export function selectedScripts(keys: readonly KanaRowKey[]): KanaScript[] {
-  return kanaScripts.filter((script) => keys.some((key) => key.startsWith(`${script}.`)));
-}
-
 /** The kana of the selected rows: each script in dataset order, hiragana first. */
 export function selectedKana(
   keys: readonly KanaRowKey[],

@@ -44,11 +44,12 @@ function play(questionMode: QuestionMode, answerFor: (itemId: string) => string)
 }
 
 describe('question modes', () => {
-  it('include typing and choosing the reading, and choosing the character', () => {
+  it('include typing and choosing the reading, choosing the character, and typing the kana', () => {
     expect(questionModes.map(({ id, ask, respond, input }) => [id, ask, respond, input])).toEqual([
       ['type-the-reading', 'prompt', 'answer', 'type'],
       ['choose-the-reading', 'prompt', 'answer', 'choose'],
-      ['choose-the-character', 'answer', 'prompt', 'choose']
+      ['choose-the-character', 'answer', 'prompt', 'choose'],
+      ['type-the-kana', 'answer', 'prompt', 'type']
     ]);
   });
 
@@ -76,21 +77,28 @@ describe('question', () => {
   it('shows the kana and accepts every reading when the reading is asked for', () => {
     expect(question(mode('type-the-reading'), ti)).toEqual({
       itemId: 'kana.katakana.ti',
-      shown: { text: 'ティ', lang: 'ja' },
-      solution: { text: 'ti', lang: null },
+      shown: { text: 'ティ', lang: 'ja', name: 'katakana' },
+      solution: { text: 'ti', lang: null, name: 'romaji' },
       accepted: ['ti', 'thi'],
       input: 'type'
     });
     expect(question(mode('choose-the-reading'), ti).input).toBe('choose');
   });
 
-  it('shows the reading and accepts only the kana when the character is asked for', () => {
+  it('shows the reading and accepts the kana that read that way when the kana is asked for', () => {
+    // チ also accepts "ti" (Kunrei-shiki), so it is right for "ti" too.
     expect(question(mode('choose-the-character'), ti)).toEqual({
       itemId: 'kana.katakana.ti',
-      shown: { text: 'ti', lang: null },
-      solution: { text: 'ティ', lang: 'ja' },
-      accepted: ['ティ'],
+      shown: { text: 'ti', lang: null, name: 'romaji' },
+      solution: { text: 'ティ', lang: 'ja', name: 'katakana' },
+      accepted: ['ティ', 'チ'],
       input: 'choose'
+    });
+    expect(question(mode('type-the-kana'), ti)).toMatchObject({
+      shown: { text: 'ti' },
+      solution: { text: 'ティ' },
+      accepted: ['ティ', 'チ'],
+      input: 'type'
     });
   });
 });
@@ -116,14 +124,31 @@ describe.each(questionModes)('a session in $id mode', (questionMode) => {
 });
 
 describe('what each side accepts', () => {
-  it('accepts alternative spellings for the reading, but only the kana itself for the character', () => {
+  it('accepts alternative spellings for the reading, and for the kana only kana that read the same', () => {
     const shi = itemFor('シ');
     const di = itemFor('ヂ');
     if (shi === undefined || di === undefined) throw new Error('missing kana');
     expect(question(mode('type-the-reading'), shi).accepted).toEqual(['shi', 'si']);
-    expect(question(mode('choose-the-character'), shi).accepted).toEqual(['シ']);
-    // ヂ reads like ジ: the reading accepts ji, di, and zi, the character only ヂ.
+    expect(question(mode('type-the-kana'), shi).accepted).toEqual(['シ']);
+    // ヂ reads like ジ: the reading accepts ji, di, and zi; for "ji" both ヂ and ジ are right.
     expect(question(mode('choose-the-reading'), di).accepted).toEqual(['ji', 'di', 'zi']);
-    expect(question(mode('choose-the-character'), di).accepted).toEqual(['ヂ']);
+    expect(question(mode('type-the-kana'), di).accepted).toEqual(['ヂ', 'ジ']);
+  });
+
+  it('compares typed kana after NFKC normalization, so half-width katakana count', () => {
+    const shi = itemFor('シ');
+    if (shi === undefined) throw new Error('missing kana');
+    const start = () =>
+      startSession({
+        items: sessionItems(mode('type-the-kana'), [shi]),
+        questionCount: 1,
+        random: createSeededRandom(1)
+      });
+    const answerOf = (typed: string) => submitAnswer(start(), typed, () => 0).answers[0];
+    expect(answerOf('ｼ')).toMatchObject({ given: 'シ', correct: true });
+    expect(answerOf(' シ\u3000')).toMatchObject({ correct: true });
+    // The other script and the romaji are not the katakana asked for.
+    expect(answerOf('し')?.correct).toBe(false);
+    expect(answerOf('shi')?.correct).toBe(false);
   });
 });

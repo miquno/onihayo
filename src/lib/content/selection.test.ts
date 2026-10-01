@@ -6,8 +6,7 @@ import {
   parseRowSelection,
   rowSelectionSearch,
   rowsByClass,
-  selectedKana,
-  selectedScripts
+  selectedKana
 } from './selection';
 
 const datasets = { hiragana, katakana };
@@ -66,14 +65,6 @@ describe('rowSelectionSearch', () => {
       'hiragana.a',
       'katakana.kya'
     ]);
-  });
-});
-
-describe('selectedScripts', () => {
-  it('names the scripts a selection draws from', () => {
-    expect(selectedScripts(['hiragana.a', 'hiragana.ka'])).toEqual(['hiragana']);
-    expect(selectedScripts(['katakana.pya', 'hiragana.n'])).toEqual(['hiragana', 'katakana']);
-    expect(selectedScripts([])).toEqual([]);
   });
 });
 
