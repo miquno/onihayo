@@ -12,7 +12,7 @@ Learners do need their progress to survive between visits, and eventually across
 ## Decision
 
 1. Onihayo starts **guest-first**: every learning feature works without an account.
-2. Guest progress is stored only in the learner's browser (storage mechanism chosen in milestone 0.6). The server stores nothing about guests and sets no cookies for them.
+2. Guest progress is stored only in the learner's browser (storage mechanism: [ADR 0008](0008-guest-progress-storage.md)). The server stores nothing about guests and sets no cookies for them.
 3. Guests can export their progress to a file and import it again, so they are never locked to one browser.
 4. **Optional accounts** are a dedicated roadmap milestone (0.9, _Accounts and sync_), introduced once there is progress worth protecting (after the review/SRS engine). Accounts add cross-device sync and server-side backup; they never gate learning content.
 5. The account milestone starts with its own ADR covering library, session strategy, credentials, recovery, deletion, email, and rate limiting, following [docs/security/authentication.md](../security/authentication.md).
