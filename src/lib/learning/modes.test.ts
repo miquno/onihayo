@@ -34,7 +34,8 @@ function play(questionMode: QuestionMode, answerFor: (itemId: string) => string)
   let session = startSession({
     items: sessionItems(questionMode, items),
     questionCount: items.length * 2,
-    random: createSeededRandom(5)
+    random: createSeededRandom(5),
+    clock: () => 0
   });
   while (session.phase !== 'finished') {
     session = submitAnswer(session, answerFor(currentItem(session)?.id ?? ''), () => 0);
@@ -142,7 +143,8 @@ describe('what each side accepts', () => {
       startSession({
         items: sessionItems(mode('type-the-kana'), [shi]),
         questionCount: 1,
-        random: createSeededRandom(1)
+        random: createSeededRandom(1),
+        clock: () => 0
       });
     const answerOf = (typed: string) => submitAnswer(start(), typed, () => 0).answers[0];
     expect(answerOf('ｼ')).toMatchObject({ given: 'シ', correct: true });
