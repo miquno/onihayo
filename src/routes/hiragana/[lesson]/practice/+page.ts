@@ -3,7 +3,7 @@ import { hiragana } from '$lib/content/kana/hiragana';
 import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
 import { findLesson, lessonKana, lessonSlug, nextLesson } from '$lib/content/lessons';
 import { parseSeed } from '$lib/learning/random';
-import { randomSeed } from './practice';
+import { practiceKana, randomSeed } from '$lib/ui/practice';
 import type { PageLoad } from './$types';
 
 /** How often each kana of the lesson is asked. */
@@ -19,12 +19,7 @@ export const load = (({ params, url }) => {
   return {
     slug: lessonSlug(lesson),
     title: lesson.title,
-    kana: kana.map((record) => ({
-      id: record.id,
-      character: record.character,
-      romaji: record.romaji,
-      accepted: [record.romaji, ...record.alternatives]
-    })),
+    kana: kana.map(practiceKana),
     questionCount: kana.length * rounds,
     // `?seed=` replays a session; anything that is not a valid seed starts a new one.
     seed: parseSeed(url.searchParams.get('seed')) ?? randomSeed(),

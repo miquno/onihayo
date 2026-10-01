@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { maxSeed } from '$lib/learning/random';
-import { missedItems, missesText, randomSeed, resultText } from './practice';
+import { hiragana } from '$lib/content/kana/hiragana';
+import { missedItems, missesText, practiceKana, randomSeed, resultText } from './practice';
 
 describe('resultText', () => {
   it('states correct answers, total, and a rounded percentage', () => {
@@ -48,5 +49,17 @@ describe('randomSeed', () => {
     for (const seed of seeds)
       expect(Number.isInteger(seed) && seed >= 0 && seed <= maxSeed).toBe(true);
     expect(new Set(seeds).size).toBeGreaterThan(1);
+  });
+});
+
+describe('practiceKana', () => {
+  it('accepts the romaji first, then every alternative', () => {
+    const shi = hiragana.find((kana) => kana.id === 'kana.hiragana.shi');
+    expect(shi && practiceKana(shi)).toEqual({
+      id: 'kana.hiragana.shi',
+      character: 'し',
+      romaji: 'shi',
+      accepted: ['shi', 'si']
+    });
   });
 });

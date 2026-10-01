@@ -1,5 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import { rowSelectionSearch } from '$lib/content/selection';
   import { pageTitle } from '$lib/site';
   import KanaPractice from '$lib/ui/KanaPractice.svelte';
   import LinkButton from '$lib/ui/LinkButton.svelte';
@@ -9,32 +10,25 @@
 </script>
 
 <svelte:head>
-  <title>{pageTitle(`Practice: ${data.title} — Hiragana`)}</title>
+  <title>{pageTitle(`Kana quiz: ${String(data.kana.length)} kana`)}</title>
 </svelte:head>
 
-<h1>Practice: {data.title}</h1>
+<h1>Kana quiz: {data.kana.length} kana</h1>
 
 <noscript>
-  <p class="instructions">Practice needs JavaScript. The lesson itself works without it.</p>
+  <p class="instructions">The quiz needs JavaScript. The lessons and charts work without it.</p>
 </noscript>
 
 <KanaPractice
   kana={data.kana}
   questionCount={data.questionCount}
   seed={data.seed}
-  kanaName="hiragana"
+  kanaName={data.kanaName}
 >
   {#snippet nextStep()}
-    {#if data.next}
-      <LinkButton href={resolve('/hiragana/[lesson]', { lesson: data.next.slug })}>
-        Next lesson: {data.next.title}
-      </LinkButton>
-    {:else}
-      <LinkButton href={resolve('/hiragana')}>All hiragana lessons</LinkButton>
-    {/if}
-  {/snippet}
-  {#snippet moreLinks()}
-    <a href={resolve('/hiragana/[lesson]', { lesson: data.slug })}>Back to the lesson</a>
+    <!-- Back to the selection page with the same rows chosen. -->
+    <LinkButton href={resolve(`/quiz${rowSelectionSearch(data.rows)}`)}>Change selection</LinkButton
+    >
   {/snippet}
 </KanaPractice>
 
