@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { tick } from 'svelte';
+  import { question, questionModes, sessionItems } from '$lib/learning/modes';
   import { createSeededRandom } from '$lib/learning/random';
   import {
     currentItem,
@@ -34,9 +35,12 @@
 
   let { items, questionCount, seed, kanaName, nextStep, moreLinks }: Props = $props();
 
+  // The one typed mode so far: see the kana, type its reading.
+  const [mode] = questionModes;
+
   function newSession(sessionSeed: number) {
     return startSession({
-      items: items.map(({ id, accepted }) => ({ id, accepted })),
+      items: sessionItems(mode, items),
       questionCount,
       random: createSeededRandom(sessionSeed)
     });
@@ -51,7 +55,8 @@
   let resultsHeading: HTMLHeadingElement | undefined = $state();
 
   const itemsById = $derived(new Map(items.map((item) => [item.id, item])));
-  const current = $derived(itemsById.get(currentItem(session)?.id ?? ''));
+  const currentPracticeItem = $derived(itemsById.get(currentItem(session)?.id ?? ''));
+  const current = $derived(currentPracticeItem && question(mode, currentPracticeItem));
   const answered = $derived(lastAnswer(session));
   const progress = $derived(questionProgress(session));
   const summary = $derived(summarize(session));
@@ -87,7 +92,7 @@
   <ProgressBar label="Question" value={progress.current} max={progress.total} />
 
   <form class="question" onsubmit={handleSubmit}>
-    <p class="character" id="prompt" lang={current.promptLang}>{current.prompt}</p>
+    <p class="character" id="prompt" lang={current.shown.lang}>{current.shown.text}</p>
     <label for="answer">Romaji for this {kanaName}</label>
     <div class="answer-row">
       <!-- No `name`: without JavaScript nothing is submitted, so answers never reach a URL. -->
@@ -111,20 +116,20 @@
   <div class="feedback" role="status">
     {#if answered?.correct}
       <p>
-        <strong>Correct.</strong> <span lang={current.promptLang}>{current.prompt}</span> is
-        <span lang={current.answerLang}>{current.answer}</span>.
+        <strong>Correct.</strong> <span lang={current.shown.lang}>{current.shown.text}</span> is
+        <span lang={current.solution.lang}>{current.solution.text}</span>.
       </p>
     {:else if answered}
       <p>
-        <strong>Not quite.</strong> <span lang={current.promptLang}>{current.prompt}</span> is
-        <strong lang={current.answerLang}>{current.answer}</strong>. You typed “{answered.given}”.
+        <strong>Not quite.</strong> <span lang={current.shown.lang}>{current.shown.text}</span> is
+        <strong lang={current.solution.lang}>{current.solution.text}</strong>. You typed “{answered.given}”.
       </p>
     {:else if blankSubmitted}
       <p>Type the romaji first, then press Enter.</p>
     {:else if session.position > 0}
       <VisuallyHidden>
         Question {progress.current} of {progress.total}:
-        <span lang={current.promptLang}>{current.prompt}</span>
+        <span lang={current.shown.lang}>{current.shown.text}</span>
       </VisuallyHidden>
     {/if}
   </div>
