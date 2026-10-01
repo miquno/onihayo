@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { maxSeed } from '$lib/learning/random';
 import { hiragana } from '$lib/content/kana/hiragana';
-import { missedItems, missesText, practiceKana, randomSeed, resultText } from './practice';
+import { katakana } from '$lib/content/kana/katakana';
+import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
+import {
+  lessonPractice,
+  missedItems,
+  missesText,
+  practiceKana,
+  randomSeed,
+  resultText
+} from './practice';
 
 describe('resultText', () => {
   it('states correct answers, total, and a rounded percentage', () => {
@@ -61,5 +70,30 @@ describe('practiceKana', () => {
       romaji: 'shi',
       accepted: ['shi', 'si']
     });
+  });
+});
+
+describe('lessonPractice', () => {
+  it('asks every kana of the lesson twice, replaying a valid seed', () => {
+    const practice = lessonPractice(katakanaLessons, katakana, 'wa', '12');
+    expect(practice?.kana.map((kana) => kana.character)).toEqual(['ワ', 'ヲ', 'ン']);
+    expect(practice).toMatchObject({
+      slug: 'wa',
+      title: 'W row and n',
+      questionCount: 6,
+      seed: 12
+    });
+    expect(practice?.next).toEqual({ slug: 'ga', title: 'G row' });
+  });
+
+  it('picks a new seed for anything that is not a valid seed', () => {
+    for (const seed of [null, '', '-1', '1e3', '4294967296']) {
+      const practice = lessonPractice(katakanaLessons, katakana, 'a', seed);
+      expect(Number.isInteger(practice?.seed)).toBe(true);
+    }
+  });
+
+  it('is undefined for an unknown slug', () => {
+    expect(lessonPractice(katakanaLessons, katakana, 'nope', null)).toBeUndefined();
   });
 });

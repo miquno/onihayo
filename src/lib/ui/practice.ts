@@ -1,4 +1,6 @@
-import type { KanaRecord } from '$lib/content/model';
+import { findLesson, lessonKana, lessonSlug, nextLesson } from '$lib/content/lessons';
+import type { KanaLesson, KanaRecord } from '$lib/content/model';
+import { parseSeed } from '$lib/learning/random';
 import type { SessionSummary } from '$lib/learning/session';
 
 /** What `KanaPractice` needs to know about one kana. */
@@ -49,4 +51,43 @@ export function missedItems<T extends { readonly id: string }>(
     const item = items.find((candidate) => candidate.id === itemId);
     return item === undefined ? [] : [{ item, misses }];
   });
+}
+
+/** How often each kana of a lesson is asked in its practice. */
+const lessonRounds = 2;
+
+/** Everything a lesson practice page needs. */
+export interface LessonPracticeData {
+  readonly slug: string;
+  readonly title: string;
+  readonly kana: readonly PracticeKana[];
+  readonly questionCount: number;
+  readonly seed: number;
+  readonly next: { readonly slug: string; readonly title: string } | null;
+}
+
+/**
+ * The practice of the lesson with the given slug (exact match only), or
+ * `undefined` for anything else: every kana of the lesson asked twice. A
+ * valid `seed` from the URL replays a question order; anything else starts a
+ * new one.
+ */
+export function lessonPractice(
+  lessons: readonly KanaLesson[],
+  records: readonly KanaRecord[],
+  slug: string,
+  seed: string | null
+): LessonPracticeData | undefined {
+  const lesson = findLesson(lessons, slug);
+  if (lesson === undefined) return undefined;
+  const kana = lessonKana(lesson, records);
+  const next = nextLesson(lessons, lesson);
+  return {
+    slug: lessonSlug(lesson),
+    title: lesson.title,
+    kana: kana.map(practiceKana),
+    questionCount: kana.length * lessonRounds,
+    seed: parseSeed(seed) ?? randomSeed(),
+    next: next === undefined ? null : { slug: lessonSlug(next), title: next.title }
+  };
 }

@@ -8,7 +8,7 @@
   let { data }: PageProps = $props();
 
   const titles: Record<KanaClass, string> = {
-    basic: 'Basic hiragana',
+    basic: 'Basic katakana',
     dakuten: 'Dakuten and handakuten',
     yoon: 'Combined sounds',
     extended: 'Loanword sounds'
@@ -16,18 +16,18 @@
 </script>
 
 <svelte:head>
-  <title>{pageTitle('Hiragana chart')}</title>
+  <title>{pageTitle('Katakana chart')}</title>
   <meta
     name="description"
-    content="All hiragana in one chart, row by row, with the romaji for every character."
+    content="All katakana in one chart, row by row, with the romaji for every character."
   />
 </svelte:head>
 
-<h1>Hiragana chart</h1>
-<p class="lead">All {data.total} hiragana on one page, each with its romaji.</p>
+<h1>Katakana chart</h1>
+<p class="lead">All {data.total} katakana on one page, each with its romaji.</p>
 <p>
   Use it to look something up or to review. To learn the characters one row at a time, start with
-  the <a href={resolve('/hiragana')}>hiragana lessons</a>.
+  the <a href={resolve('/katakana')}>katakana lessons</a>.
 </p>
 
 <KanaCharts charts={data.charts} {titles}>
@@ -36,11 +36,14 @@
       Each row starts with a consonant sound; each column is a vowel.
     {:else if kanaClass === 'dakuten'}
       Two small strokes or a small circle change the consonant:
-      <span lang="ja">か</span> ka becomes <span lang="ja">が</span> ga.
+      <span lang="ja">カ</span> ka becomes <span lang="ja">ガ</span> ga.
+    {:else if kanaClass === 'yoon'}
+      A kana ending in i and a small <span lang="ja">ャ</span>, <span lang="ja">ュ</span>, or
+      <span lang="ja">ョ</span> make one sound: <span lang="ja">キ</span> ki and
+      <span lang="ja">ャ</span> give <span lang="ja">キャ</span> kya.
     {:else}
-      A kana ending in i and a small <span lang="ja">ゃ</span>, <span lang="ja">ゅ</span>, or
-      <span lang="ja">ょ</span> make one sound: <span lang="ja">き</span> ki and
-      <span lang="ja">ゃ</span> give <span lang="ja">きゃ</span> kya.
+      A kana and a small vowel write sounds that loanwords need: <span lang="ja">テ</span> te and
+      <span lang="ja">ィ</span> give <span lang="ja">ティ</span> ti.
     {/if}
   {/snippet}
 </KanaCharts>

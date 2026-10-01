@@ -8,13 +8,13 @@
 </script>
 
 <svelte:head>
-  <title>{pageTitle(`Practice: ${data.title} — Hiragana`)}</title>
+  <title>{pageTitle(`Practice: ${data.title} — Katakana`)}</title>
 </svelte:head>
 
 <LessonPractice
   practice={data}
-  kanaName="hiragana"
-  lessonHref={resolve('/hiragana/[lesson]', { lesson: data.slug })}
-  nextHref={data.next ? resolve('/hiragana/[lesson]', { lesson: data.next.slug }) : null}
-  allLessonsHref={resolve('/hiragana')}
+  kanaName="katakana"
+  lessonHref={resolve('/katakana/[lesson]', { lesson: data.slug })}
+  nextHref={data.next ? resolve('/katakana/[lesson]', { lesson: data.next.slug }) : null}
+  allLessonsHref={resolve('/katakana')}
 />

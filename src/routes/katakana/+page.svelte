@@ -35,6 +35,7 @@
 />
 
 <p>
+  To see every character at once, open the <a href={resolve('/katakana/chart')}>katakana chart</a>.
   To practise any rows of hiragana and katakana together, try the
   <a href={resolve('/quiz')}>kana quiz</a>.
 </p>
