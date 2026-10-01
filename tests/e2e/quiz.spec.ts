@@ -42,7 +42,10 @@ test('keyboard-only learner picks rows of both scripts and finishes a quiz', asy
 
   await page.getByRole('button', { name: 'Start quiz' }).focus();
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/quiz\/practice\?rows=hiragana\.a&rows=katakana\.ka$/u);
+  // The setup travels in the URL: the default mode and length, then the rows.
+  await expect(page).toHaveURL(
+    /\/quiz\/practice\?mode=type-the-reading&length=20&rows=hiragana\.a&rows=katakana\.ka$/u
+  );
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Kana quiz: 10 kana');
 
   // Answers stay in the browser: no request while practising.
@@ -224,4 +227,138 @@ test('Enter during an input-method composition does not submit the answer', asyn
   await expect(input).toHaveValue(kana ?? '');
   await page.keyboard.press('Enter');
   await expect(feedback).toHaveText(`Correct. ${reading} is ${kana ?? ''}.`);
+});
+
+// The practice setup: mode and length are chosen with the rows, and the
+// session follows them. Two modes, from setup to results.
+test('keyboard-only learner sets up a choose-the-character quiz of 10 questions', async ({
+  page
+}) => {
+  await page.goto('/quiz');
+  // Radio groups: arrow keys move the choice.
+  await page.getByRole('radio', { name: /^Type the reading/u }).focus();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('radio', { name: /^Choose the character/u })).toBeChecked();
+  await page.getByRole('radio', { name: '20 questions' }).focus();
+  await page.keyboard.press('ArrowUp');
+  await expect(page.getByRole('radio', { name: '10 questions' })).toBeChecked();
+  await page.getByRole('checkbox', { name: /^hiragana a row:/u }).focus();
+  await page.keyboard.press('Space');
+  await page.getByRole('checkbox', { name: /^katakana sa row:/u }).focus();
+  await page.keyboard.press('Space');
+  await expect(page.getByRole('status')).toHaveText('5 kana selected');
+  await page.getByRole('button', { name: 'Start quiz' }).focus();
+  await page.keyboard.press('Enter');
+
+  await expect(page).toHaveURL(
+    /\/quiz\/practice\?mode=choose-the-character&length=10&rows=katakana\.sa$/u
+  );
+  await expect(page.getByText('Choose the katakana for each romaji.')).toBeVisible();
+
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+
+  const options = page.getByRole('group', { name: 'Katakana for this romaji' });
+  const feedback = page.getByRole('status');
+  const katakanaFor = new Map(katakana.map((kana) => [kana.romaji, kana.character]));
+  for (let question = 1; question <= 10; question++) {
+    await expect(page.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuetext',
+      `${String(question)} of 10`
+    );
+    const reading = (await page.locator('#prompt').textContent()) ?? '';
+    const right = katakanaFor.get(reading) ?? '';
+    const texts = await options.getByRole('button').allTextContents();
+    // Four katakana, the right one among them exactly once.
+    expect(texts).toHaveLength(4);
+    expect(texts.filter((text) => text.trim() === right)).toHaveLength(1);
+    for (const text of texts) expect(text.trim()).toMatch(/^[ァ-ヶ]/u);
+
+    if (question === 1) {
+      const wrong = texts.map((text) => text.trim()).find((text) => text !== right) ?? '';
+      await options.getByRole('button', { name: wrong, exact: true }).focus();
+      await page.keyboard.press('Enter');
+      await expect(feedback).toHaveText(`Not quite. ${reading} is ${right}. You chose “${wrong}”.`);
+      await expect(
+        options.getByRole('button', { name: `${right} (correct answer)` })
+      ).toBeDisabled();
+      await expect(options.getByRole('button', { name: `${wrong} (your choice)` })).toBeDisabled();
+    } else {
+      await options.getByRole('button', { name: right, exact: true }).focus();
+      await page.keyboard.press('Enter');
+      await expect(feedback).toHaveText(`Correct. ${reading} is ${right}.`);
+    }
+    // Focus moves to "Next", then to the first option of the next question.
+    await expect(page.getByRole('button', { name: 'Next' })).toBeFocused();
+    await page.keyboard.press('Enter');
+    if (question < 10) await expect(options.getByRole('button').first()).toBeFocused();
+  }
+
+  await expect(page.getByRole('heading', { level: 2, name: 'Results' })).toBeFocused();
+  await expect(page.getByText('You answered 9 of 10 correctly (90 %).')).toBeVisible();
+  expect(requests).toEqual([]);
+
+  // "Change selection" keeps the mode, the length, and the rows.
+  await page.getByRole('link', { name: 'Change selection' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Kana quiz');
+  await expect(page.getByRole('radio', { name: /^Choose the character/u })).toBeChecked();
+  await expect(page.getByRole('radio', { name: '10 questions' })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: /^katakana sa row:/u })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: /^hiragana a row:/u })).not.toBeChecked();
+});
+
+test('learner sets up a type-the-kana quiz and finishes it', async ({ page }) => {
+  await page.goto('/quiz');
+  await page.getByRole('radio', { name: /^Type the kana/u }).check();
+  await page.getByRole('radio', { name: '10 questions' }).check();
+  await page.getByRole('button', { name: 'Start quiz' }).click();
+  await expect(page).toHaveURL(/\/quiz\/practice\?mode=type-the-kana&length=10&rows=hiragana\.a$/u);
+
+  const input = page.getByLabel('Hiragana for this romaji');
+  const hiraganaFor = new Map(hiragana.map((kana) => [kana.romaji, kana.character]));
+  for (let question = 1; question <= 10; question++) {
+    await input.fill(hiraganaFor.get((await page.locator('#prompt').textContent()) ?? '') ?? '');
+    await input.press('Enter');
+    await expect(page.getByRole('status')).toContainText('Correct.');
+    await input.press('Enter');
+  }
+  await expect(page.getByText('You answered 10 of 10 correctly (100 %).')).toBeVisible();
+});
+
+test('an endless quiz goes on until the learner finishes it', async ({ page }) => {
+  await page.goto('/quiz');
+  await page.getByRole('radio', { name: /^Choose the reading/u }).check();
+  await page.getByRole('radio', { name: 'Endless, until you finish' }).check();
+  await page.getByRole('button', { name: 'Start quiz' }).click();
+  await expect(page).toHaveURL(/mode=choose-the-reading&length=endless&rows=hiragana\.a$/u);
+  await expect(page.getByRole('progressbar')).toHaveCount(0);
+
+  const options = page.getByRole('group', { name: 'Romaji for this hiragana' });
+  const romajiFor = new Map(hiragana.map((kana) => [kana.character, kana.romaji]));
+  // More questions than the five vowels: the session keeps going.
+  for (let question = 1; question <= 7; question++) {
+    await expect(page.getByText(`Question ${String(question)}`, { exact: true })).toBeVisible();
+    const right = romajiFor.get((await page.locator('#prompt').textContent()) ?? '') ?? '';
+    await options.getByRole('button', { name: right, exact: true }).click();
+    await expect(page.getByRole('status')).toContainText('Correct.');
+    await page.getByRole('button', { name: 'Next' }).click();
+  }
+  await page.getByRole('button', { name: 'Finish' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { level: 2, name: 'Results' })).toBeFocused();
+  await expect(page.getByText('You answered 7 of 7 correctly (100 %).')).toBeVisible();
+});
+
+test('the same seed gives the same options in the same order', async ({ page }) => {
+  const firstOptions = async () => {
+    await page.goto('/quiz/practice?rows=katakana.ta&mode=choose-the-character&length=10&seed=42');
+    const shown = (await page.locator('#prompt').textContent()) ?? '';
+    const texts = await page.getByRole('group').getByRole('button').allTextContents();
+    return [shown, ...texts.map((text) => text.trim())];
+  };
+  const first = await firstOptions();
+  expect(first).toHaveLength(5);
+  expect(await firstOptions()).toEqual(first);
 });

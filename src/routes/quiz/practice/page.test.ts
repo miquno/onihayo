@@ -29,7 +29,7 @@ describe('kana quiz practice load', () => {
     expect(data.seed).toBe(5);
   });
 
-  it('types the reading unless a typed mode is asked for by its exact ID', () => {
+  it('types the reading unless a mode is asked for by its exact ID', () => {
     expect(loadQuiz('?rows=hiragana.a').mode.id).toBe('type-the-reading');
     expect(loadQuiz('?rows=hiragana.a&mode=type-the-kana').mode).toMatchObject({
       id: 'type-the-kana',
@@ -37,13 +37,42 @@ describe('kana quiz practice load', () => {
       respond: 'prompt',
       input: 'type'
     });
-    // Unknown IDs and choice modes (no options UI yet) fall back to typing the reading.
-    for (const mode of ['', 'Type-the-kana', 'nope', '__proto__', 'choose-the-reading']) {
+    expect(loadQuiz('?rows=hiragana.a&mode=choose-the-character').mode).toMatchObject({
+      id: 'choose-the-character',
+      input: 'choose'
+    });
+    // Anything that is not exactly a mode ID falls back to typing the reading.
+    for (const mode of ['', 'Type-the-kana', 'nope', '__proto__', 'choose']) {
       expect(loadQuiz(`?rows=hiragana.a&mode=${mode}`).mode.id, mode).toBe('type-the-reading');
     }
   });
 
-  it('asks each kana twice, or once when twice would be more than 100 questions', () => {
+  it('gives choice modes the whole script of each practised kana as options, typed modes none', () => {
+    expect(loadQuiz('?rows=hiragana.a').pool).toEqual([]);
+    expect(loadQuiz('?rows=hiragana.a&mode=type-the-kana').pool).toEqual([]);
+    const oneScript = loadQuiz('?rows=katakana.sa&mode=choose-the-reading').pool;
+    expect(oneScript).toHaveLength(116);
+    expect(new Set(oneScript.map((item) => item.choices.group))).toEqual(
+      new Set(['kana.katakana'])
+    );
+    expect(
+      loadQuiz('?rows=katakana.sa&rows=hiragana.a&mode=choose-the-character').pool
+    ).toHaveLength(104 + 116);
+  });
+
+  it('asks 10, 20, or 50 questions, or prepares an endless session, by exact length', () => {
+    const count = (length: string) => loadQuiz(`?rows=hiragana.a&length=${length}`);
+    expect(count('10')).toMatchObject({ length: '10', questionCount: 10 });
+    expect(count('20')).toMatchObject({ length: '20', questionCount: 20 });
+    expect(count('50')).toMatchObject({ length: '50', questionCount: 50 });
+    expect(count('endless')).toMatchObject({ length: 'endless', questionCount: 1000 });
+    // Anything else: no length, and the quiz covers the selection as before.
+    for (const length of ['', '5', '010', '20.0', 'Endless', '__proto__', '1e1']) {
+      expect(count(length), length).toMatchObject({ length: null, questionCount: 10 });
+    }
+  });
+
+  it('without a length, asks each kana twice, or once when twice would be more than 100', () => {
     expect(loadQuiz('?rows=hiragana.a').questionCount).toBe(10);
     const basicHiragana = ['a', 'ka', 'sa', 'ta', 'na', 'ha', 'ma', 'ya', 'ra', 'wa', 'n'];
     const all = basicHiragana.map((row) => `rows=hiragana.${row}`).join('&');
@@ -101,6 +130,49 @@ describe('kana quiz practice page', () => {
     expect(page).toMatch(/<p class="character[^"]*" id="prompt">(?:sa|shi|su|se|so)<\/p>/u);
     expect(page).toMatch(/<input id="answer"[^>]*lang="ja"/u);
     expect(page).not.toMatch(/<input[^>]*\sname=/u);
+  });
+
+  it('offers four options as buttons in a choice mode, and nothing that is sent', () => {
+    const choice = loadQuiz('?rows=katakana.sa&seed=9&mode=choose-the-character&length=10');
+    const page = withoutHydrationMarkers(
+      render(QuizPracticePage, { props: { data: choice, params: {} } }).body
+    );
+    expect(page).toContain('Choose the katakana for each romaji.');
+    expect(page).toMatch(
+      /<div class="options[^"]*" role="group" aria-labelledby="choice-label" aria-describedby="prompt">/u
+    );
+    expect(page).toMatch(/<p class="label[^"]*" id="choice-label">Katakana for this romaji<\/p>/u);
+    const options = [
+      ...page.matchAll(
+        /<button type="button" id="option-(\d)" class="option[^"]*">\s*<span lang="ja">([^<]+)<\/span>/gu
+      )
+    ].map(([, index, text]) => `${index ?? ''}:${text ?? ''}`);
+    expect(options).toHaveLength(4);
+    expect(options.map((option) => option.slice(0, 1))).toEqual(['0', '1', '2', '3']);
+    for (const option of options) expect(option.slice(2)).toMatch(/^[ァ-ヶ][ャュョァィゥェォ]?$/u);
+    expect(page).not.toContain('id="answer"');
+    expect(page).not.toMatch(/<(?:input|button)[^>]*\sname=/u);
+    expect(page).toContain('aria-valuetext="1 of 10"');
+  });
+
+  it('shows the question number and a Finish button instead of a progress bar when endless', () => {
+    const endless = loadQuiz('?rows=hiragana.a&seed=9&length=endless');
+    const page = withoutHydrationMarkers(
+      render(QuizPracticePage, { props: { data: endless, params: {} } }).body
+    );
+    expect(page).not.toContain('role="progressbar"');
+    expect(page).toMatch(/<span>Question 1<\/span>/u);
+    expect(page).toMatch(/<button[^>]*type="button"[^>]*>\s*(?:<span>)?Finish/u);
+  });
+
+  it('links back to the setup with the same rows, mode, and length', () => {
+    // The link is in the results, so it is checked on the data the page builds it from.
+    const data = loadQuiz('?rows=katakana.sa&mode=choose-the-reading&length=50');
+    expect([data.rows, data.mode.id, data.length]).toEqual([
+      ['katakana.sa'],
+      'choose-the-reading',
+      '50'
+    ]);
   });
 
   it('explains that the quiz needs JavaScript', () => {

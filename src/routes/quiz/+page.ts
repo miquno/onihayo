@@ -6,17 +6,25 @@ import {
   rowsByClass,
   type KanaRowKey
 } from '$lib/content/selection';
+import { parsePracticeLength, practiceLengths, type PracticeLength } from '$lib/learning/length';
+import { findQuestionMode, questionModes } from '$lib/learning/modes';
 import type { PageLoad } from './$types';
 
 const datasets = { hiragana, katakana };
 
-/** What a first visit starts with: the hiragana vowels. */
+/** What a first visit starts with: the hiragana vowels, typing the reading, 20 questions. */
 const defaultSelection: readonly KanaRowKey[] = ['hiragana.a'];
+const defaultLength: PracticeLength = '20';
 
 export const load = (({ url }) => {
-  // `?rows=` comes back from a finished quiz ("Change selection"); only known rows are kept.
+  // `?rows=`, `?mode=`, and `?length=` come back from a finished quiz ("Change
+  // selection"); only known rows, an exact mode ID, and an exact length are kept.
   const fromUrl = parseRowSelection(url.searchParams.getAll('rows'));
   return {
+    modes: questionModes.map(({ id, name }) => ({ id, name })),
+    mode: (findQuestionMode(url.searchParams.get('mode') ?? '') ?? questionModes[0]).id,
+    lengths: practiceLengths,
+    length: parsePracticeLength(url.searchParams.get('length')) ?? defaultLength,
     scripts: kanaScripts.map((script) => ({
       script,
       groups: rowsByClass(datasets[script]).map(({ kanaClass, rows }) => ({

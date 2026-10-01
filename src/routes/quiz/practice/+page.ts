@@ -7,11 +7,12 @@ import { parseSeed } from '$lib/learning/random';
 import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
 import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
 import { kanaPracticeItems } from '$lib/learning/kana-items';
+import { parsePracticeLength, questionCountFor } from '$lib/learning/length';
 import { findQuestionMode, questionModes } from '$lib/learning/modes';
 import { randomSeed } from '$lib/ui/practice';
 import type { PageLoad } from './$types';
 
-/** Each kana is asked twice, or once when twice would mean more questions than this. */
+/** Without a length, each kana is asked twice, or once when twice would mean more questions than this. */
 const maxQuestionsForTwoRounds = 100;
 
 export const load = (({ url }) => {
@@ -21,17 +22,27 @@ export const load = (({ url }) => {
   if (rows.length === 0) redirect(307, resolve('/quiz'));
 
   const selected = new Set<string>(selectedKana(rows, { hiragana, katakana }).map(({ id }) => id));
-  const items = [
+  const all = [
     ...kanaPracticeItems(hiragana, hiraganaLessons),
     ...kanaPracticeItems(katakana, katakanaLessons)
-  ].filter((item) => selected.has(item.id));
-  // `?mode=` picks a typed question mode by its exact ID; anything else is "type the reading".
-  const requested = findQuestionMode(url.searchParams.get('mode') ?? '');
+  ];
+  const items = all.filter((item) => selected.has(item.id));
+  // `?mode=` picks a question mode by its exact ID; anything else is "type the reading".
+  const mode = findQuestionMode(url.searchParams.get('mode') ?? '') ?? questionModes[0];
+  // `?length=` is 10, 20, 50, or endless; without it the quiz covers the selection.
+  const length = parsePracticeLength(url.searchParams.get('length')) ?? null;
+  // Options of a choice mode come from the whole script of each practised kana.
+  const groups = new Set(items.map((item) => item.choices.group));
   return {
     rows,
     items,
-    mode: requested?.input === 'type' ? requested : questionModes[0],
-    questionCount: items.length * (items.length * 2 <= maxQuestionsForTwoRounds ? 2 : 1),
+    mode,
+    pool: mode.input === 'choose' ? all.filter((item) => groups.has(item.choices.group)) : [],
+    length,
+    questionCount:
+      length === null
+        ? items.length * (items.length * 2 <= maxQuestionsForTwoRounds ? 2 : 1)
+        : questionCountFor(length),
     // `?seed=` replays a session; anything that is not a valid seed starts a new one.
     seed: parseSeed(url.searchParams.get('seed')) ?? randomSeed()
   };

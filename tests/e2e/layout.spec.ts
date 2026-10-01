@@ -77,6 +77,11 @@ const pages: PageCase[] = [
     title: 'Kana quiz: 8 kana — Onihayo',
     current: { navigation: 'Primary', link: 'Kana quiz', state: 'true' }
   },
+  {
+    path: '/quiz/practice?rows=hiragana.a&mode=choose-the-reading&length=endless&seed=1',
+    title: 'Kana quiz: 5 kana — Onihayo',
+    current: { navigation: 'Primary', link: 'Kana quiz', state: 'true' }
+  },
   { path: '/about', title: 'About — Onihayo', current: { navigation: 'Primary', link: 'About' } },
   {
     path: '/privacy',

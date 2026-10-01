@@ -130,7 +130,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Question modes as data: type-the-reading, choose-the-reading, choose-the-character. Adding a mode adds a mode definition and tests, not a new session code path.
 - [x] Distractor selection: same script, look-alikes and same row first, never duplicates, exactly one correct option, deterministic for a seed.
 - [x] Type-the-kana mode: the prompt shows romaji and the learner types kana with their OS input method; Enter during IME composition never submits; answers compared after NFKC normalization.
-- [ ] Practice setup page: choose scripts, lessons/rows, mode, and length (10, 20, 50, endless); selection count always visible; starting with nothing selected is prevented with an explanation.
+- [x] Practice setup page: choose scripts, lessons/rows, mode, and length (10, 20, 50, endless); selection count always visible; starting with nothing selected is prevented with an explanation.
 - [ ] Choice keyboard support: number keys 1–4 select options; arrow keys move between options; focus management after each question.
 - [ ] Results: accuracy, time, missed items ordered by misses; "Practise again" and "Retry mistakes".
 
