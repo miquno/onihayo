@@ -126,7 +126,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** a practice setup page where learners pick kana sets and a mode — type the reading, choose the reading, choose the character, or type the kana — with results and "retry mistakes".
 **Prerequisites:** 0.4.
 
-- [ ] Practice item contract in `src/lib/learning/`: the data a question needs (ID, prompt, accepted answers, choice candidates, `lang`), produced by a per-content adapter; kana is the first adapter.
+- [x] Practice item contract in `src/lib/learning/`: the data a question needs (ID, prompt, accepted answers, choice candidates, `lang`), produced by a per-content adapter; kana is the first adapter.
 - [ ] Question modes as data: type-the-reading, choose-the-reading, choose-the-character. Adding a mode adds a mode definition and tests, not a new session code path.
 - [ ] Distractor selection: same script, look-alikes and same row first, never duplicates, exactly one correct option, deterministic for a seed.
 - [ ] Type-the-kana mode: the prompt shows romaji and the learner types kana with their OS input method; Enter during IME composition never submits; answers compared after NFKC normalization.

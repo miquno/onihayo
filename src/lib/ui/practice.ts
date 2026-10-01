@@ -1,27 +1,9 @@
 import { findLesson, lessonKana, lessonSlug, nextLesson } from '$lib/content/lessons';
 import type { KanaLesson, KanaRecord } from '$lib/content/model';
+import { kanaPracticeItems } from '$lib/learning/kana-items';
+import type { PracticeItem } from '$lib/learning/practice-item';
 import { parseSeed } from '$lib/learning/random';
 import type { SessionSummary } from '$lib/learning/session';
-
-/** What `KanaPractice` needs to know about one kana. */
-export interface PracticeKana {
-  readonly id: string;
-  readonly character: string;
-  /** The reading shown after an answer. */
-  readonly romaji: string;
-  /** Every answer that counts as correct, the romaji first. */
-  readonly accepted: readonly string[];
-}
-
-/** A kana record as practice needs it: the romaji and every alternative are accepted. */
-export function practiceKana(record: KanaRecord): PracticeKana {
-  return {
-    id: record.id,
-    character: record.character,
-    romaji: record.romaji,
-    accepted: [record.romaji, ...record.alternatives]
-  };
-}
 
 /**
  * A fresh seed for a new practice session. Not security-relevant: it only
@@ -60,7 +42,7 @@ const lessonRounds = 2;
 export interface LessonPracticeData {
   readonly slug: string;
   readonly title: string;
-  readonly kana: readonly PracticeKana[];
+  readonly items: readonly PracticeItem[];
   readonly questionCount: number;
   readonly seed: number;
   readonly next: { readonly slug: string; readonly title: string } | null;
@@ -80,13 +62,14 @@ export function lessonPractice(
 ): LessonPracticeData | undefined {
   const lesson = findLesson(lessons, slug);
   if (lesson === undefined) return undefined;
-  const kana = lessonKana(lesson, records);
+  const taught = new Set<string>(lessonKana(lesson, records).map((record) => record.id));
+  const items = kanaPracticeItems(records, lessons).filter((item) => taught.has(item.id));
   const next = nextLesson(lessons, lesson);
   return {
     slug: lessonSlug(lesson),
     title: lesson.title,
-    kana: kana.map(practiceKana),
-    questionCount: kana.length * lessonRounds,
+    items,
+    questionCount: items.length * lessonRounds,
     seed: parseSeed(seed) ?? randomSeed(),
     next: next === undefined ? null : { slug: lessonSlug(next), title: next.title }
   };

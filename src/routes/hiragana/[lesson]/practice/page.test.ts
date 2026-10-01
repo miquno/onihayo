@@ -26,10 +26,10 @@ describe('hiragana practice load', () => {
   it('practises every kana of the lesson twice, accepting the romaji and every alternative', () => {
     const data = loadPractice('sa', '?seed=42');
     expect(data).toMatchObject({ slug: 'sa', title: 'S row', questionCount: 10, seed: 42 });
-    expect(data.kana.find((kana) => kana.id === 'kana.hiragana.shi')).toEqual({
-      id: 'kana.hiragana.shi',
-      character: 'し',
-      romaji: 'shi',
+    expect(data.items.find((item) => item.id === 'kana.hiragana.shi')).toMatchObject({
+      prompt: 'し',
+      promptLang: 'ja',
+      answer: 'shi',
       accepted: ['shi', 'si']
     });
     expect(data.next).toEqual({ slug: 'ta', title: 'T row' });
@@ -71,16 +71,13 @@ describe('hiragana practice page', () => {
 
   it('asks the first question of the seeded order, in Japanese', () => {
     const session = startSession({
-      items: data.kana.map(({ id, accepted }) => ({ id, accepted })),
+      items: data.items.map(({ id, accepted }) => ({ id, accepted })),
       questionCount: data.questionCount,
       random: createSeededRandom(7)
     });
-    const first = data.kana.find((kana) => kana.id === currentItem(session)?.id);
+    const first = data.items.find((item) => item.id === currentItem(session)?.id);
     expect(html).toMatch(
-      new RegExp(
-        `<p class="character[^"]*" id="prompt" lang="ja">${first?.character ?? '?'}</p>`,
-        'u'
-      )
+      new RegExp(`<p class="character[^"]*" id="prompt" lang="ja">${first?.prompt ?? '?'}</p>`, 'u')
     );
     expect(html).toContain('aria-valuetext="1 of 10"');
   });

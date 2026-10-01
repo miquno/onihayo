@@ -14,12 +14,13 @@
   import Button from './Button.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import VisuallyHidden from './VisuallyHidden.svelte';
-  import { missedItems, missesText, randomSeed, resultText, type PracticeKana } from './practice';
+  import type { PracticeItem } from '$lib/learning/practice-item';
+  import { missedItems, missesText, randomSeed, resultText } from './practice';
 
-  // See a kana, type its romaji, get feedback; a summary at the end. Runs
+  // See a prompt, type its answer, get feedback; a summary at the end. Runs
   // entirely in the browser: answers are never sent or stored.
   interface Props {
-    kana: readonly PracticeKana[];
+    items: readonly PracticeItem[];
     questionCount: number;
     /** The seed of the first session; "Practise again" picks a new one. */
     seed: number;
@@ -31,11 +32,11 @@
     moreLinks?: Snippet;
   }
 
-  let { kana, questionCount, seed, kanaName, nextStep, moreLinks }: Props = $props();
+  let { items, questionCount, seed, kanaName, nextStep, moreLinks }: Props = $props();
 
   function newSession(sessionSeed: number) {
     return startSession({
-      items: kana.map(({ id, accepted }) => ({ id, accepted })),
+      items: items.map(({ id, accepted }) => ({ id, accepted })),
       questionCount,
       random: createSeededRandom(sessionSeed)
     });
@@ -49,9 +50,8 @@
   let input: HTMLInputElement | undefined = $state();
   let resultsHeading: HTMLHeadingElement | undefined = $state();
 
-  // Keyed by plain string: the session works with any item ID, not only kana IDs.
-  const kanaById = $derived(new Map<string, PracticeKana>(kana.map((item) => [item.id, item])));
-  const current = $derived(kanaById.get(currentItem(session)?.id ?? ''));
+  const itemsById = $derived(new Map(items.map((item) => [item.id, item])));
+  const current = $derived(itemsById.get(currentItem(session)?.id ?? ''));
   const answered = $derived(lastAnswer(session));
   const progress = $derived(questionProgress(session));
   const summary = $derived(summarize(session));
@@ -87,7 +87,7 @@
   <ProgressBar label="Question" value={progress.current} max={progress.total} />
 
   <form class="question" onsubmit={handleSubmit}>
-    <p class="character" id="prompt" lang="ja">{current.character}</p>
+    <p class="character" id="prompt" lang={current.promptLang}>{current.prompt}</p>
     <label for="answer">Romaji for this {kanaName}</label>
     <div class="answer-row">
       <!-- No `name`: without JavaScript nothing is submitted, so answers never reach a URL. -->
@@ -111,18 +111,20 @@
   <div class="feedback" role="status">
     {#if answered?.correct}
       <p>
-        <strong>Correct.</strong> <span lang="ja">{current.character}</span> is {current.romaji}.
+        <strong>Correct.</strong> <span lang={current.promptLang}>{current.prompt}</span> is
+        <span lang={current.answerLang}>{current.answer}</span>.
       </p>
     {:else if answered}
       <p>
-        <strong>Not quite.</strong> <span lang="ja">{current.character}</span> is
-        <strong>{current.romaji}</strong>. You typed “{answered.given}”.
+        <strong>Not quite.</strong> <span lang={current.promptLang}>{current.prompt}</span> is
+        <strong lang={current.answerLang}>{current.answer}</strong>. You typed “{answered.given}”.
       </p>
     {:else if blankSubmitted}
       <p>Type the romaji first, then press Enter.</p>
     {:else if session.position > 0}
       <VisuallyHidden>
-        Question {progress.current} of {progress.total}: <span lang="ja">{current.character}</span>
+        Question {progress.current} of {progress.total}:
+        <span lang={current.promptLang}>{current.prompt}</span>
       </VisuallyHidden>
     {/if}
   </div>
@@ -132,8 +134,11 @@
   {#if summary.missed.length > 0}
     <p>Characters to look at again:</p>
     <ul class="missed">
-      {#each missedItems(summary, kana) as { item, misses } (item.id)}
-        <li><span lang="ja">{item.character}</span> {item.romaji}, {missesText(misses)}</li>
+      {#each missedItems(summary, items) as { item, misses } (item.id)}
+        <li>
+          <span class="missed-prompt" lang={item.promptLang}>{item.prompt}</span>
+          <span lang={item.answerLang}>{item.answer}</span>, {missesText(misses)}
+        </li>
       {/each}
     </ul>
   {:else}
@@ -212,7 +217,7 @@
     padding-inline-start: var(--space-5);
   }
 
-  .missed span {
+  .missed-prompt {
     font-size: var(--font-size-xl);
   }
 

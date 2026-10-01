@@ -19,12 +19,12 @@ describe('kana quiz practice load', () => {
   it('practises the kana of the selected rows, accepting the romaji and every alternative', () => {
     const data = loadQuiz('?rows=katakana.sa&rows=hiragana.a&seed=5');
     expect(data.rows).toEqual(['hiragana.a', 'katakana.sa']);
-    expect(data.kana.map(({ character }) => character).join('')).toBe('あいうえおサシスセソ');
-    expect(data.kana.find(({ character }) => character === 'シ')).toEqual({
+    expect(data.items.map(({ prompt }) => prompt).join('')).toBe('あいうえおサシスセソ');
+    expect(data.items.find(({ prompt }) => prompt === 'シ')).toMatchObject({
       id: 'kana.katakana.shi',
-      character: 'シ',
-      romaji: 'shi',
-      accepted: ['shi', 'si']
+      answer: 'shi',
+      accepted: ['shi', 'si'],
+      choices: { group: 'kana.katakana' }
     });
     expect(data.seed).toBe(5);
   });
