@@ -25,12 +25,7 @@
   <p class="instructions">Practice needs JavaScript. The lesson itself works without it.</p>
 </noscript>
 
-<KanaPractice
-  items={practice.items}
-  questionCount={practice.questionCount}
-  seed={practice.seed}
-  {kanaName}
->
+<KanaPractice items={practice.items} questionCount={practice.questionCount} seed={practice.seed}>
   {#snippet nextStep()}
     {#if nextHref && practice.next}
       <LinkButton href={nextHref}>Next lesson: {practice.next.title}</LinkButton>

@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { maxSeed } from '$lib/learning/random';
+import { hiragana } from '$lib/content/kana/hiragana';
+import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
 import { katakana } from '$lib/content/kana/katakana';
 import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
-import { lessonPractice, missedItems, missesText, randomSeed, resultText } from './practice';
+import { kanaPracticeItems } from '$lib/learning/kana-items';
+import { question, questionModes } from '$lib/learning/modes';
+import {
+  answerLabel,
+  instructionsText,
+  lessonPractice,
+  missedItems,
+  missesText,
+  randomSeed,
+  resultText
+} from './practice';
 
 describe('resultText', () => {
   it('states correct answers, total, and a rounded percentage', () => {
@@ -75,5 +87,33 @@ describe('lessonPractice', () => {
 
   it('is undefined for an unknown slug', () => {
     expect(lessonPractice(katakanaLessons, katakana, 'nope', null)).toBeUndefined();
+  });
+});
+
+describe('instructionsText and answerLabel', () => {
+  const [typeTheReading, , , typeTheKana] = questionModes;
+  const a = kanaPracticeItems(hiragana, hiraganaLessons)[0];
+  const ka = kanaPracticeItems(katakana, katakanaLessons)[5];
+  if (a === undefined || ka === undefined) throw new Error('missing kana');
+
+  it('name what to type for what, from the items themselves', () => {
+    expect(instructionsText([question(typeTheReading, a)])).toBe(
+      'Type the romaji for each hiragana, then press Enter.'
+    );
+    expect(instructionsText([question(typeTheKana, ka)])).toBe(
+      'Type the katakana for each romaji, then press Enter.'
+    );
+    expect(answerLabel(question(typeTheReading, ka))).toBe('Romaji for this katakana');
+    expect(answerLabel(question(typeTheKana, a))).toBe('Hiragana for this romaji');
+  });
+
+  it('list each name once when scripts are mixed', () => {
+    const mixed = [a, ka, a].map((item) => question(typeTheReading, item));
+    expect(instructionsText(mixed)).toBe(
+      'Type the romaji for each hiragana or katakana, then press Enter.'
+    );
+    expect(instructionsText([a, ka].map((item) => question(typeTheKana, item)))).toBe(
+      'Type the hiragana or katakana for each romaji, then press Enter.'
+    );
   });
 });

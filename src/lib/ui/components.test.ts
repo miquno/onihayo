@@ -22,9 +22,12 @@ function practiceItem(id: string, prompt: string, answer: string): PracticeItem 
     id,
     prompt,
     promptLang: 'ja',
+    promptName: 'katakana',
     answer,
     answerLang: null,
+    answerName: 'romaji',
     accepted: [answer],
+    acceptedPrompts: [prompt],
     choices: { group: 'test', preferred: [] }
   };
 }
@@ -131,7 +134,7 @@ describe('KanaPractice', () => {
     practiceItem('kana.katakana.shi', 'シ', 'shi')
   ];
   const { body } = render(KanaPractice, {
-    props: { items, questionCount: 4, seed: 1, kanaName: 'katakana', nextStep: text('Next') }
+    props: { items, questionCount: 4, seed: 1, nextStep: text('Next') }
   });
 
   it('names the kind of kana in the instructions and the field label', () => {
@@ -148,6 +151,8 @@ describe('KanaPractice', () => {
     const input = attributes(body, 'input', 'id="answer"');
     expect(input.get('aria-describedby')).toBe('prompt');
     expect(input.has('name')).toBe(false);
+    // Romaji is typed in the page's language.
+    expect(input.has('lang')).toBe(false);
     expect(body).toMatch(/<div class="feedback[^"]*" role="status">(?:<!--[^>]*-->|\s)*<\/div>/u);
   });
 });
@@ -165,7 +170,6 @@ describe('all components', () => {
           items: [practiceItem('f', 'ア', 'a')],
           questionCount: 1,
           seed: 0,
-          kanaName: 'kana',
           nextStep: text('g')
         }
       }).body,

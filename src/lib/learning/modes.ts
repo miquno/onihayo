@@ -47,6 +47,13 @@ export const questionModes = [
     ask: 'answer',
     respond: 'prompt',
     input: 'choose'
+  },
+  {
+    id: 'type-the-kana',
+    name: 'Type the kana',
+    ask: 'answer',
+    respond: 'prompt',
+    input: 'type'
   }
 ] as const satisfies readonly QuestionMode[];
 
@@ -57,23 +64,26 @@ export function findQuestionMode(id: string): QuestionMode | undefined {
   return questionModes.find((mode) => mode.id === id);
 }
 
-/** One side of an item: its text and language. */
-export function itemSide(
-  item: PracticeItem,
-  side: ItemSide
-): { readonly text: string; readonly lang: TextLang } {
+/** One side of an item: its text, its language, and what to call it (e.g. "katakana"). */
+export interface SideText {
+  readonly text: string;
+  readonly lang: TextLang;
+  readonly name: string;
+}
+
+export function itemSide(item: PracticeItem, side: ItemSide): SideText {
   return side === 'prompt'
-    ? { text: item.prompt, lang: item.promptLang }
-    : { text: item.answer, lang: item.answerLang };
+    ? { text: item.prompt, lang: item.promptLang, name: item.promptName }
+    : { text: item.answer, lang: item.answerLang, name: item.answerName };
 }
 
 /** A question about one item in one mode. */
 export interface Question {
   readonly itemId: string;
   /** What the question shows. */
-  readonly shown: { readonly text: string; readonly lang: TextLang };
+  readonly shown: SideText;
   /** The correct answer, shown after the learner answers. */
-  readonly solution: { readonly text: string; readonly lang: TextLang };
+  readonly solution: SideText;
   /** Every answer that counts as correct, in normalized form. */
   readonly accepted: readonly string[];
   readonly input: QuestionMode['input'];
@@ -81,15 +91,15 @@ export interface Question {
 
 /**
  * Asks about `item` in `mode`. Giving the answer side accepts every accepted
- * answer (alternative spellings too); giving the prompt side accepts the
- * prompt itself, e.g. exactly the kana.
+ * answer (alternative spellings too); giving the prompt side accepts every
+ * accepted prompt (the kana itself, and one that reads the same).
  */
 export function question(mode: QuestionMode, item: PracticeItem): Question {
   return {
     itemId: item.id,
     shown: itemSide(item, mode.ask),
     solution: itemSide(item, mode.respond),
-    accepted: mode.respond === 'answer' ? item.accepted : [normalizeAnswer(item.prompt)],
+    accepted: mode.respond === 'answer' ? item.accepted : item.acceptedPrompts.map(normalizeAnswer),
     input: mode.input
   };
 }

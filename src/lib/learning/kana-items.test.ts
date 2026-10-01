@@ -22,10 +22,31 @@ describe('kanaPracticeItems', () => {
       id: 'kana.katakana.ti',
       prompt: 'ティ',
       promptLang: 'ja',
+      promptName: 'katakana',
       answer: 'ti',
       answerLang: null,
+      answerName: 'romaji',
       accepted: ['ti', 'thi']
     });
+    expect(kanaPracticeItems(hiragana, hiraganaLessons)[0]?.promptName).toBe('hiragana');
+  });
+
+  it('accepts, for a reading, every kana of the script that reads that way', () => {
+    const acceptedPrompts = (character: string) => byCharacter(character)?.acceptedPrompts;
+    expect(acceptedPrompts('ナ')).toEqual(['ナ']);
+    // ジ and ヂ are both "ji", ズ and ヅ both "zu", ヲ and ウォ both "wo".
+    expect(acceptedPrompts('ジ')).toEqual(['ジ', 'ヂ']);
+    expect(acceptedPrompts('ヂ')).toEqual(['ヂ', 'ジ']);
+    expect(acceptedPrompts('ヅ')).toEqual(['ヅ', 'ズ']);
+    expect(acceptedPrompts('ヲ')).toEqual(['ヲ', 'ウォ']);
+    expect(acceptedPrompts('ウォ')).toEqual(['ウォ', 'ヲ']);
+    // チ and ヂ accept "ti" and "di" as alternative spellings; "chi" is only チ.
+    expect(acceptedPrompts('ティ')).toEqual(['ティ', 'チ']);
+    expect(acceptedPrompts('ディ')).toEqual(['ディ', 'ヂ']);
+    expect(acceptedPrompts('チ')).toEqual(['チ']);
+    // Never a kana of the other script.
+    const ji = kanaPracticeItems(hiragana, hiraganaLessons).find((item) => item.prompt === 'じ');
+    expect(ji?.acceptedPrompts).toEqual(['じ', 'ぢ']);
   });
 
   it('offers look-alikes first, then the rest of the row, all from the same script', () => {
@@ -62,6 +83,11 @@ describe('kanaPracticeItems', () => {
           expect(normalizeAnswer(accepted), item.id).toBe(accepted);
         }
         expect(item.prompt, item.id).not.toBe('');
+        expect(item.acceptedPrompts[0], item.id).toBe(item.prompt);
+        for (const accepted of item.acceptedPrompts) {
+          expect(normalizeAnswer(accepted), item.id).toBe(accepted);
+        }
+        expect(new Set(item.acceptedPrompts).size, item.id).toBe(item.acceptedPrompts.length);
       }
     });
 

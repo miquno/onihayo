@@ -29,10 +29,18 @@ describe('kana quiz practice load', () => {
     expect(data.seed).toBe(5);
   });
 
-  it('calls a prompt by its script, or "kana" when both are mixed', () => {
-    expect(loadQuiz('?rows=hiragana.a').kanaName).toBe('hiragana');
-    expect(loadQuiz('?rows=katakana.a').kanaName).toBe('katakana');
-    expect(loadQuiz('?rows=hiragana.a&rows=katakana.a').kanaName).toBe('kana');
+  it('types the reading unless a typed mode is asked for by its exact ID', () => {
+    expect(loadQuiz('?rows=hiragana.a').mode.id).toBe('type-the-reading');
+    expect(loadQuiz('?rows=hiragana.a&mode=type-the-kana').mode).toMatchObject({
+      id: 'type-the-kana',
+      ask: 'answer',
+      respond: 'prompt',
+      input: 'type'
+    });
+    // Unknown IDs and choice modes (no options UI yet) fall back to typing the reading.
+    for (const mode of ['', 'Type-the-kana', 'nope', '__proto__', 'choose-the-reading']) {
+      expect(loadQuiz(`?rows=hiragana.a&mode=${mode}`).mode.id, mode).toBe('type-the-reading');
+    }
   });
 
   it('asks each kana twice, or once when twice would be more than 100 questions', () => {
@@ -74,10 +82,25 @@ describe('kana quiz practice page', () => {
     expect(html.match(/<h1[\s>]/gu)).toHaveLength(1);
   });
 
-  it('asks for the romaji of a kana, with a field that is never submitted', () => {
-    expect(html).toMatch(/<label for="answer"[^>]*>Romaji for this kana<\/label>/u);
+  it('asks for the romaji of each kana by its script, with a field that is never submitted', () => {
+    expect(html).toContain('Type the romaji for each hiragana or katakana, then press Enter.');
+    expect(html).toMatch(
+      /<label for="answer"[^>]*>Romaji for this (?:hiragana|katakana)<\/label>/u
+    );
     expect(html).not.toMatch(/<input[^>]*\sname=/u);
     expect(html).toContain('aria-valuetext="1 of 20"');
+  });
+
+  it('asks for the kana of each romaji in type-the-kana mode, in a Japanese field', () => {
+    const kana = loadQuiz('?rows=katakana.sa&seed=9&mode=type-the-kana');
+    const page = withoutHydrationMarkers(
+      render(QuizPracticePage, { props: { data: kana, params: {} } }).body
+    );
+    expect(page).toContain('Type the katakana for each romaji, then press Enter.');
+    expect(page).toMatch(/<label for="answer"[^>]*>Katakana for this romaji<\/label>/u);
+    expect(page).toMatch(/<p class="character[^"]*" id="prompt">(?:sa|shi|su|se|so)<\/p>/u);
+    expect(page).toMatch(/<input id="answer"[^>]*lang="ja"/u);
+    expect(page).not.toMatch(/<input[^>]*\sname=/u);
   });
 
   it('explains that the quiz needs JavaScript', () => {

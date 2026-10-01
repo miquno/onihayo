@@ -23,7 +23,7 @@
   items={data.items}
   questionCount={data.questionCount}
   seed={data.seed}
-  kanaName={data.kanaName}
+  mode={data.mode}
 >
   {#snippet nextStep()}
     <!-- Back to the selection page with the same rows chosen. -->

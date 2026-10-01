@@ -1,6 +1,7 @@
 import { findLesson, lessonKana, lessonSlug, nextLesson } from '$lib/content/lessons';
 import type { KanaLesson, KanaRecord } from '$lib/content/model';
 import { kanaPracticeItems } from '$lib/learning/kana-items';
+import type { Question } from '$lib/learning/modes';
 import type { PracticeItem } from '$lib/learning/practice-item';
 import { parseSeed } from '$lib/learning/random';
 import type { SessionSummary } from '$lib/learning/session';
@@ -17,6 +18,19 @@ export function randomSeed(): number {
 export function resultText(summary: SessionSummary): string {
   const percent = Math.round(summary.accuracy * 100);
   return `You answered ${String(summary.correct)} of ${String(summary.answered)} correctly (${String(percent)} %).`;
+}
+
+/** "Type the romaji for each hiragana or katakana, then press Enter." */
+export function instructionsText(questions: readonly Question[]): string {
+  const names = (side: 'shown' | 'solution') =>
+    [...new Set(questions.map((question) => question[side].name))].join(' or ');
+  return `Type the ${names('solution')} for each ${names('shown')}, then press Enter.`;
+}
+
+/** The label of the answer field: "Romaji for this katakana", "Hiragana for this romaji". */
+export function answerLabel(question: Question): string {
+  const { name } = question.solution;
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)} for this ${question.shown.name}`;
 }
 
 /** "missed once", "missed 2 times". */
