@@ -1,14 +1,86 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
+interface PageCase {
+  path: string;
+  title: string;
+  /** The navigation link marked with `aria-current`: `page` on the page itself, `true` below it. */
+  current: { navigation: string; link: string; state?: 'page' | 'true' } | null;
+}
+
 // Every page route. A new page is added here so it gets the layout, title,
 // keyboard, and accessibility checks below. `current` is the navigation link
-// that carries `aria-current="page"`, if any.
-const pages = [
+// that carries `aria-current`, if any.
+const pages: PageCase[] = [
   {
     path: '/',
     title: 'Onihayo — Learn Japanese from zero to JLPT N5',
     current: { navigation: 'Primary', link: 'Home' }
+  },
+  {
+    path: '/hiragana',
+    title: 'Hiragana — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana' }
+  },
+  {
+    path: '/hiragana/chart',
+    title: 'Hiragana chart — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
+  },
+  {
+    path: '/hiragana/a',
+    title: 'Vowels — Hiragana — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
+  },
+  {
+    path: '/hiragana/ka/practice?seed=1',
+    title: 'Practice: K row — Hiragana — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
+  },
+  {
+    path: '/hiragana/gya',
+    title: 'Combined sounds: gy, j, by, py — Hiragana — Onihayo',
+    current: { navigation: 'Primary', link: 'Hiragana', state: 'true' }
+  },
+  {
+    path: '/katakana',
+    title: 'Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana' }
+  },
+  {
+    path: '/katakana/chart',
+    title: 'Katakana chart — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
+    path: '/katakana/ka/practice?seed=1',
+    title: 'Practice: K row — Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
+    path: '/katakana/ka',
+    title: 'K row — Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
+    path: '/katakana/wi',
+    title: 'Loanword sounds: w, sh, j, ch — Katakana — Onihayo',
+    current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
+  },
+  {
+    path: '/quiz',
+    title: 'Kana quiz — Onihayo',
+    current: { navigation: 'Primary', link: 'Kana quiz' }
+  },
+  {
+    path: '/quiz/practice?rows=hiragana.a&rows=katakana.kya&seed=1',
+    title: 'Kana quiz: 8 kana — Onihayo',
+    current: { navigation: 'Primary', link: 'Kana quiz', state: 'true' }
+  },
+  {
+    path: '/quiz/practice?rows=hiragana.a&mode=choose-the-reading&length=endless&seed=1',
+    title: 'Kana quiz: 5 kana — Onihayo',
+    current: { navigation: 'Primary', link: 'Kana quiz', state: 'true' }
   },
   { path: '/about', title: 'About — Onihayo', current: { navigation: 'Primary', link: 'About' } },
   {
@@ -65,7 +137,7 @@ for (const { path, title, current } of pages) {
           page
             .getByRole('navigation', { name: current.navigation })
             .getByRole('link', { name: current.link })
-        ).toHaveAttribute('aria-current', 'page');
+        ).toHaveAttribute('aria-current', current.state ?? 'page');
         await expect(marked).toHaveCount(1);
       }
     });
@@ -168,7 +240,11 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Skip to main content',
     'Onihayo',
     'Home',
+    'Hiragana',
+    'Katakana',
+    'Kana quiz',
     'About',
+    'Start here: Vowels',
     'roadmap',
     'source code on GitHub',
     'Privacy',
@@ -187,5 +263,5 @@ test('after the skip link, Tab continues inside main', async ({ page }) => {
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'roadmap' })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Start here: Vowels' })).toBeFocused();
 });

@@ -8,17 +8,18 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `licences/` (licences of every bundled package, from `virtual:bundled-licences`; server-rendered only, `csr = false`), `healthz/+server.ts` (liveness probe).
+- `routes/` — URL structure. `+layout.svelte` (root layout: skip link, header with site name and primary navigation, `main`, footer), `+error.svelte` (friendly errors without internal details), `+page.svelte` (home: one primary "Start here" action to the first hiragana lesson, taken from the lesson data in `+page.ts`), `about/+page.svelte` (what Onihayo is and the path to N5), `privacy/+page.svelte` (what is stored: the learner-facing privacy record), `hiragana/` (the hiragana lesson list, the chart of all hiragana as tables at `hiragana/chart`, one page per lesson at `hiragana/[lesson]`, and its practice at `hiragana/[lesson]/practice`: runs entirely in the browser, sends and stores nothing, `?seed=` replays a question order; unknown slugs answer 404), `katakana/` (the katakana lesson list, the chart at `katakana/chart`, one page per lesson at `katakana/[lesson]`, and its practice at `katakana/[lesson]/practice`, built from the same `LessonList`, `KanaLesson`, `KanaCharts`, and `LessonPractice` components and `lessonPractice()` load as hiragana; unknown slugs answer 404), `quiz/` (the kana quiz and practice setup: `quiz` picks a mode, a length, and rows of hiragana and katakana in a plain GET form, `quiz/practice?mode=…&length=…&rows=…` practises them with `KanaPractice`; unknown rows are dropped, and nothing left to practise redirects to `quiz`; `?mode=` is a question mode by its exact ID, anything else types the reading; `?length=` is `10`, `20`, `50`, or `endless`, anything else covers the selection; `?seed=` as for lessons), `licences/` (licences of every bundled package, from `virtual:bundled-licences`; server-rendered only, `csr = false`), `healthz/+server.ts` (liveness probe).
 - `lib/licences.ts` — the `BundledPackage` type shared by the Licences page and its build plugin (`scripts/licences/`).
 - `bundled-licences.d.ts` — type of the `virtual:bundled-licences` module (`null` in the dev server).
 - `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
+- `lib/content/` — typed learning content: the content model, Onihayo-authored hiragana and katakana data and lessons (CC BY-SA 4.0), and lesson, chart, and row-selection helpers. See its `AGENTS.md`.
+- `lib/learning/` — the learning engine: answer normalization, the seeded random source, the practice item contract with its kana adapter, question modes, distractor selection, and the practice session state machine. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
+- `lib/testing/` — helpers for unit tests only: `withoutHydrationMarkers()` strips Svelte's hydration comments from server-rendered markup (repeating until nothing changes, so no comment can survive a removal).
 
 ## Planned layout (create a folder only when its roadmap item needs it)
 
-- `lib/content/` — typed learning content and loaders; no UI, no I/O beyond reading bundled data (0.3).
-- `lib/learning/` — practice sessions, answer checking, normalization, seeded randomness (0.3).
 - `lib/progress/` — learner progress model and storage adapters (0.6).
 - `lib/srs/` — review scheduling (0.8).
 - `lib/server/db/`, `lib/server/auth/` — persistence and authentication (0.9).

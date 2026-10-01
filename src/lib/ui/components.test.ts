@@ -3,9 +3,34 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import Button from './Button.svelte';
 import Card from './Card.svelte';
+import { kanaChart } from '$lib/content/chart';
+import { katakana } from '$lib/content/kana/katakana';
+import type { KanaClass } from '$lib/content/model';
+import type { PracticeItem } from '$lib/learning/practice-item';
+import KanaCharts from './KanaCharts.svelte';
+import KanaLesson from './KanaLesson.svelte';
+import KanaPractice from './KanaPractice.svelte';
+import LessonList from './LessonList.svelte';
+import LessonPractice from './LessonPractice.svelte';
 import LinkButton from './LinkButton.svelte';
 import ProgressBar from './ProgressBar.svelte';
 import VisuallyHidden from './VisuallyHidden.svelte';
+
+/** A practice item with a Japanese prompt and one accepted answer. */
+function practiceItem(id: string, prompt: string, answer: string): PracticeItem {
+  return {
+    id,
+    prompt,
+    promptLang: 'ja',
+    promptName: 'katakana',
+    answer,
+    answerLang: null,
+    answerName: 'romaji',
+    accepted: [answer],
+    acceptedPrompts: [prompt],
+    choices: { group: 'test', preferred: [] }
+  };
+}
 
 const text = (value: string) => createRawSnippet(() => ({ render: () => `<span>${value}</span>` }));
 
@@ -103,6 +128,35 @@ describe('VisuallyHidden', () => {
   });
 });
 
+describe('KanaPractice', () => {
+  const items = [
+    practiceItem('kana.katakana.a', 'ア', 'a'),
+    practiceItem('kana.katakana.shi', 'シ', 'shi')
+  ];
+  const { body } = render(KanaPractice, {
+    props: { items, questionCount: 4, seed: 1, nextStep: text('Next') }
+  });
+
+  it('names the kind of kana in the instructions and the field label', () => {
+    expect(body).toContain('Type the romaji for each katakana, then press Enter.');
+    expect(body).toMatch(/<label for="answer"[^>]*>Romaji for this katakana<\/label>/u);
+  });
+
+  it('asks the first question in Japanese, with a progress bar over every question', () => {
+    expect(body).toMatch(/<p class="character[^"]*" id="prompt" lang="ja">[アシ]<\/p>/u);
+    expect(attributes(body, 'div', 'role="progressbar"').get('aria-valuetext')).toBe('1 of 4');
+  });
+
+  it('has an answer field that is never submitted and an empty live region', () => {
+    const input = attributes(body, 'input', 'id="answer"');
+    expect(input.get('aria-describedby')).toBe('prompt');
+    expect(input.has('name')).toBe(false);
+    // Romaji is typed in the page's language.
+    expect(input.has('lang')).toBe(false);
+    expect(body).toMatch(/<div class="feedback[^"]*" role="status">(?:<!--[^>]*-->|\s)*<\/div>/u);
+  });
+});
+
 describe('all components', () => {
   it('render no inline style attributes, which the CSP would block', () => {
     const bodies = [
@@ -110,7 +164,79 @@ describe('all components', () => {
       render(LinkButton, { props: { href: '/', children: text('b') } }).body,
       render(Card, { props: { children: text('c') } }).body,
       render(ProgressBar, { props: { label: 'd', value: 30 } }).body,
-      render(VisuallyHidden, { props: { children: text('e') } }).body
+      render(VisuallyHidden, { props: { children: text('e') } }).body,
+      render(KanaPractice, {
+        props: {
+          items: [practiceItem('f', 'ア', 'a')],
+          questionCount: 1,
+          seed: 0,
+          nextStep: text('g')
+        }
+      }).body,
+      render(LessonList, {
+        props: { lessons: [{ href: '/katakana/a', title: 'i', characters: ['ア'] }] }
+      }).body,
+      render(KanaLesson, {
+        props: {
+          lesson: {
+            slug: 'j',
+            number: 1,
+            total: 1,
+            title: 'k',
+            note: 'l',
+            rows: ['ka'],
+            kana: [{ id: 'm', character: 'カ', romaji: 'ka', note: 'n' }],
+            marks: [
+              {
+                mark: 'ー',
+                name: 'o',
+                note: 'p',
+                examples: [{ word: 'ケーキ', romaji: 'kēki', meaning: 'q' }]
+              }
+            ],
+            lookAlikes: [
+              {
+                kana: [
+                  { character: 'シ', romaji: 'shi' },
+                  { character: 'ツ', romaji: 'tsu' }
+                ],
+                note: 'u'
+              }
+            ],
+            next: null
+          },
+          scriptName: 'Katakana',
+          practiceHref: '/quiz/practice',
+          next: null,
+          allLessonsHref: '/katakana',
+          finished: text('t')
+        }
+      }).body,
+      render(LessonPractice, {
+        props: {
+          practice: {
+            slug: 'v',
+            title: 'w',
+            items: [practiceItem('x', 'ア', 'a')],
+            questionCount: 1,
+            seed: 0,
+            next: null
+          },
+          kanaName: 'katakana',
+          lessonHref: '/katakana/a',
+          nextHref: null,
+          allLessonsHref: '/katakana'
+        }
+      }).body,
+      render(KanaCharts, {
+        props: {
+          charts: [kanaChart(katakana, 'extended')],
+          titles: { basic: 'y', dakuten: 'y', yoon: 'y', extended: 'y' },
+          description: createRawSnippet((kanaClass: () => KanaClass) => ({
+            render: () => `<span>${kanaClass()}</span>`
+          }))
+        }
+      }).body
     ];
     for (const body of bodies) expect(body).not.toMatch(/\sstyle=/);
   });

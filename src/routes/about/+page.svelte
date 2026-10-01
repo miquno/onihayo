@@ -69,8 +69,8 @@
 
 <h2>Where Onihayo is today</h2>
 <p>
-  Onihayo is in early development and lessons are not available yet. The first ones will teach
-  hiragana. Progress follows a public
+  Onihayo is in early development. Lessons for hiragana and katakana and a kana quiz are available;
+  vocabulary and everything after it follow a public
   <a href="https://github.com/miquno/onihayo/blob/main/ROADMAP.md">roadmap</a>.
 </p>
 <p>Onihayo is an independent project and is not affiliated with the organisers of the JLPT.</p>

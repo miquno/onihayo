@@ -30,7 +30,7 @@ Entry point for anyone — human or coding agent — changing Onihayo. This file
 - `docs/decisions/` — architecture decision records (ADRs)
 - `docs/content/` — content provenance and licensing rules, source register
 - `docs/deployment/hosting.md` — hosting model and production assumptions
-- Folder-local docs: `src/AGENTS.md`, `src/lib/ui/AGENTS.md`, `src/lib/server/AGENTS.md`, `tests/AGENTS.md`, `scripts/AGENTS.md`, `.github/AGENTS.md`. A new top-level source folder gets its own `AGENTS.md` (and a one-line `CLAUDE.md` containing `@AGENTS.md`) in the same pull request.
+- Folder-local docs: `src/AGENTS.md`, `src/lib/content/AGENTS.md`, `src/lib/learning/AGENTS.md`, `src/lib/ui/AGENTS.md`, `src/lib/server/AGENTS.md`, `tests/AGENTS.md`, `scripts/AGENTS.md`, `.github/AGENTS.md`. A new top-level source folder gets its own `AGENTS.md` (and a one-line `CLAUDE.md` containing `@AGENTS.md`) in the same pull request.
 
 ## Engineering rules
 
@@ -54,7 +54,7 @@ Entry point for anyone — human or coding agent — changing Onihayo. This file
 
 - Never copy content from Nihondex, WaniKani, Bunpro, commercial textbooks, paid dictionaries, or commercial apps. Never scrape learning websites.
 - Before importing a dataset: identify the source, verify and document the licence, document attribution and transformations, and add validation tests. Rules and register: `docs/content/`.
-- Keep imported, generated, and Onihayo-authored content distinguishable.
+- Keep imported, generated, and Onihayo-authored content distinguishable. Code is MIT; Onihayo-authored content is CC BY-SA 4.0 (ADR 0006), with a `LICENSE` file in each authored-content directory.
 
 ## Security reminders
 

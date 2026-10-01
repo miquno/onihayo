@@ -77,15 +77,16 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** "Start here" on the home page leads to hiragana lessons (one per row group) with each character's reading and a short pronunciation note, a practice quiz per lesson, and a hiragana chart.
 **Prerequisites:** 0.2. ADR 0006 (content licence) decided.
 
-- [ ] Kana dataset in `src/lib/content/kana/`, authored for Onihayo: the 46 basic hiragana, 25 with dakuten/handakuten, and 33 yōon, each with a stable ID (e.g. `kana.hiragana.shi`), row, class, Hepburn romaji, and accepted alternatives (`si`, `tu`, …); every record marked `authored`.
-- [ ] Dataset validation tests: exact counts per class, unique IDs and characters, non-empty romaji, no duplicate alternatives, rows in gojūon order.
-- [ ] Answer normalization in `src/lib/learning/normalize.ts`: Unicode NFKC (full-width letters become ASCII), trim, lowercase; inner spaces kept.
-- [ ] Seedable random source in `src/lib/learning/random.ts` (small, well-known PRNG) with an interface the whole engine uses.
-- [ ] Practice session state machine in `src/lib/learning/session.ts`: asking → answered → next / finished; no immediate repeats when the pool has two or more items; records answers with timestamps from an injected clock.
-- [ ] Hiragana lesson pages: lesson list, per-lesson page showing each character large, its romaji, and an authored note; "Practise this lesson" and "Next lesson" links.
-- [ ] Lesson practice page: see a hiragana, type its romaji, instant feedback; after a miss the correct answer is shown and announced via a polite live region; Enter submits and advances; a summary at the end (accuracy, missed characters).
-- [ ] Hiragana chart page: all hiragana in a gojūon grid, marked up as a table with row and column headers, each character with `lang="ja"`.
-- [ ] Home page "Start here" call to action leading to the first hiragana lesson.
+- [x] Kana dataset in `src/lib/content/kana/`, authored for Onihayo: the 46 basic hiragana, 25 with dakuten/handakuten, and 33 yōon, each with a stable ID (e.g. `kana.hiragana.shi`), row, class, Hepburn romaji, and accepted alternatives (`si`, `tu`, …); every record marked `authored`.
+- [x] Dataset validation tests: exact counts per class, unique IDs and characters, non-empty romaji, no duplicate alternatives, rows in gojūon order.
+- [x] Answer normalization in `src/lib/learning/normalize.ts`: Unicode NFKC (full-width letters become ASCII), trim, lowercase; inner spaces kept.
+- [x] Seedable random source in `src/lib/learning/random.ts` (small, well-known PRNG) with an interface the whole engine uses.
+- [x] Practice session state machine in `src/lib/learning/session.ts`: asking → answered → next / finished; no immediate repeats when the pool has two or more items; records answers with timestamps from an injected clock.
+- [x] Hiragana lesson pages: lesson list, per-lesson page showing each character large, its romaji, and an authored pronunciation note (per lesson, plus per character where it sounds different from its romaji); "Next lesson" link.
+- [x] Lesson practice page, linked from each lesson page as "Practise this lesson": see a hiragana, type its romaji, instant feedback; after a miss the correct answer is shown and announced via a polite live region; Enter submits and advances; a summary at the end (accuracy, missed characters).
+- [x] Hiragana chart page: all hiragana in a gojūon grid, marked up as a table with row and column headers, each character with `lang="ja"`.
+- [x] Home page "Start here" call to action leading to the first hiragana lesson.
+- [ ] Fluent-speaker review of the authored hiragana lesson notes, recorded in a pull request (**owner arranges the reviewer**).
 
 **Acceptance criteria:**
 
@@ -105,12 +106,12 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** katakana lessons, practice, and chart; mixed hiragana/katakana practice.
 **Prerequisites:** 0.3.
 
-- [ ] Katakana characters added to the kana dataset for all 104 sounds, with IDs `kana.katakana.<sound>`.
-- [ ] Extended katakana needed by N5 loanwords as a separate class (ティ, ディ, ファ, フィ, フェ, フォ, ウィ, ウェ, ウォ, シェ, ジェ, チェ) with validation tests.
-- [ ] Katakana lessons with authored notes, including the long-vowel mark ー and small ッ.
-- [ ] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
-- [ ] Katakana practice and chart pages reusing the 0.3 components and session without copying them.
-- [ ] Mixed practice: practise any selection of hiragana and katakana lessons together.
+- [x] Katakana characters added to the kana dataset for all 104 sounds, with IDs `kana.katakana.<sound>`.
+- [x] Kana quiz: pick any rows of hiragana and katakana from a grid of row tiles (an "All" switch per group that shows a partial selection, the selected count always visible, starting with nothing selected prevented with an explanation) and practise them together through the shared practice component and session; the selection travels in the URL.
+- [x] Extended katakana needed by N5 loanwords as a separate class (ティ, ディ, ファ, フィ, フェ, フォ, ウィ, ウェ, ウォ, シェ, ジェ, チェ) with validation tests.
+- [x] Katakana lessons with authored notes, including the long-vowel mark ー and small ッ.
+- [x] Look-alike notes for commonly confused pairs (シ/ツ, ソ/ン, ク/ケ, …) shown in the relevant lessons.
+- [x] Katakana practice and chart pages reusing the 0.3 components and session without copying them.
 
 **Acceptance criteria:** same as 0.3 for katakana; no katakana-specific branches in session logic.
 **Required tests:** D (katakana inventory, extended class), U (mixed pools), E + A (katakana lesson → practice journey).
@@ -119,19 +120,19 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 ---
 
-## 0.5 — Shared practice engine
+## 0.5 — Shared practice engine ✅
 
 **Goal:** one practice engine with several question modes that any content type can use.
 **User-visible result:** a practice setup page where learners pick kana sets and a mode — type the reading, choose the reading, choose the character, or type the kana — with results and "retry mistakes".
 **Prerequisites:** 0.4.
 
-- [ ] Practice item contract in `src/lib/learning/`: the data a question needs (ID, prompt, accepted answers, choice candidates, `lang`), produced by a per-content adapter; kana is the first adapter.
-- [ ] Question modes as data: type-the-reading, choose-the-reading, choose-the-character. Adding a mode adds a mode definition and tests, not a new session code path.
-- [ ] Distractor selection: same script, look-alikes and same row first, never duplicates, exactly one correct option, deterministic for a seed.
-- [ ] Type-the-kana mode: the prompt shows romaji and the learner types kana with their OS input method; Enter during IME composition never submits; answers compared after NFKC normalization.
-- [ ] Practice setup page: choose scripts, lessons/rows, mode, and length (10, 20, 50, endless); selection count always visible; starting with nothing selected is prevented with an explanation.
-- [ ] Choice keyboard support: number keys 1–4 select options; arrow keys move between options; focus management after each question.
-- [ ] Results: accuracy, time, missed items ordered by misses; "Practise again" and "Retry mistakes".
+- [x] Practice item contract in `src/lib/learning/`: the data a question needs (ID, prompt, accepted answers, choice candidates, `lang`), produced by a per-content adapter; kana is the first adapter.
+- [x] Question modes as data: type-the-reading, choose-the-reading, choose-the-character. Adding a mode adds a mode definition and tests, not a new session code path.
+- [x] Distractor selection: same script, look-alikes and same row first, never duplicates, exactly one correct option, deterministic for a seed.
+- [x] Type-the-kana mode: the prompt shows romaji and the learner types kana with their OS input method; Enter during IME composition never submits; answers compared after NFKC normalization.
+- [x] Practice setup page: choose scripts, lessons/rows, mode, and length (10, 20, 50, endless); selection count always visible; starting with nothing selected is prevented with an explanation.
+- [x] Choice keyboard support: number keys 1–4 select options; arrow keys move between options; focus management after each question.
+- [x] Results: accuracy, time, missed items ordered by misses; "Practise again" and "Retry mistakes".
 
 **Acceptance criteria:** every mode is fully keyboard operable and screen-reader announced; the engine has no kana-specific code outside the kana adapter.
 **Required tests:** U (each mode, distractor rules incl. small pools, IME composition guard as pure logic, results maths), E + A (setup → session → results in two modes).

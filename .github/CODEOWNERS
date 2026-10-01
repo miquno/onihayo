@@ -1,12 +1,16 @@
 # Marks the security-relevant paths: the CI definition, its scripts, the
-# dependency/supply-chain configuration, security headers, and the security
-# policy. Code-owner review becomes required in the `main` ruleset once there
+# dependency/supply-chain configuration (including the container image and
+# its build context), security headers, and the security policy. Code-owner review becomes required in the `main` ruleset once there
 # is a second maintainer; see .github/AGENTS.md.
 /.github/ @miquno
 /scripts/ @miquno
 /package.json @miquno
 /pnpm-lock.yaml @miquno
 /pnpm-workspace.yaml @miquno
+/.npmrc @miquno
+/.nvmrc @miquno
+/Dockerfile @miquno
+/.dockerignore @miquno
 /svelte.config.js @miquno
 /src/hooks.server.ts @miquno
 /src/lib/server/ @miquno

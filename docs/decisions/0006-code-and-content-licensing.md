@@ -1,6 +1,6 @@
 # 0006. Code and content licensing
 
-- Status: Proposed — the repository owner decides before the first Onihayo-authored content is merged (milestone 0.3)
+- Status: Accepted — option (b), CC BY-SA 4.0 for Onihayo-authored content
 - Date: 2026-09-29
 
 ## Context
@@ -16,6 +16,14 @@ Onihayo will contain three kinds of material: source code, Onihayo-authored educ
     Recommendation: **(b)**, stated in a `LICENSE` file inside each authored-content directory.
 - **Imported data:** keeps its original licence, stored in its own directory with the licence text, listed in `NOTICE`, `docs/content/sources.md`, and the site's licences page.
 - Sources with **NonCommercial** or **NoDerivatives** terms are not used, so the project stays free to be hosted by anyone, including with donations or paid hosting.
+
+## Decision
+
+The repository owner chose option **(b)**:
+
+- **Code** stays under the MIT License (`LICENSE`).
+- **Onihayo-authored learning content** (explanations, notes, mnemonics, example sentences, exercises, lesson and path ordering) is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), attributed to "Onihayo contributors". Each directory of authored content carries a `LICENSE` file with the CC BY-SA 4.0 legal code, added with the first authored content (milestone 0.3).
+- **Imported data** keeps its original licence, as proposed.
 
 ## Consequences
 
