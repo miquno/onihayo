@@ -9,7 +9,8 @@
   const titles: Record<KanaClass, string> = {
     basic: 'Basic hiragana',
     dakuten: 'Dakuten and handakuten',
-    yoon: 'Combined sounds'
+    yoon: 'Combined sounds',
+    extended: 'Loanword sounds'
   };
 </script>
 

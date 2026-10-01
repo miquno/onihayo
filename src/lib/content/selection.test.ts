@@ -14,9 +14,16 @@ const datasets = { hiragana, katakana };
 
 describe('kanaRowKeys', () => {
   it('lists every row of hiragana, then every row of katakana', () => {
-    expect(kanaRowKeys).toHaveLength(54);
+    expect(kanaRowKeys).toHaveLength(27 + 34);
     expect(kanaRowKeys.slice(0, 3)).toEqual(['hiragana.a', 'hiragana.ka', 'hiragana.sa']);
-    expect(kanaRowKeys.at(-1)).toBe('katakana.pya');
+    expect(kanaRowKeys.slice(26, 28)).toEqual(['hiragana.pya', 'katakana.a']);
+    expect(kanaRowKeys.at(-1)).toBe('katakana.che');
+  });
+
+  it('has only rows a script really has, so every key selects kana', () => {
+    for (const key of kanaRowKeys) expect(selectedKana([key], datasets), key).not.toEqual([]);
+    expect(kanaRowKeys).not.toContain('hiragana.fa');
+    expect(parseRowSelection(['hiragana.fa', 'hiragana.she'])).toEqual([]);
   });
 });
 
@@ -96,8 +103,8 @@ describe('selectedKana', () => {
 
   it('selects every kana exactly once when every row is chosen', () => {
     const kana = selectedKana(kanaRowKeys, datasets);
-    expect(kana).toHaveLength(208);
-    expect(new Set(kana.map((record) => record.id)).size).toBe(208);
+    expect(kana).toHaveLength(104 + 116);
+    expect(new Set(kana.map((record) => record.id)).size).toBe(104 + 116);
   });
 
   it('selects nothing for an empty selection', () => {
@@ -108,18 +115,35 @@ describe('selectedKana', () => {
 describe('rowsByClass', () => {
   it('groups a script by class, then by row in gojūon order', () => {
     const groups = rowsByClass(katakana);
-    expect(groups.map((group) => group.kanaClass)).toEqual(['basic', 'dakuten', 'yoon']);
+    expect(groups.map((group) => group.kanaClass)).toEqual([
+      'basic',
+      'dakuten',
+      'yoon',
+      'extended'
+    ]);
     expect(groups.map((group) => group.rows.map(({ row }) => row).join(' '))).toEqual([
       'a ka sa ta na ha ma ya ra wa n',
       'ga za da ba pa',
-      'kya sha cha nya hya mya rya gya ja bya pya'
+      'kya sha cha nya hya mya rya gya ja bya pya',
+      'ti di fa wi she je che'
     ]);
     const wa = groups[0]?.rows.find(({ row }) => row === 'wa');
     expect(wa?.kana.map((record) => record.character)).toEqual(['ワ', 'ヲ']);
   });
 
-  it('covers every kana of the script once', () => {
-    const kana = rowsByClass(hiragana).flatMap((group) => group.rows.flatMap((row) => row.kana));
-    expect(kana).toEqual(hiragana);
+  it('leaves out classes a script does not have', () => {
+    expect(rowsByClass(hiragana).map((group) => group.kanaClass)).toEqual([
+      'basic',
+      'dakuten',
+      'yoon'
+    ]);
+  });
+
+  it.each([
+    { script: 'hiragana', records: hiragana },
+    { script: 'katakana', records: katakana }
+  ])('covers every $script kana once', ({ records }) => {
+    const kana = rowsByClass(records).flatMap((group) => group.rows.flatMap((row) => row.kana));
+    expect(kana).toEqual(records);
   });
 });

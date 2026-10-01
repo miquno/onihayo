@@ -17,9 +17,10 @@ describe('kana quiz load', () => {
   it('offers every row of both scripts, grouped by class', () => {
     const { scripts } = loadQuiz();
     expect(scripts.map(({ script }) => script)).toEqual(['hiragana', 'katakana']);
-    for (const { groups } of scripts) {
-      expect(groups.map(({ rows }) => rows.length)).toEqual([11, 5, 11]);
-    }
+    expect(scripts.map(({ groups }) => groups.map(({ rows }) => rows.length))).toEqual([
+      [11, 5, 11],
+      [11, 5, 11, 7]
+    ]);
     const shi = scripts[1]?.groups[0]?.rows.find(({ row }) => row === 'sa')?.kana[1];
     expect(shi).toEqual({ character: 'シ', romaji: 'shi' });
   });
@@ -51,7 +52,7 @@ describe('kana quiz page', () => {
   it('is a plain GET form to the quiz, one named checkbox per row', () => {
     expect(html).toMatch(/<form method="GET" action="\/quiz\/practice"/u);
     const rows = [...html.matchAll(/<input type="checkbox" name="rows" value="([^"]+)"/gu)];
-    expect(rows).toHaveLength(54);
+    expect(rows).toHaveLength(27 + 34);
     const checked = [
       ...html.matchAll(/<input type="checkbox" name="rows" value="([^"]+)" checked/gu)
     ].map(([, key]) => key);
@@ -79,7 +80,7 @@ describe('kana quiz page', () => {
     expect(html).toMatch(
       /<section[^>]*aria-labelledby="script-katakana"[^>]*>\s*<h2 id="script-katakana"[^>]*>Katakana<\/h2>/u
     );
-    expect(html.match(/<legend[^>]*>/gu)).toHaveLength(6);
+    expect(html.match(/<legend[^>]*>/gu)).toHaveLength(3 + 4);
   });
 
   it('leaves out the "All" checkboxes, which need JavaScript, when rendered on the server', () => {

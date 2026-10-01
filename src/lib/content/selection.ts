@@ -1,4 +1,11 @@
-import { kanaRows, type KanaClass, type KanaRecord, type KanaRow, type KanaScript } from './model';
+import {
+  kanaRows,
+  scriptRows,
+  type KanaClass,
+  type KanaRecord,
+  type KanaRow,
+  type KanaScript
+} from './model';
 
 /*
  * Choosing kana by row, across scripts: the kana quiz lets a learner pick any
@@ -8,14 +15,14 @@ import { kanaRows, type KanaClass, type KanaRecord, type KanaRow, type KanaScrip
 
 export const kanaScripts: readonly KanaScript[] = ['hiragana', 'katakana'];
 
-const kanaClasses: readonly KanaClass[] = ['basic', 'dakuten', 'yoon'];
+const kanaClasses: readonly KanaClass[] = ['basic', 'dakuten', 'yoon', 'extended'];
 
 /** One row of one script, e.g. `katakana.sa`. */
 export type KanaRowKey = `${KanaScript}.${KanaRow}`;
 
-/** Every row key in display order: all hiragana rows in gojūon order, then all katakana rows. */
+/** Every row key in display order: all hiragana rows, then all katakana rows (with extended). */
 export const kanaRowKeys: readonly KanaRowKey[] = kanaScripts.flatMap((script) =>
-  kanaRows.map((row): KanaRowKey => `${script}.${row}`)
+  scriptRows[script].map((row): KanaRowKey => `${script}.${row}`)
 );
 
 /**
@@ -55,16 +62,17 @@ export interface KanaRowGroup {
   readonly rows: readonly { readonly row: KanaRow; readonly kana: readonly KanaRecord[] }[];
 }
 
-/** A script's kana grouped by class (basic, dakuten, yōon), then by row in gojūon order. */
+/**
+ * A script's kana grouped by class (basic, dakuten, yōon, extended), then by
+ * row in order. Classes the script does not have are left out.
+ */
 export function rowsByClass(records: readonly KanaRecord[]): KanaRowGroup[] {
-  return kanaClasses.map((kanaClass) => {
+  return kanaClasses.flatMap((kanaClass) => {
     const ofClass = records.filter((record) => record.class === kanaClass);
-    return {
-      kanaClass,
-      rows: kanaRows.flatMap((row) => {
-        const kana = ofClass.filter((record) => record.row === row);
-        return kana.length === 0 ? [] : [{ row, kana }];
-      })
-    };
+    const rows = kanaRows.flatMap((row) => {
+      const kana = ofClass.filter((record) => record.row === row);
+      return kana.length === 0 ? [] : [{ row, kana }];
+    });
+    return rows.length === 0 ? [] : [{ kanaClass, rows }];
   });
 }

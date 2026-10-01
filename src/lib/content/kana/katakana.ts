@@ -4,8 +4,8 @@ import type { KanaRecord, Provenance } from '../model';
  * Katakana, written for Onihayo. Licensed under CC BY-SA 4.0 (see LICENSE in
  * this directory), attributed to "Onihayo contributors".
  *
- * The same 104 sounds as hiragana.ts, in the same gojūon order, with the same
- * readings and accepted alternatives: katakana spell the same sounds with
+ * First the same 104 sounds as hiragana.ts, in the same gojūon order, with the
+ * same readings and accepted alternatives: katakana spell the same sounds with
  * different characters. Records are basic, then dakuten/handakuten, then yōon;
  * within a class row by row, and within a row a-i-u-e-o. Romaji is Hepburn,
  * except that ヲ is "wo" (as typed on a keyboard) with the modern Hepburn "o"
@@ -13,6 +13,15 @@ import type { KanaRecord, Provenance } from '../model';
  * they differ (si, tu, zi, di, sya, …), and "nn" for ン as typed with an input
  * method. ヂ and ヅ share their Hepburn reading with ジ and ズ, so their IDs use
  * the Nihon-shiki "di" and "du".
+ *
+ * Then 12 extended katakana, a kana with a small vowel, for sounds that
+ * loanwords in N5 need (パーティー, フォーク, …), one row per consonant
+ * sound. Romaji is Hepburn. Where Hepburn spells another kana too, the spelling
+ * an input method uses is also accepted (ティ "thi", since チ accepts "ti";
+ * ディ "dhi"; ウォ "who"), and シェ, ジェ, チェ accept "sye", "zye", "tye" as
+ * the yōon accept "sya", "zya", "tya". IDs use the reading, except that ディ
+ * and ウォ read like ヂ and ヲ, whose IDs "di" and "wo" are taken; they use
+ * "dhi" and "who".
  */
 
 export const provenance: Provenance = {
@@ -955,6 +964,114 @@ export const katakana: readonly KanaRecord[] = [
     class: 'yoon',
     romaji: 'pyo',
     alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.ti',
+    character: 'ティ',
+    row: 'ti',
+    class: 'extended',
+    romaji: 'ti',
+    alternatives: ['thi'],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.dhi',
+    character: 'ディ',
+    row: 'di',
+    class: 'extended',
+    romaji: 'di',
+    alternatives: ['dhi'],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.fa',
+    character: 'ファ',
+    row: 'fa',
+    class: 'extended',
+    romaji: 'fa',
+    alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.fi',
+    character: 'フィ',
+    row: 'fa',
+    class: 'extended',
+    romaji: 'fi',
+    alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.fe',
+    character: 'フェ',
+    row: 'fa',
+    class: 'extended',
+    romaji: 'fe',
+    alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.fo',
+    character: 'フォ',
+    row: 'fa',
+    class: 'extended',
+    romaji: 'fo',
+    alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.wi',
+    character: 'ウィ',
+    row: 'wi',
+    class: 'extended',
+    romaji: 'wi',
+    alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.we',
+    character: 'ウェ',
+    row: 'wi',
+    class: 'extended',
+    romaji: 'we',
+    alternatives: [],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.who',
+    character: 'ウォ',
+    row: 'wi',
+    class: 'extended',
+    romaji: 'wo',
+    alternatives: ['who'],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.she',
+    character: 'シェ',
+    row: 'she',
+    class: 'extended',
+    romaji: 'she',
+    alternatives: ['sye'],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.je',
+    character: 'ジェ',
+    row: 'je',
+    class: 'extended',
+    romaji: 'je',
+    alternatives: ['zye'],
+    origin: 'authored'
+  },
+  {
+    id: 'kana.katakana.che',
+    character: 'チェ',
+    row: 'che',
+    class: 'extended',
+    romaji: 'che',
+    alternatives: ['tye'],
     origin: 'authored'
   }
 ];

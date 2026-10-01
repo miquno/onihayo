@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { kanaChart, type ChartRow } from './chart';
 import { hiragana } from './kana/hiragana';
+import { katakana } from './kana/katakana';
 import type { KanaClass, KanaRecord } from './model';
 
 const classes: readonly KanaClass[] = ['basic', 'dakuten', 'yoon'];
@@ -47,6 +48,20 @@ describe('kanaChart', () => {
     expect(rowText(chart.rows[0])).toBe('kya: きゃ きゅ きょ');
     expect(rowText(chart.rows.find((row) => row.row === 'ja'))).toBe('ja: じゃ じゅ じょ');
     expect(chart.rows).toHaveLength(11);
+  });
+
+  it('places extended katakana in the vowel column of their row', () => {
+    const chart = kanaChart(katakana, 'extended');
+    expect(chart.columns).toEqual(['a', 'i', 'u', 'e', 'o']);
+    expect(chart.rows.map(rowText)).toEqual([
+      'ti: · ティ · · ·',
+      'di: · ディ · · ·',
+      'fa: ファ フィ · フェ フォ',
+      'wi: · ウィ · ウェ ウォ',
+      'she: · · · シェ ·',
+      'je: · · · ジェ ·',
+      'che: · · · チェ ·'
+    ]);
   });
 
   it('shows every hiragana exactly once across the three charts', () => {

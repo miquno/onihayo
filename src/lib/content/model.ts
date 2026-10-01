@@ -20,15 +20,17 @@ export type KanaScript = 'hiragana' | 'katakana';
 
 /**
  * Kana classes: the basic gojūon characters, those with dakuten or handakuten
- * (が, ぱ, …), and yōon combinations with a small ゃ, ゅ, or ょ (きゃ, …).
+ * (が, ぱ, …), yōon combinations with a small ゃ, ゅ, or ょ (きゃ, …), and
+ * extended katakana with a small vowel, written for sounds in loanwords
+ * (ティ, ファ, …). Only katakana has the extended class.
  */
-export type KanaClass = 'basic' | 'dakuten' | 'yoon';
+export type KanaClass = 'basic' | 'dakuten' | 'yoon' | 'extended';
 
 /**
- * Kana rows in gojūon order, class by class. A row is named after the
- * romaji of its first kana; ん forms its own row.
+ * The rows both scripts share, in gojūon order, class by class. A row is
+ * named after the romaji of its first kana; ん forms its own row.
  */
-export const kanaRows = [
+const gojuonRows = [
   'a',
   'ka',
   'sa',
@@ -58,7 +60,19 @@ export const kanaRows = [
   'pya'
 ] as const;
 
+/** Rows of extended katakana, one per consonant sound, in the order they are taught. */
+const extendedKatakanaRows = ['ti', 'di', 'fa', 'wi', 'she', 'je', 'che'] as const;
+
+/** Every kana row in order: the gojūon rows, then the extended katakana rows. */
+export const kanaRows = [...gojuonRows, ...extendedKatakanaRows] as const;
+
 export type KanaRow = (typeof kanaRows)[number];
+
+/** The rows each script has, in order. Hiragana has no extended rows. */
+export const scriptRows: Readonly<Record<KanaScript, readonly KanaRow[]>> = {
+  hiragana: gojuonRows,
+  katakana: kanaRows
+};
 
 /** One kana as a learning item. */
 export interface KanaRecord {

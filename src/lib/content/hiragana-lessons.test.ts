@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { hiragana } from './kana/hiragana';
 import { hiraganaLessons, provenance } from './kana/hiragana-lessons';
 import { lessonKana, lessonSlug } from './lessons';
-import { kanaRows } from './model';
+import { scriptRows } from './model';
 
 /*
  * Dataset validation (D) for the hiragana lessons: together they teach every
@@ -17,7 +17,7 @@ describe('hiragana lessons validation', () => {
   });
 
   it('list their rows in gojūon order, each row in one lesson only', () => {
-    expect(hiraganaLessons.flatMap((lesson) => lesson.rows)).toEqual(kanaRows);
+    expect(hiraganaLessons.flatMap((lesson) => lesson.rows)).toEqual(scriptRows.hiragana);
   });
 
   it('have unique IDs named after their first row', () => {
