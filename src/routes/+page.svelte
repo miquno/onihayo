@@ -26,7 +26,7 @@
     Start here: {data.firstLesson.title}
   </LinkButton>
 </p>
-<p>Onihayo is in early development; katakana, vocabulary, and the rest of the path to N5 follow.</p>
+<p>Onihayo is in early development; vocabulary, kanji, and the rest of the path to N5 follow.</p>
 <p>
   Development follows a public, milestone-based
   <a href="https://github.com/miquno/onihayo/blob/main/ROADMAP.md">roadmap</a>.

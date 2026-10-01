@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
+  import LessonList from '$lib/ui/LessonList.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -24,14 +25,13 @@
   each lesson builds on the one before.
 </p>
 
-<ol class="lessons">
-  {#each data.lessons as lesson (lesson.slug)}
-    <li>
-      <a href={resolve('/hiragana/[lesson]', { lesson: lesson.slug })}>{lesson.title}</a>
-      <span class="preview" lang="ja">{lesson.characters.join(' ')}</span>
-    </li>
-  {/each}
-</ol>
+<LessonList
+  lessons={data.lessons.map((lesson) => ({
+    href: resolve('/hiragana/[lesson]', { lesson: lesson.slug }),
+    title: lesson.title,
+    characters: lesson.characters
+  }))}
+/>
 
 <p>
   To see every character at once, open the <a href={resolve('/hiragana/chart')}>hiragana chart</a>.
@@ -51,19 +51,5 @@
   .lead {
     font-size: var(--font-size-lg);
     color: var(--color-text);
-  }
-
-  .lessons {
-    padding-inline-start: var(--space-6);
-  }
-
-  .lessons li + li {
-    margin-top: var(--space-3);
-  }
-
-  .preview {
-    display: block;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-lg);
   }
 </style>

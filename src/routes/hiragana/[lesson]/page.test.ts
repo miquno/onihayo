@@ -90,6 +90,7 @@ describe('hiragana lesson page', () => {
     expect(body).not.toContain('Next lesson');
     expect(body).toContain('<a href="/hiragana/gya/practice"');
     expect(body).toContain('That was the last hiragana lesson');
+    expect(body).toMatch(/<a href="\/katakana"[^>]*>\s*Continue with katakana\s*<\/a>/u);
     expect(body).toContain('<a href="/hiragana">All hiragana lessons</a>');
   });
 });

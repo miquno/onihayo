@@ -92,16 +92,39 @@ export interface KanaRecord {
   readonly origin: ContentOrigin;
 }
 
+/** A word that shows a mark in use, written only with kana taught so far. */
+export interface MarkExample {
+  /** The word in kana, e.g. `ケーキ`. */
+  readonly word: string;
+  /** Its Hepburn romaji, long vowels with a macron, e.g. `kēki`. */
+  readonly romaji: string;
+  /** Its English meaning, e.g. "cake". */
+  readonly meaning: string;
+}
+
+/**
+ * A spelling mark taught with a lesson that is not a kana of its own: the
+ * long vowel mark ー or the small ッ that doubles a consonant.
+ */
+export interface MarkNote {
+  readonly mark: string;
+  /** Its English name, e.g. "Long vowel mark". */
+  readonly name: string;
+  /** What the mark does, as plain text. */
+  readonly note: string;
+  readonly examples: readonly MarkExample[];
+}
+
 /**
  * A kana lesson: one or more consecutive rows of one class, taught together.
  * The lesson teaches every kana in its rows, in dataset order.
  */
 export interface KanaLesson {
   /**
-   * Stable lesson ID, `lesson.hiragana.<first row>`. Never renamed or reused:
+   * Stable lesson ID, `lesson.<script>.<first row>`. Never renamed or reused:
    * lesson progress will refer to it. The part after the last dot is the URL slug.
    */
-  readonly id: `lesson.hiragana.${KanaRow}`;
+  readonly id: `lesson.${KanaScript}.${KanaRow}`;
   /** Short English title, e.g. "K row". */
   readonly title: string;
   /** The rows taught, in gojūon order. */
@@ -110,5 +133,7 @@ export interface KanaLesson {
   readonly note: string;
   /** Notes for kana that do not sound the way their romaji suggests, keyed by item ID. Plain text. */
   readonly kanaNotes: Readonly<Partial<Record<KanaRecord['id'], string>>>;
+  /** Marks this lesson introduces, if any. */
+  readonly marks?: readonly MarkNote[];
   readonly origin: ContentOrigin;
 }
