@@ -7,11 +7,7 @@
  */
 
 import type { AnswerRecord } from '$lib/learning/session';
-
-/** The stages every item moves through, in order (`docs/architecture/learning-model.md`). */
-export const stages = ['new', 'learning', 'reviewing', 'mastered'] as const;
-
-export type Stage = (typeof stages)[number];
+import { nextStage, type Stage } from './stages';
 
 /**
  * What one learner knows about one item. A record exists from the first
@@ -58,12 +54,12 @@ export function stageOf(progress: LearnerProgress, itemId: string): Stage {
 
 /**
  * Counts one answer in its item's record, creating the record with the first
- * answer. The stage is left as it is, `new` in a record just created: stage
- * rules are a function of their own.
+ * answer, and moves the item to the stage `nextStage()` gives.
  *
- * Answers may arrive in any order: `firstSeen` is the earliest and `lastSeen`
- * the latest answer time, so the result is the same and `firstSeen` never
- * lies after `lastSeen`, even when the device's clock was set back.
+ * The counts and times do not depend on the order answers arrive in:
+ * `firstSeen` is the earliest and `lastSeen` the latest answer time, so
+ * `firstSeen` never lies after `lastSeen`, even when the device's clock was
+ * set back. The stage follows the answers in the order they are recorded.
  */
 export function recordAnswer(progress: LearnerProgress, answer: AnsweredItem): LearnerProgress {
   const { itemId, correct, answeredAt } = answer;
@@ -72,7 +68,7 @@ export function recordAnswer(progress: LearnerProgress, answer: AnsweredItem): L
   const record = progress.items.get(itemId);
   const items = new Map(progress.items);
   items.set(itemId, {
-    stage: record?.stage ?? 'new',
+    stage: nextStage(record?.stage ?? 'new', correct),
     attempts: (record?.attempts ?? 0) + 1,
     correct: (record?.correct ?? 0) + (correct ? 1 : 0),
     firstSeen: Math.min(record?.firstSeen ?? answeredAt, answeredAt),

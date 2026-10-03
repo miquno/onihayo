@@ -24,7 +24,18 @@ Every item moves through the same stages regardless of its type:
 3. **Reviewing** — in the review schedule.
 4. **Mastered** — recalled reliably over long intervals (threshold defined with the scheduler in 0.8).
 
-A wrong answer can move an item back; the rules live in one tested function, never in UI components.
+An answer moves an item between stages. The rules live in one tested function, `nextStage()` in `src/lib/progress/stages.ts`, never in UI components:
+
+| Stage     | After a correct answer | After a wrong answer |
+| --------- | ---------------------- | -------------------- |
+| New       | Learning               | Learning             |
+| Learning  | Reviewing              | Learning             |
+| Reviewing | Reviewing              | Learning             |
+| Mastered  | Mastered               | Reviewing            |
+
+- The first answer about an item, right or wrong, starts the learning. An item that has been practised never becomes new again.
+- A correct answer moves an item one stage forward, as far as Reviewing: a new item is in review after two correct answers. A wrong answer moves it one stage back.
+- No answer makes an item Mastered. That takes recall over long intervals, so the step from Reviewing to Mastered arrives with the scheduler in 0.8.
 
 ## Principles
 
