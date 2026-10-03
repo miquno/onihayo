@@ -14,13 +14,13 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
 - `lib/content/` — typed learning content: the content model, Onihayo-authored hiragana and katakana data and lessons (CC BY-SA 4.0), and lesson, chart, and row-selection helpers. See its `AGENTS.md`.
 - `lib/learning/` — the learning engine: answer normalization, the seeded random source, the practice item contract with its kana adapter, question modes, distractor selection, and the practice session state machine. See its `AGENTS.md`.
+- `lib/progress/` — learner progress as immutable values: one progress record per item (stage, attempts, correct answers, first and last seen) and lesson completion records, keyed by stable ID. Nothing is stored yet. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
 - `lib/server/` — server-only code. See its `AGENTS.md`.
 - `lib/testing/` — helpers for unit tests only: `withoutHydrationMarkers()` strips Svelte's hydration comments from server-rendered markup (repeating until nothing changes, so no comment can survive a removal).
 
 ## Planned layout (create a folder only when its roadmap item needs it)
 
-- `lib/progress/` — learner progress model and storage adapters (0.6).
 - `lib/srs/` — review scheduling (0.8).
 - `lib/server/db/`, `lib/server/auth/` — persistence and authentication (0.9).
 
