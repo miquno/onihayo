@@ -13,7 +13,8 @@ describe('privacy page', () => {
 
   it('describes local progress storage and the absence of accounts and third parties', () => {
     expect(body).toContain('There are no accounts and nothing to sign up for.');
-    expect(body).toContain('Onihayo does not yet save practice results.');
+    expect(body).toContain("Onihayo saves learning progress in this browser's local storage");
+    expect(body).toContain('Progress export is not available yet.');
     expect(body).toContain('local storage');
     expect(body).toContain('starts with empty progress, and shows a notice');
     expect(body).toContain('Onihayo sets no cookies');

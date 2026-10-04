@@ -75,6 +75,22 @@ test('keyboard-only learner picks rows of both scripts and finishes a quiz', asy
   await expect(page.getByText('You answered 19 of 20 correctly (95 %).')).toBeVisible();
   expect(requests).toEqual([]);
 
+  const saved = await page.evaluate(() => {
+    const raw = localStorage.getItem('onihayo:progress');
+    return raw === null
+      ? null
+      : (JSON.parse(raw) as {
+          items: [string, { attempts: number; correct: number }][];
+          lessons: [string, { completedAt: number }][];
+        });
+  });
+  expect(saved).not.toBeNull();
+  expect(saved?.items).toHaveLength(10);
+  expect(saved?.items.every(([, record]) => record.attempts === 2)).toBe(true);
+  expect(saved?.items.reduce((total, [, record]) => total + record.correct, 0)).toBe(19);
+  expect(saved?.lessons).toHaveLength(0);
+  expect(JSON.stringify(saved)).not.toContain('xyz');
+
   // "Change selection" goes back with the same rows chosen.
   await page.getByRole('link', { name: 'Change selection' }).focus();
   await page.keyboard.press('Enter');

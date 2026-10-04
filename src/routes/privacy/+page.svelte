@@ -17,10 +17,10 @@
 <h2>What Onihayo stores</h2>
 <p>There are no accounts and nothing to sign up for.</p>
 <p>
-  Onihayo does not yet save practice results. The progress storage is being added in stages. When it
-  is connected, it will keep each item's learning stage, answer counts and dates, and completed
-  lessons in your browser's local storage. It will stay on your device and clearing this site's
-  browser data will delete it.
+  Onihayo saves learning progress in this browser's local storage: each item's learning stage,
+  number of attempts and correct answers, first and last answer times, and the time a lesson was
+  first completed. The text you type is never saved. This information stays on your device, and
+  clearing this site's browser data deletes it. Progress export is not available yet.
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed

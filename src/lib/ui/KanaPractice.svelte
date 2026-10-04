@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { tick } from 'svelte';
+  import { onMount } from 'svelte';
   import { question, questionModes, sessionItems, type QuestionMode } from '$lib/learning/modes';
   import { normalizeAnswer } from '$lib/learning/normalize';
   import { choiceOptions } from '$lib/learning/options';
@@ -22,6 +23,13 @@
   import { choiceKeyAction, optionShortcut } from './choice-keys';
   import { ignoreNextSubmit, imeKeydown, type ImeEvent } from './ime';
   import {
+    completeLesson,
+    emptyProgress,
+    recordAnswer,
+    type LearnerProgress
+  } from '$lib/progress/records';
+  import { readProgress, updateProgress, type ProgressNotice } from '$lib/progress/storage';
+  import {
     answerLabel,
     durationText,
     instructionsText,
@@ -34,8 +42,8 @@
   } from './practice';
 
   // See one side of an item and type the other, or choose it from options;
-  // get feedback; a summary at the end. Runs entirely in the browser: answers
-  // are never sent or stored.
+  // get feedback; a summary at the end. Answers stay in the browser; only
+  // aggregate progress is stored, never the text the learner typed.
   interface Props {
     items: readonly PracticeItem[];
     /** The question mode; "type the reading" unless given. */
@@ -45,6 +53,8 @@
     questionCount: number;
     /** Goes on until the learner finishes it: shows "Finish" instead of a progress bar. */
     endless?: boolean;
+    /** Stable lesson ID; quizzes omit it and never complete a lesson. */
+    lessonId?: string;
     /** The seed of the first session; "Practise again" picks a new one. */
     seed: number;
     /** The first link of the results (the recommended next step). */
@@ -59,6 +69,7 @@
     pool,
     questionCount,
     endless = false,
+    lessonId,
     seed,
     nextStep,
     moreLinks
@@ -89,6 +100,46 @@
   let blankSubmitted = $state(false);
   let input: HTMLInputElement | undefined = $state();
   let resultsHeading: HTMLHeadingElement | undefined = $state();
+  let learnerProgress = $state<LearnerProgress>(emptyProgress());
+  let progressNotice = $state<ProgressNotice | null>(null);
+
+  onMount(() => {
+    try {
+      const loaded = readProgress(window.localStorage);
+      learnerProgress = loaded.progress;
+      progressNotice = loaded.notice;
+    } catch {
+      progressNotice = 'unavailable';
+    }
+  });
+
+  function persistProgress(update: (progress: LearnerProgress) => LearnerProgress) {
+    try {
+      const saved = updateProgress(window.localStorage, update, learnerProgress);
+      if (saved.notice === 'reload') {
+        progressNotice = 'reload';
+        return;
+      }
+      learnerProgress = saved.progress;
+      progressNotice = saved.notice;
+    } catch {
+      // Accessing the localStorage property itself can fail in restricted browsers.
+      learnerProgress = update(learnerProgress);
+      progressNotice = 'unavailable';
+    }
+  }
+
+  function persistAnswer(answeredAt: number) {
+    const record = lastAnswer(session);
+    if (record === undefined) return;
+    persistProgress((progress) =>
+      recordAnswer(progress, {
+        itemId: record.itemId,
+        correct: record.correct,
+        answeredAt
+      })
+    );
+  }
 
   const itemsById = $derived(new Map(items.map((item) => [item.id, item])));
   const currentPracticeItem = $derived(itemsById.get(currentItem(session)?.id ?? ''));
@@ -124,10 +175,19 @@
     if (track({ type: 'submit' })) return;
     if (session.phase === 'asking') {
       const updated = submitAnswer(session, answer, Date.now);
+      const answered = updated !== session;
       blankSubmitted = updated === session;
       session = updated;
+      if (answered) {
+        const record = lastAnswer(updated);
+        if (record !== undefined) persistAnswer(record.answeredAt);
+      }
     } else if (session.phase === 'answered') {
+      const finalAnswer = lastAnswer(session);
       session = nextQuestion(session);
+      if (session.phase === 'finished' && lessonId !== undefined && finalAnswer !== undefined) {
+        persistProgress((progress) => completeLesson(progress, lessonId, finalAnswer.answeredAt));
+      }
       answer = '';
       await tick();
       if (session.phase === 'finished') resultsHeading?.focus();
@@ -144,6 +204,8 @@
   async function choose(text: string) {
     if (session.phase !== 'asking') return;
     session = submitAnswer(session, text, Date.now);
+    const recorded = lastAnswer(session);
+    if (recorded !== undefined) persistAnswer(recorded.answeredAt);
     await tick();
     document.getElementById('next-question')?.focus();
   }
@@ -333,6 +395,16 @@
   </nav>
 {/if}
 
+{#if progressNotice}
+  <p class="storage-notice" role="status">
+    {progressNotice === 'unavailable'
+      ? 'Browser storage is unavailable. Learning progress may not be saved.'
+      : progressNotice === 'reload'
+        ? 'This progress was saved by a newer version. Reload this page before continuing.'
+        : 'Saved progress could not be read. A recovery copy was kept, and learning progress was reset.'}
+  </p>
+{/if}
+
 <style>
   h2 {
     font-size: var(--font-size-xl);
@@ -451,6 +523,10 @@
   .feedback {
     min-height: var(--space-7);
     margin-top: var(--space-4);
+  }
+
+  .storage-notice {
+    color: var(--color-text-muted);
   }
 
   .feedback p {

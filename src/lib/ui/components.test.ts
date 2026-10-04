@@ -215,6 +215,7 @@ describe('all components', () => {
       render(LessonPractice, {
         props: {
           practice: {
+            lessonId: 'lesson.katakana.a',
             slug: 'v',
             title: 'w',
             items: [practiceItem('x', 'ア', 'a')],

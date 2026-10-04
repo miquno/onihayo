@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Practice now saves answer counts and learning stages in browser storage; finishing a lesson practice also records its completion. Typed answers stay private and are never saved.
 - Guest progress storage now validates a bounded, versioned browser document; if saved data is damaged, Onihayo recovers with empty progress and explains what happened.
 - A landing page that explains what Onihayo is, with one clear first step: a "Start here" button that opens the first hiragana lesson.
 - Japanese text uses a Japanese system font where one is available, so kana and kanji show their Japanese forms.

@@ -105,11 +105,32 @@ test('keyboard-only learner practises a lesson and sees a summary', async ({ pag
   ]);
   expect(requests).toEqual([]);
 
+  const saved = await page.evaluate(() => {
+    const raw = localStorage.getItem('onihayo:progress');
+    return raw === null
+      ? null
+      : (JSON.parse(raw) as {
+          items: [string, { attempts: number; correct: number }][];
+          lessons: [string, { completedAt: number }][];
+        });
+  });
+  expect(saved).not.toBeNull();
+  expect(saved?.items).toHaveLength(5);
+  expect(saved?.items.every(([, record]) => record.attempts === 2)).toBe(true);
+  expect(saved?.items.reduce((total, [, record]) => total + record.correct, 0)).toBe(9);
+  expect(saved?.lessons).toHaveLength(1);
+  expect(saved?.lessons[0]?.[0]).toBe('lesson.hiragana.sa');
+  expect(JSON.stringify(saved)).not.toContain('xyz');
+
   await page.getByRole('button', { name: 'Practise again' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '1 of 10');
   await expect(input).toBeFocused();
   await expect(input).toHaveValue('');
+
+  await page.reload();
+  const afterReload = await page.evaluate(() => localStorage.getItem('onihayo:progress'));
+  expect(afterReload).toBe(JSON.stringify(saved));
 });
 
 test('the same seed gives the same question order', async ({ page }) => {
