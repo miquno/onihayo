@@ -81,13 +81,14 @@ export function readProgress(storage: ProgressStorage): ProgressLoad {
  */
 export function updateProgress(
   storage: ProgressStorage,
-  update: (progress: LearnerProgress) => LearnerProgress
+  update: (progress: LearnerProgress) => LearnerProgress,
+  inMemoryProgress: LearnerProgress = emptyProgress()
 ): ProgressLoad {
   let raw: string | null;
   try {
     raw = storage.getItem(progressStorageKey);
   } catch {
-    return { progress: emptyProgress(), notice: 'unavailable' };
+    return { progress: update(inMemoryProgress), notice: 'unavailable' };
   }
 
   const parsed =

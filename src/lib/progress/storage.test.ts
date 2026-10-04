@@ -178,4 +178,19 @@ describe('updateProgress', () => {
     expect(result.progress.items.has('kana.hiragana.shi')).toBe(true);
     expect(result.notice).toBe('unavailable');
   });
+
+  it('applies an update to the current in-memory value if storage cannot be read', () => {
+    const storage = new MemoryStorage();
+    storage.failRead = true;
+    const current = progressWithKnownRecord();
+    const result = updateProgress(
+      storage,
+      (progress) =>
+        recordAnswer(progress, { itemId: 'kana.hiragana.shi', correct: true, answeredAt: 456 }),
+      current
+    );
+
+    expect(result.progress.items.get('kana.hiragana.shi')).toMatchObject({ attempts: 2 });
+    expect(result.notice).toBe('unavailable');
+  });
 });
