@@ -22,6 +22,12 @@ const resolvedVirtualId = `\0${virtualId}`;
 const placeholder = '__ONIHAYO_BUNDLED_LICENCES__';
 const listedFile = '.svelte-kit/bundled-licences.json';
 
+/**
+ * Client-only packages tree-shaken out of the server build but present in the
+ * browser bundle. Keep these listed so the Licences page covers both graphs.
+ */
+const clientOnlyPackages = ['valibot'];
+
 /** Licences compatible with MIT distribution (docs/security/dependencies.md). */
 const allowedLicences = new Set([
   'MIT',
@@ -158,6 +164,12 @@ export function bundledLicences(): Plugin {
 
       const require = createRequire(join(projectRoot, 'package.json'));
       roots.add(dirname(require.resolve(`${adapter.name}/package.json`)));
+      for (const name of clientOnlyPackages) {
+        const root = packageRoot(require.resolve(name));
+        if (root === null)
+          this.error(`could not find the package root for client dependency ${name}`);
+        roots.add(root);
+      }
 
       const packages = [...roots].map((root) => {
         const pkg = readPackage(root, locked);

@@ -11,16 +11,18 @@ describe('privacy page', () => {
     expect(body).toMatch(/<h1[^>]*>Privacy<\/h1>/u);
   });
 
-  it('states that nothing personal is stored, set, or shared', () => {
-    expect(body).toContain('does not collect, store, or share any personal data');
-    expect(body).toContain('Onihayo sets no cookies.');
+  it('describes local progress storage and the absence of accounts and third parties', () => {
+    expect(body).toContain('There are no accounts and nothing to sign up for.');
+    expect(body).toContain('Onihayo does not yet save practice results.');
+    expect(body).toContain('local storage');
+    expect(body).toContain('starts with empty progress, and shows a notice');
+    expect(body).toContain('Onihayo sets no cookies');
     expect(body).toContain('No analytics, advertising, or tracking of any kind.');
     expect(body).toContain('No scripts, fonts, images, or embeds from other websites.');
   });
 
-  it('says that practice answers stay in the browser', () => {
-    expect(body).toContain('your answers are checked in your browser');
-    expect(body).toContain('never sent to Onihayo or');
+  it('says that practice answers are neither sent nor saved', () => {
+    expect(body).toContain('never sent to Onihayo or saved');
   });
 
   it('says what error logs contain and what they leave out', () => {

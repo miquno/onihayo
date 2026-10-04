@@ -1,12 +1,30 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import '$lib/ui/tokens.css';
   import '../app.css';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { footerNavigation, navigationCurrent, primaryNavigation, siteName } from '$lib/site';
+  import { readProgress, type ProgressNotice } from '$lib/progress/storage';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
+  let progressNotice = $state<ProgressNotice | null>(null);
+
+  onMount(() => {
+    try {
+      progressNotice = readProgress(window.localStorage).notice;
+    } catch {
+      progressNotice = 'unavailable';
+    }
+  });
+
+  const progressNoticeText: Record<ProgressNotice, string> = {
+    recovered:
+      'Saved progress could not be read. A recovery copy was kept, and learning progress was reset.',
+    unavailable: 'Browser storage is unavailable. Learning progress may not be saved.',
+    reload: 'This progress was saved by a newer version. Reload this page before continuing.'
+  };
 </script>
 
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -29,6 +47,10 @@
     </nav>
   </div>
 </header>
+
+{#if progressNotice}
+  <p class="progress-notice container" role="status">{progressNoticeText[progressNotice]}</p>
+{/if}
 
 <!-- tabindex="-1" lets the skip link move focus here, not only scroll. -->
 <main id="main" class="container" tabindex="-1">
@@ -119,6 +141,14 @@
 
   main {
     padding-block: var(--space-7);
+  }
+
+  .progress-notice {
+    margin-block: var(--space-3) 0;
+    padding: var(--space-3) var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
   }
 
   .site-footer {

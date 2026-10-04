@@ -150,7 +150,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] ADR: guest progress storage (IndexedDB vs `localStorage`), schema versioning, and migration of stored data; ADR choosing the single validation library (e.g. Zod) used at all boundaries.
 - [x] Progress record per item keyed by stable ID: stage (new / learning / reviewing / mastered), attempts, correct count, first and last seen; lesson completion records.
 - [x] Stage transition rules in one pure, tested function (`src/lib/progress/`).
-- [ ] Storage adapter that validates everything it reads: unknown IDs dropped, corrupted data recovered with a visible notice, never a crash; writes are versioned.
+- [x] Storage adapter that validates everything it reads: unknown IDs dropped, corrupted data recovered with a visible notice, never a crash; writes are versioned.
 - [ ] Practice results update progress; lessons are marked complete after their practice.
 - [ ] Home page "Continue" action: exactly one primary next step.
 - [ ] Settings page: export progress to a JSON file, import with validation and a size limit, reset with explicit confirmation.
