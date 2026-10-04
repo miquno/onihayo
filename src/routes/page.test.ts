@@ -15,8 +15,19 @@ describe('home page', () => {
   const { head, body } = render(HomePage, { props: { data, params: {} } });
   const html = withoutHydrationMarkers(body);
 
-  it('points to the first hiragana lesson', () => {
-    expect(data.firstLesson).toEqual({ slug: 'a', title: 'Vowels' });
+  it('supplies lessons in Hiragana then Katakana order', () => {
+    expect(data.firstLesson).toMatchObject({
+      id: 'lesson.hiragana.a',
+      script: 'hiragana',
+      slug: 'a',
+      title: 'Vowels'
+    });
+    expect(data.orderedLessons[18]).toMatchObject({
+      id: 'lesson.katakana.a',
+      script: 'katakana',
+      slug: 'a',
+      title: 'Vowels'
+    });
   });
 
   it('has the full site title and a single h1', () => {
@@ -24,7 +35,7 @@ describe('home page', () => {
     expect(html.match(/<h1[\s>]/gu)).toHaveLength(1);
   });
 
-  it('offers exactly one primary action: start the first lesson', () => {
+  it('offers exactly one primary action, starting the first lesson before progress exists', () => {
     const primary = [...html.matchAll(/<a [^>]*class="ui-button ui-button-primary"[^>]*>/gu)];
     expect(primary).toHaveLength(1);
     expect(html).toMatch(/<a href="\/hiragana\/a"[^>]*>\s*Start here: Vowels\s*<\/a>/u);

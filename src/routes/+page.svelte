@@ -1,10 +1,49 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
   import LinkButton from '$lib/ui/LinkButton.svelte';
+  import { nextUncompletedLesson } from '$lib/progress/next-lesson';
+  import { readProgress } from '$lib/progress/storage';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
+  let nextLesson = $state<PageProps['data']['orderedLessons'][number] | null>(null);
+  let progressLoaded = $state(false);
+  let hasCompletedLessons = $state(false);
+  let recoveredProgress = $state(false);
+
+  onMount(() => {
+    try {
+      const loaded = readProgress(window.localStorage);
+      const progress = loaded.progress;
+      nextLesson = nextUncompletedLesson(progress, data.orderedLessons) ?? null;
+      hasCompletedLessons = progress.lessons.size > 0;
+      // Recovery clears the invalid document, so the root layout may no longer
+      // see its notice if this page reads first. Other notices remain visible
+      // to the root layout because their stored data is not changed.
+      recoveredProgress = loaded.notice === 'recovered';
+      progressLoaded = true;
+    } catch {
+      // The root layout presents storage access failures.
+    }
+  });
+
+  const currentLesson = $derived(progressLoaded ? nextLesson : data.firstLesson);
+  const nextHref = $derived(
+    currentLesson === null
+      ? resolve('/quiz')
+      : currentLesson.script === 'hiragana'
+        ? resolve('/hiragana/[lesson]', { lesson: currentLesson.slug })
+        : resolve('/katakana/[lesson]', { lesson: currentLesson.slug })
+  );
+  const nextLabel = $derived(
+    currentLesson === null
+      ? 'Continue: Kana quiz'
+      : hasCompletedLessons
+        ? `Continue: ${currentLesson.script === 'hiragana' ? 'Hiragana' : 'Katakana'} ${currentLesson.title}`
+        : `Start here: ${currentLesson.title}`
+  );
 </script>
 
 <svelte:head>
@@ -22,10 +61,13 @@
   lessons, one row of characters at a time, each followed by its own practice.
 </p>
 <p class="start">
-  <LinkButton href={resolve('/hiragana/[lesson]', { lesson: data.firstLesson.slug })}>
-    Start here: {data.firstLesson.title}
-  </LinkButton>
+  <LinkButton href={nextHref}>{nextLabel}</LinkButton>
 </p>
+{#if recoveredProgress}
+  <p class="progress-notice" role="status">
+    Saved progress could not be read. A recovery copy was kept, and learning progress was reset.
+  </p>
+{/if}
 <p>Onihayo is in early development; vocabulary, kanji, and the rest of the path to N5 follow.</p>
 <p>
   Development follows a public, milestone-based
@@ -50,5 +92,9 @@
   .lead {
     font-size: var(--font-size-lg);
     color: var(--color-text);
+  }
+
+  .progress-notice {
+    color: var(--color-text-muted);
   }
 </style>

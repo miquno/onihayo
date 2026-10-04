@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- The home page now continues with the first unfinished lesson, moving from hiragana to katakana. After all current kana lessons are complete, its one primary action opens the kana quiz.
 - Practice now saves answer counts and learning stages in browser storage; finishing a lesson practice also records its completion. Typed answers stay private and are never saved.
 - Guest progress storage now validates a bounded, versioned browser document; if saved data is damaged, Onihayo recovers with empty progress and explains what happened.
 - A landing page that explains what Onihayo is, with one clear first step: a "Start here" button that opens the first hiragana lesson.
