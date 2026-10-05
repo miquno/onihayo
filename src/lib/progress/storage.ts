@@ -20,7 +20,7 @@ export const progressStorageKey = 'onihayo:progress';
 export const rejectedProgressStorageKey = 'onihayo:progress.rejected';
 export const currentProgressVersion = 1;
 /** ADR 0008 budgets under 1 MB for the full N5 progress document. */
-export const maxProgressDocumentLength = 1_000_000;
+export const maxProgressDocumentBytes = 1_000_000;
 
 export interface ProgressStorage {
   getItem(key: string): string | null;
@@ -34,6 +34,17 @@ export interface ProgressLoad {
   readonly progress: LearnerProgress;
   readonly notice: ProgressNotice | null;
 }
+
+export interface ProgressExport {
+  readonly json: string | null;
+  readonly notice: ProgressNotice | null;
+}
+
+export type ProgressImportResult =
+  | { readonly status: 'imported'; readonly progress: LearnerProgress }
+  | { readonly status: 'invalid' | 'newer' | 'unavailable' };
+
+export type ProgressResetResult = 'reset' | 'unavailable';
 
 const nonNegativeInteger = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 const id = v.pipe(v.string(), v.minLength(1), v.maxLength(200));
@@ -73,6 +84,55 @@ export function readProgress(storage: ProgressStorage): ProgressLoad {
   if (document.kind === 'invalid') return recover(storage, raw);
 
   return { progress: toLearnerProgress(document.value), notice: null };
+}
+
+/** Export a validated progress document without exposing malformed or newer data. */
+export function exportProgress(storage: ProgressStorage): ProgressExport {
+  let raw: string | null;
+  try {
+    raw = storage.getItem(progressStorageKey);
+  } catch {
+    return { json: null, notice: 'unavailable' };
+  }
+
+  if (raw === null) return { json: serializeDocument(emptyDocument()), notice: null };
+
+  const parsed = parseDocument(raw);
+  if (parsed.kind === 'newer') return { json: null, notice: 'reload' };
+  if (parsed.kind === 'invalid') {
+    const recovered = recover(storage, raw);
+    return {
+      json: recovered.notice === 'recovered' ? serializeDocument(emptyDocument()) : null,
+      notice: recovered.notice
+    };
+  }
+
+  return { json: serializeDocument(parsed.value), notice: null };
+}
+
+/** Validate a progress file completely before replacing the current document. */
+export function importProgress(storage: ProgressStorage, raw: string): ProgressImportResult {
+  const parsed = parseDocument(raw);
+  if (parsed.kind === 'newer') return { status: 'newer' };
+  if (parsed.kind === 'invalid') return { status: 'invalid' };
+
+  try {
+    storage.setItem(progressStorageKey, raw);
+    return { status: 'imported', progress: toLearnerProgress(parsed.value) };
+  } catch {
+    return { status: 'unavailable' };
+  }
+}
+
+/** Remove saved progress and its recovery copy after the learner confirms reset. */
+export function resetProgress(storage: ProgressStorage): ProgressResetResult {
+  try {
+    storage.removeItem(progressStorageKey);
+    storage.removeItem(rejectedProgressStorageKey);
+    return 'reset';
+  } catch {
+    return 'unavailable';
+  }
 }
 
 /**
@@ -132,7 +192,7 @@ function writeDocument(
     settings: {}
   };
   const serialized = JSON.stringify(document);
-  if (serialized.length > maxProgressDocumentLength) {
+  if (new TextEncoder().encode(serialized).byteLength > maxProgressDocumentBytes) {
     return { progress, notice: 'unavailable' };
   }
 
@@ -150,7 +210,12 @@ function parseDocument(
   | { readonly kind: 'valid'; readonly value: ProgressDocument }
   | { readonly kind: 'invalid' }
   | { readonly kind: 'newer' } {
-  if (raw.length > maxProgressDocumentLength) return { kind: 'invalid' };
+  if (
+    raw.length > maxProgressDocumentBytes ||
+    new TextEncoder().encode(raw).byteLength > maxProgressDocumentBytes
+  ) {
+    return { kind: 'invalid' };
+  }
 
   let input: unknown;
   try {
@@ -212,6 +277,10 @@ function toLearnerProgress(document: ProgressDocument): LearnerProgress {
 
 function emptyDocument(): ProgressDocument {
   return { version: currentProgressVersion, items: [], lessons: [], settings: {} };
+}
+
+function serializeDocument(document: ProgressDocument): string {
+  return JSON.stringify(document);
 }
 
 function recover(storage: ProgressStorage, raw: string): ProgressLoad {

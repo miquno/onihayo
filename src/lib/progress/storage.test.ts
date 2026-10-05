@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { recordAnswer, emptyProgress, type LearnerProgress } from './records';
 import {
   currentProgressVersion,
-  maxProgressDocumentLength,
+  exportProgress,
+  importProgress,
+  maxProgressDocumentBytes,
   progressStorageKey,
   readProgress,
+  resetProgress,
   rejectedProgressStorageKey,
   updateProgress,
   type ProgressStorage
@@ -87,7 +90,7 @@ describe('readProgress', () => {
         ]
       ])
     ],
-    ['oversized input', ' '.repeat(maxProgressDocumentLength + 1)]
+    ['oversized input', ' '.repeat(maxProgressDocumentBytes + 1)]
   ])('quarantines %s and recovers with empty progress', (_label, raw) => {
     const storage = new MemoryStorage();
     storage.values.set(progressStorageKey, raw);
@@ -192,5 +195,161 @@ describe('updateProgress', () => {
 
     expect(result.progress.items.get('kana.hiragana.shi')).toMatchObject({ attempts: 2 });
     expect(result.notice).toBe('unavailable');
+  });
+});
+
+describe('exportProgress', () => {
+  it('exports a validated document that imports with identical known progress', () => {
+    const source = new MemoryStorage();
+    source.values.set(
+      progressStorageKey,
+      stored(
+        [
+          [
+            'kana.hiragana.shi',
+            { stage: 'reviewing', attempts: 3, correct: 2, firstSeen: 10, lastSeen: 30 }
+          ],
+          [
+            'kana.future.word',
+            { stage: 'learning', attempts: 1, correct: 1, firstSeen: 40, lastSeen: 40 }
+          ]
+        ],
+        [['lesson.hiragana.ka', { completedAt: 50 }]]
+      )
+    );
+
+    const exported = exportProgress(source);
+    expect(exported.notice).toBeNull();
+    expect(exported.json).not.toBeNull();
+
+    const destination = new MemoryStorage();
+    const imported = importProgress(destination, exported.json ?? '');
+    expect(imported.status).toBe('imported');
+    expect(imported).toMatchObject({
+      status: 'imported',
+      progress: readProgress(source).progress
+    });
+    expect(destination.values.get(progressStorageKey)).toContain('kana.future.word');
+  });
+
+  it('exports an empty current-version document when no progress is saved', () => {
+    const result = exportProgress(new MemoryStorage());
+    expect(result.notice).toBeNull();
+    expect(JSON.parse(result.json ?? 'null')).toEqual({
+      version: currentProgressVersion,
+      items: [],
+      lessons: [],
+      settings: {}
+    });
+  });
+
+  it('keeps a large valid export under the import size limit', () => {
+    const source = new MemoryStorage();
+    const raw = stored(
+      Array.from(
+        { length: 4_500 },
+        (_, index) =>
+          [
+            `unknown.${String(index).padStart(4, '0')}.${'x'.repeat(100)}`,
+            { stage: 'learning', attempts: 1, correct: 1, firstSeen: 0, lastSeen: 0 }
+          ] as const
+      )
+    );
+    expect(new TextEncoder().encode(raw).byteLength).toBeLessThan(maxProgressDocumentBytes);
+    source.values.set(progressStorageKey, raw);
+
+    const exported = exportProgress(source);
+    expect(exported.json).not.toBeNull();
+    expect(new TextEncoder().encode(exported.json ?? '').byteLength).toBeLessThanOrEqual(
+      maxProgressDocumentBytes
+    );
+    expect(importProgress(new MemoryStorage(), exported.json ?? '').status).toBe('imported');
+  });
+
+  it('does not export or overwrite a document from a newer version', () => {
+    const storage = new MemoryStorage();
+    const raw = JSON.stringify({ version: currentProgressVersion + 1 });
+    storage.values.set(progressStorageKey, raw);
+
+    expect(exportProgress(storage)).toEqual({ json: null, notice: 'reload' });
+    expect(storage.values.get(progressStorageKey)).toBe(raw);
+  });
+});
+
+describe('importProgress', () => {
+  it.each([
+    ['malformed JSON', '{not json'],
+    ['oversized JSON', ' '.repeat(maxProgressDocumentBytes + 1)]
+  ])('leaves existing progress alone for %s', (_label, raw) => {
+    const storage = new MemoryStorage();
+    const existing = stored([], [['lesson.hiragana.a', { completedAt: 10 }]]);
+    storage.values.set(progressStorageKey, existing);
+
+    expect(importProgress(storage, raw)).toEqual({ status: 'invalid' });
+    expect(storage.values.get(progressStorageKey)).toBe(existing);
+  });
+
+  it('rejects a valid-looking document whose UTF-8 size exceeds the byte limit', () => {
+    const items = Array.from(
+      { length: 1_700 },
+      (_, index) =>
+        [
+          `${String(index).padStart(4, '0')}${'あ'.repeat(190)}`,
+          { stage: 'learning', attempts: 1, correct: 1, firstSeen: 0, lastSeen: 0 }
+        ] as const
+    );
+    const oversizedByBytes = stored(items);
+    expect(oversizedByBytes.length).toBeLessThan(maxProgressDocumentBytes);
+    expect(new TextEncoder().encode(oversizedByBytes).byteLength).toBeGreaterThan(
+      maxProgressDocumentBytes
+    );
+
+    const storage = new MemoryStorage();
+    const existing = stored();
+    storage.values.set(progressStorageKey, existing);
+
+    expect(importProgress(storage, oversizedByBytes)).toEqual({ status: 'invalid' });
+    expect(storage.values.get(progressStorageKey)).toBe(existing);
+  });
+
+  it('refuses a newer version without changing current progress', () => {
+    const storage = new MemoryStorage();
+    const existing = stored();
+    const newer = JSON.stringify({ version: currentProgressVersion + 1 });
+    storage.values.set(progressStorageKey, existing);
+
+    expect(importProgress(storage, newer)).toEqual({ status: 'newer' });
+    expect(storage.values.get(progressStorageKey)).toBe(existing);
+  });
+
+  it('keeps current progress when storage cannot accept an import', () => {
+    const storage = new MemoryStorage();
+    const existing = stored();
+    storage.values.set(progressStorageKey, existing);
+    storage.failWrite = true;
+
+    expect(
+      importProgress(storage, stored([], [['lesson.hiragana.a', { completedAt: 10 }]]))
+    ).toEqual({ status: 'unavailable' });
+    expect(storage.values.get(progressStorageKey)).toBe(existing);
+  });
+});
+
+describe('resetProgress', () => {
+  it('removes saved progress and its recovery copy', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(progressStorageKey, stored());
+    storage.values.set(rejectedProgressStorageKey, '{damaged');
+
+    expect(resetProgress(storage)).toBe('reset');
+    expect(storage.values.has(progressStorageKey)).toBe(false);
+    expect(storage.values.has(rejectedProgressStorageKey)).toBe(false);
+  });
+
+  it('reports when browser storage cannot be changed', () => {
+    const storage = new MemoryStorage();
+    storage.failWrite = true;
+
+    expect(resetProgress(storage)).toBe('unavailable');
   });
 });

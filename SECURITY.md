@@ -36,7 +36,7 @@ In scope:
 
 - The Onihayo web application and its production deployment
 - The source code, CI workflows, and scripts in this repository
-- Handling of learner data (browser storage today; accounts and server-side data once introduced)
+- Handling of learner data (browser storage and local progress-file import today; accounts and server-side data once introduced)
 
 Out of scope:
 

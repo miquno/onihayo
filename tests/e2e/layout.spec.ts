@@ -93,6 +93,11 @@ const pages: PageCase[] = [
     title: 'Licences — Onihayo',
     current: { navigation: 'Site information', link: 'Licences' }
   },
+  {
+    path: '/settings',
+    title: 'Settings — Onihayo',
+    current: { navigation: 'Site information', link: 'Settings' }
+  },
   { path: '/this-route-does-not-exist', title: 'Page not found — Onihayo', current: null }
 ];
 
@@ -248,7 +253,8 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'roadmap',
     'source code on GitHub',
     'Privacy',
-    'Licences'
+    'Licences',
+    'Settings'
   ];
   const reached: string[] = [];
   for (let stop = 0; stop < expected.length; stop++) {
