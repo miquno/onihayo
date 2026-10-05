@@ -169,7 +169,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** a first vocabulary unit (around 30–50 beginner words written in kana) with lessons, practice, and word pages.
 **Prerequisites:** 0.6.
 
-- [ ] ADR and register entry for the vocabulary source (JMdict/EDRDG): licence verified from the publisher, attribution text, share-alike handling, and repository location of the licence.
+- [x] ADR and register entry for the vocabulary source (JMdict/EDRDG): licence verified from the publisher, attribution text, share-alike handling, and repository location of the licence.
 - [ ] Import script in `scripts/content/` that reads a pinned, checksum-verified JMdict release and emits a compact dataset limited to Onihayo's selection list; transformations documented; the output is committed, the script is re-runnable.
 - [ ] Word item model: stable ID, kana, optional kanji forms, English meanings, part of speech, source entry reference, origin (`imported`/`authored`).
 - [ ] First word set: an Onihayo-authored selection of kana-only beginner words, grouped into lessons.
