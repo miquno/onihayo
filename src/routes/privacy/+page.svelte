@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
 </script>
 
@@ -12,7 +13,7 @@
 
 <h1>Privacy</h1>
 <p class="lead">Onihayo does not collect or share personal data.</p>
-<p class="updated">Last updated: <time datetime="2026-10-04">4 October 2026</time></p>
+<p class="updated">Last updated: <time datetime="2026-10-05">5 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 <p>There are no accounts and nothing to sign up for.</p>
@@ -20,7 +21,8 @@
   Onihayo saves learning progress in this browser's local storage: each item's learning stage,
   number of attempts and correct answers, first and last answer times, and the time a lesson was
   first completed. The text you type is never saved. This information stays on your device, and
-  clearing this site's browser data deletes it. Progress export is not available yet.
+  clearing this site's browser data deletes it. To save a backup on your device, open
+  <a href={resolve('/settings')}>Settings</a> and choose “Export progress”.
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed

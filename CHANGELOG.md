@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Privacy page now links directly to the Settings export control and explains how to save a progress backup.
 - Settings now lets learners export a JSON backup, import a validated progress file, or reset saved progress with confirmation.
 - The home page now updates its next lesson when progress changes in another open tab.
 - The home page now continues with the first unfinished lesson, moving from hiragana to katakana. After all current kana lessons are complete, its one primary action opens the kana quiz.

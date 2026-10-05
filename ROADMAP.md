@@ -154,7 +154,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Practice results update progress; lessons are marked complete after their practice.
 - [x] Home page "Continue" action: exactly one primary next step.
 - [x] Settings page: export progress to a JSON file, import with validation and a size limit, reset with explicit confirmation.
-- [ ] Privacy page updated: what is stored in the browser, that clearing browser data deletes it, and how to export.
+- [x] Privacy page updated: what is stored in the browser, that clearing browser data deletes it, and how to export.
 
 **Acceptance criteria:** progress persists across reloads; a corrupted or hand-edited store never breaks the site; an export can be imported into a fresh browser and yields identical progress.
 **Required tests:** U (stage transitions, next-step selection, storage parsing with corrupted/unknown/oversized input, export/import round trip, schema migration), E + A (complete a lesson → reload → continue; export/import; reset).

@@ -1,5 +1,7 @@
 import { render } from 'svelte/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('$app/paths', () => ({ resolve: (path: string) => path }));
 import PrivacyPage from './+page.svelte';
 
 describe('privacy page', () => {
@@ -14,7 +16,9 @@ describe('privacy page', () => {
   it('describes local progress storage and the absence of accounts and third parties', () => {
     expect(body).toContain('There are no accounts and nothing to sign up for.');
     expect(body).toContain("Onihayo saves learning progress in this browser's local storage");
-    expect(body).toContain('Progress export is not available yet.');
+    expect(body).toContain("clearing this site's browser data deletes it");
+    expect(body).toContain('<a href="/settings">Settings</a>');
+    expect(body).toContain('choose “Export progress”');
     expect(body).toContain('local storage');
     expect(body).toContain('starts with empty progress, and shows a notice');
     expect(body).toContain('Onihayo sets no cookies');
@@ -34,6 +38,6 @@ describe('privacy page', () => {
   });
 
   it('gives a machine-readable date for the last update', () => {
-    expect(body).toMatch(/<time datetime="\d{4}-\d{2}-\d{2}">/u);
+    expect(body).toContain('<time datetime="2026-10-05">5 October 2026</time>');
   });
 });
