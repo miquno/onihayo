@@ -36,9 +36,10 @@ ENV NODE_ENV=production \
     PORT=3000 \
     BODY_SIZE_LIMIT=64K
 
-# adapter-node bundles every dependency into build/, so the runtime has no
-# node_modules and no package manager. package.json only supplies
-# "type": "module". Files stay owned by root: the app cannot modify itself.
+# Vite bundles server runtime dependencies into build/ (see ssr.noExternal in
+# vite.config.ts), so the runtime has no node_modules or package manager.
+# package.json only supplies "type": "module". Files stay owned by root: the
+# app cannot modify itself.
 COPY --from=build /app/package.json ./
 COPY --from=build /app/build ./build
 
