@@ -63,6 +63,31 @@ test('continues to the next lesson after completion and reload', async ({ page }
   );
 });
 
+test('updates the home action when another tab completes a lesson', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: 'Start here: Vowels' })).toBeVisible();
+
+  const otherTab = await page.context().newPage();
+  await otherTab.goto('/about');
+  await otherTab.evaluate(() => {
+    localStorage.setItem(
+      'onihayo:progress',
+      JSON.stringify({
+        version: 1,
+        items: [],
+        lessons: [['lesson.hiragana.a', { completedAt: 1 }]],
+        settings: {}
+      })
+    );
+  });
+
+  await expect(page.getByRole('link', { name: 'Continue: Hiragana K row' })).toHaveAttribute(
+    'href',
+    '/hiragana/ka'
+  );
+  await otherTab.close();
+});
+
 test('offers one quiz action after all current lessons are complete', async ({ page }) => {
   const lessons = [...hiraganaLessons, ...katakanaLessons];
   const document = JSON.stringify({

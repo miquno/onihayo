@@ -4,7 +4,7 @@
   import { pageTitle } from '$lib/site';
   import LinkButton from '$lib/ui/LinkButton.svelte';
   import { nextUncompletedLesson } from '$lib/progress/next-lesson';
-  import { readProgress } from '$lib/progress/storage';
+  import { progressStorageKey, readProgress } from '$lib/progress/storage';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -14,19 +14,36 @@
   let recoveredProgress = $state(false);
 
   onMount(() => {
-    try {
-      const loaded = readProgress(window.localStorage);
-      const progress = loaded.progress;
-      nextLesson = nextUncompletedLesson(progress, data.orderedLessons) ?? null;
-      hasCompletedLessons = progress.lessons.size > 0;
-      // Recovery clears the invalid document, so the root layout may no longer
-      // see its notice if this page reads first. Other notices remain visible
-      // to the root layout because their stored data is not changed.
-      recoveredProgress = loaded.notice === 'recovered';
-      progressLoaded = true;
-    } catch {
-      // The root layout presents storage access failures.
+    function refreshProgress() {
+      try {
+        const loaded = readProgress(window.localStorage);
+        const progress = loaded.progress;
+        nextLesson = nextUncompletedLesson(progress, data.orderedLessons) ?? null;
+        hasCompletedLessons = progress.lessons.size > 0;
+        // Recovery clears the invalid document, so the root layout may no longer
+        // see its notice if this page reads first. Other notices remain visible
+        // to the root layout because their stored data is not changed.
+        recoveredProgress = loaded.notice === 'recovered';
+        progressLoaded = true;
+      } catch {
+        // The root layout presents storage access failures.
+      }
     }
+
+    function handleStorage(event: StorageEvent) {
+      if (
+        event.storageArea === window.localStorage &&
+        (event.key === progressStorageKey || event.key === null)
+      ) {
+        refreshProgress();
+      }
+    }
+
+    refreshProgress();
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+    };
   });
 
   const currentLesson = $derived(progressLoaded ? nextLesson : data.firstLesson);
