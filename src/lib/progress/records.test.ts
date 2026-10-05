@@ -12,11 +12,11 @@ import {
   emptyProgress,
   recordAnswer,
   stageOf,
-  stages,
   type AnsweredItem,
   type LearnerProgress,
   type ProgressRecord
 } from './records';
+import { nextStage, stages } from './stages';
 
 const shi = 'kana.hiragana.shi';
 const tsu = 'kana.hiragana.tsu';
@@ -38,12 +38,6 @@ function plain(progress: LearnerProgress): { items: object; lessons: object } {
     lessons: Object.fromEntries(progress.lessons)
   };
 }
-
-describe('stages', () => {
-  it('lists the stages of the learning model in order', () => {
-    expect(stages).toEqual(['new', 'learning', 'reviewing', 'mastered']);
-  });
-});
 
 describe('emptyProgress', () => {
   it('has no item records and no completed lessons', () => {
@@ -85,7 +79,9 @@ describe('recordAnswer', () => {
   it('creates the record with the first answer', () => {
     const progress = recordAnswer(emptyProgress(), answer(shi, true, 1000));
     expect(plain(progress)).toEqual({
-      items: { [shi]: { stage: 'new', attempts: 1, correct: 1, firstSeen: 1000, lastSeen: 1000 } },
+      items: {
+        [shi]: { stage: 'learning', attempts: 1, correct: 1, firstSeen: 1000, lastSeen: 1000 }
+      },
       lessons: {}
     });
   });
@@ -93,7 +89,7 @@ describe('recordAnswer', () => {
   it('counts a wrong first answer as an attempt that was not correct', () => {
     const progress = recordAnswer(emptyProgress(), answer(shi, false, 1000));
     expect(progress.items.get(shi)).toEqual({
-      stage: 'new',
+      stage: 'learning',
       attempts: 1,
       correct: 0,
       firstSeen: 1000,
@@ -109,7 +105,7 @@ describe('recordAnswer', () => {
       answer(shi, true, 4000)
     ]);
     expect(progress.items.get(shi)).toEqual({
-      stage: 'new',
+      stage: 'reviewing',
       attempts: 4,
       correct: 3,
       firstSeen: 1000,
@@ -124,25 +120,39 @@ describe('recordAnswer', () => {
       answer(shi, false, 3000)
     ]);
     expect(plain(progress).items).toEqual({
-      [shi]: { stage: 'new', attempts: 2, correct: 1, firstSeen: 1000, lastSeen: 3000 },
-      [tsu]: { stage: 'new', attempts: 1, correct: 0, firstSeen: 2000, lastSeen: 2000 }
+      [shi]: { stage: 'learning', attempts: 2, correct: 1, firstSeen: 1000, lastSeen: 3000 },
+      [tsu]: { stage: 'learning', attempts: 1, correct: 0, firstSeen: 2000, lastSeen: 2000 }
     });
   });
 
-  it('leaves the stage of an existing record as it is', () => {
-    const record: ProgressRecord = {
-      stage: 'reviewing',
-      attempts: 4,
-      correct: 3,
-      firstSeen: 1000,
-      lastSeen: 5000
-    };
-    const before: LearnerProgress = { ...emptyProgress(), items: new Map([[shi, record]]) };
-    for (const correct of [true, false]) {
-      expect(recordAnswer(before, answer(shi, correct, 6000)).items.get(shi)?.stage).toBe(
-        'reviewing'
-      );
+  it('moves the item to the stage the stage rules give', () => {
+    for (const stage of stages) {
+      const record: ProgressRecord = {
+        stage,
+        attempts: 4,
+        correct: 3,
+        firstSeen: 1000,
+        lastSeen: 5000
+      };
+      const before: LearnerProgress = { ...emptyProgress(), items: new Map([[shi, record]]) };
+      for (const correct of [true, false]) {
+        expect(recordAnswer(before, answer(shi, correct, 6000)).items.get(shi)).toEqual({
+          stage: nextStage(stage, correct),
+          attempts: 5,
+          correct: correct ? 4 : 3,
+          firstSeen: 1000,
+          lastSeen: 6000
+        });
+      }
     }
+  });
+
+  it('follows the answers in the order they are recorded for the stage', () => {
+    const right = answer(shi, true, 1000);
+    const wrong = answer(shi, false, 2000);
+    expect(stageOf(recordAll(emptyProgress(), [right, wrong]), shi)).toBe('learning');
+    expect(stageOf(recordAll(emptyProgress(), [wrong, right]), shi)).toBe('reviewing');
+    expect(stageOf(recordAll(emptyProgress(), [right, right]), shi)).toBe('reviewing');
   });
 
   it('returns a new value and leaves the given progress untouched', () => {
@@ -165,11 +175,11 @@ describe('recordAnswer', () => {
     expect(after.lessons).toBe(before.lessons);
   });
 
-  it('gives the same record whatever order the answers arrive in', () => {
-    const answers = [answer(shi, true, 3000), answer(shi, false, 1000), answer(shi, true, 2000)];
-    const expected = { stage: 'new', attempts: 3, correct: 2, firstSeen: 1000, lastSeen: 3000 };
-    expect(recordAll(emptyProgress(), answers).items.get(shi)).toEqual(expected);
-    expect(recordAll(emptyProgress(), answers.toReversed()).items.get(shi)).toEqual(expected);
+  it('gives the same counts and times whatever order the answers arrive in', () => {
+    const answers = [answer(shi, true, 3000), answer(shi, false, 1000), answer(shi, false, 2000)];
+    const expected = { attempts: 3, correct: 1, firstSeen: 1000, lastSeen: 3000 };
+    expect(recordAll(emptyProgress(), answers).items.get(shi)).toMatchObject(expected);
+    expect(recordAll(emptyProgress(), answers.toReversed()).items.get(shi)).toMatchObject(expected);
   });
 
   it('never puts first seen after last seen when the clock was set back', () => {
@@ -200,7 +210,7 @@ describe('recordAnswer', () => {
     ]);
     expect([...progress.items.keys()]).toEqual(['__proto__', 'constructor']);
     expect(progress.items.get('__proto__')).toEqual({
-      stage: 'new',
+      stage: 'learning',
       attempts: 1,
       correct: 1,
       firstSeen: 1000,
