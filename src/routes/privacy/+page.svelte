@@ -6,27 +6,32 @@
   <title>{pageTitle('Privacy')}</title>
   <meta
     name="description"
-    content="Onihayo stores nothing about you: no accounts, no cookies, no tracking, and no third parties."
+    content="Onihayo has no accounts, cookies, tracking, or third parties. Learning progress stays in your browser."
   />
 </svelte:head>
 
 <h1>Privacy</h1>
-<p class="lead">Onihayo does not collect, store, or share any personal data.</p>
-<p class="updated">Last updated: <time datetime="2026-09-30">30 September 2026</time></p>
+<p class="lead">Onihayo does not collect or share personal data.</p>
+<p class="updated">Last updated: <time datetime="2026-10-04">4 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
-<p>Nothing about you. There are no accounts and nothing to sign up for.</p>
+<p>There are no accounts and nothing to sign up for.</p>
 <p>
-  Onihayo sets no cookies. The only thing it keeps in your browser is how far you had scrolled on
-  each page you visited in the current tab, so the Back button returns you to the same place. This
-  stays on your device, is never sent to Onihayo, and your browser deletes it when you close the
-  tab.
+  Onihayo does not yet save practice results. The progress storage is being added in stages. When it
+  is connected, it will keep each item's learning stage, answer counts and dates, and completed
+  lessons in your browser's local storage. It will stay on your device and clearing this site's
+  browser data will delete it.
 </p>
 <p>
-  When you practise, your answers are checked in your browser. They are never sent to Onihayo or
-  saved, and they are gone when you leave the page. The rows, mode, and length you pick for the kana
-  quiz are part of the page address, like any link, so you can bookmark a quiz; Onihayo does not
-  store them.
+  The current tab's scroll positions are kept in session storage for the Back button. Your typed
+  answers are never sent to Onihayo or saved. The rows, mode, and length you pick for the kana quiz
+  are part of the page address, like any link, so you can bookmark a quiz.
+</p>
+<p>Onihayo sets no cookies.</p>
+<p>
+  If a progress document is present, Onihayo checks it before use. If it is damaged, Onihayo keeps
+  one local recovery copy, starts with empty progress, and shows a notice. Data from items this
+  version does not know is ignored for this visit and preserved when progress is next saved.
 </p>
 
 <h2>No tracking and no third parties</h2>
@@ -65,9 +70,8 @@
 
 <h2>When this changes</h2>
 <p>
-  Later versions of Onihayo will save your learning progress in your browser so that it survives
-  between visits. Before that or any other change to what Onihayo stores ships, this page will
-  explain exactly what is stored, where, and how to delete it.
+  Before any change to what Onihayo stores ships, this page will explain exactly what is stored,
+  where, and how to delete it.
 </p>
 
 <style>

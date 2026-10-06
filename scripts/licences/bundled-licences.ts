@@ -158,7 +158,6 @@ export function bundledLicences(): Plugin {
 
       const require = createRequire(join(projectRoot, 'package.json'));
       roots.add(dirname(require.resolve(`${adapter.name}/package.json`)));
-
       const packages = [...roots].map((root) => {
         const pkg = readPackage(root, locked);
         if (pkg.name !== adapter.name) return pkg;
