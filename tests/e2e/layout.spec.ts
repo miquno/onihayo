@@ -84,6 +84,11 @@ const pages: PageCase[] = [
   },
   { path: '/about', title: 'About — Onihayo', current: { navigation: 'Primary', link: 'About' } },
   {
+    path: '/settings',
+    title: 'Settings — Onihayo',
+    current: { navigation: 'Site information', link: 'Settings' }
+  },
+  {
     path: '/privacy',
     title: 'Privacy — Onihayo',
     current: { navigation: 'Site information', link: 'Privacy' }
@@ -244,9 +249,10 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Katakana',
     'Kana quiz',
     'About',
-    'Start here: Vowels',
+    'Continue: Vowels',
     'roadmap',
     'source code on GitHub',
+    'Settings',
     'Privacy',
     'Licences'
   ];
@@ -263,5 +269,5 @@ test('after the skip link, Tab continues inside main', async ({ page }) => {
   await page.keyboard.press('Tab');
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Start here: Vowels' })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Continue: Vowels' })).toBeFocused();
 });

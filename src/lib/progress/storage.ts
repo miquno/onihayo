@@ -35,6 +35,10 @@ export interface ProgressLoad {
   readonly notice: ProgressNotice | null;
 }
 
+export type ProgressImportResult =
+  | { readonly imported: true; readonly progress: LearnerProgress }
+  | { readonly imported: false; readonly reason: 'invalid' | 'newer' | 'unavailable' };
+
 const nonNegativeInteger = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 const id = v.pipe(v.string(), v.minLength(1), v.maxLength(200));
 const progressRecordSchema = v.strictObject({
@@ -105,6 +109,55 @@ export function updateProgress(
   const unknownItems = parsed.value.items.filter(([itemId]) => !knownItemIds.has(itemId));
   const unknownLessons = parsed.value.lessons.filter(([lessonId]) => !knownLessonIds.has(lessonId));
   return writeDocument(storage, next, unknownItems, unknownLessons, null);
+}
+
+/** A portable, bounded JSON document containing only progress known to this build. */
+export function exportProgress(progress: LearnerProgress): string {
+  const document: ProgressDocument = {
+    version: currentProgressVersion,
+    items: [...progress.items].map(([itemId, record]) => [itemId, record]),
+    lessons: [...progress.lessons].map(([lessonId, completion]) => [lessonId, completion]),
+    settings: {}
+  };
+  const serialized = JSON.stringify(document);
+  if (serialized.length > maxProgressDocumentLength) {
+    throw new RangeError('Progress is too large to export.');
+  }
+  return serialized;
+}
+
+/** Validate an imported document before replacing the current browser progress. */
+export function importProgress(storage: ProgressStorage, raw: string): ProgressImportResult {
+  const parsed = parseDocument(raw);
+  if (parsed.kind === 'newer') return { imported: false, reason: 'newer' };
+  if (parsed.kind === 'invalid') return { imported: false, reason: 'invalid' };
+
+  let current: string | null;
+  try {
+    current = storage.getItem(progressStorageKey);
+  } catch {
+    return { imported: false, reason: 'unavailable' };
+  }
+  if (current !== null && parseDocument(current).kind === 'newer') {
+    return { imported: false, reason: 'newer' };
+  }
+
+  const progress = toLearnerProgress(parsed.value);
+  const result = writeDocument(storage, progress, [], [], null);
+  return result.notice === null
+    ? { imported: true, progress: result.progress }
+    : { imported: false, reason: 'unavailable' };
+}
+
+/** Remove both active progress and any recovery copy after explicit confirmation. */
+export function resetProgress(storage: ProgressStorage): boolean {
+  try {
+    storage.removeItem(progressStorageKey);
+    storage.removeItem(rejectedProgressStorageKey);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function writeDocument(

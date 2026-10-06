@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import { tick } from 'svelte';
+  import { getContext, tick } from 'svelte';
   import { question, questionModes, sessionItems, type QuestionMode } from '$lib/learning/modes';
   import { normalizeAnswer } from '$lib/learning/normalize';
   import { choiceOptions } from '$lib/learning/options';
@@ -21,6 +21,14 @@
   import type { PracticeItem } from '$lib/learning/practice-item';
   import { choiceKeyAction, optionShortcut } from './choice-keys';
   import { ignoreNextSubmit, imeKeydown, type ImeEvent } from './ime';
+  import {
+    completeLesson,
+    emptyProgress,
+    recordAnswer,
+    type LearnerProgress
+  } from '$lib/progress/records';
+  import { progressContextKey, type ProgressContext } from '$lib/progress/context';
+  import { updateProgress, type ProgressNotice } from '$lib/progress/storage';
   import {
     answerLabel,
     durationText,
@@ -49,6 +57,8 @@
     seed: number;
     /** The first link of the results (the recommended next step). */
     nextStep: Snippet;
+    /** Stable lesson ID, set only for a lesson's own practice. */
+    lessonId?: string;
     /** Further links after "Practise again". */
     moreLinks?: Snippet;
   }
@@ -60,6 +70,7 @@
     questionCount,
     endless = false,
     seed,
+    lessonId,
     nextStep,
     moreLinks
   }: Props = $props();
@@ -89,6 +100,44 @@
   let blankSubmitted = $state(false);
   let input: HTMLInputElement | undefined = $state();
   let resultsHeading: HTMLHeadingElement | undefined = $state();
+  let currentProgress: LearnerProgress = emptyProgress();
+  let progressNotice = $state<ProgressNotice | null>(null);
+  const progressContext = getContext<ProgressContext>(progressContextKey);
+
+  function saveAnswer(itemId: string, correct: boolean, answeredAt: number) {
+    try {
+      const result = updateProgress(
+        window.localStorage,
+        (progress) => recordAnswer(progress, { itemId, correct, answeredAt }),
+        currentProgress
+      );
+      currentProgress = result.progress;
+      progressContext.progress = result.progress;
+      if (result.notice !== null) progressNotice = result.notice;
+    } catch {
+      currentProgress = recordAnswer(currentProgress, { itemId, correct, answeredAt });
+      progressContext.progress = currentProgress;
+      progressNotice = 'unavailable';
+    }
+  }
+
+  function saveLessonCompletion() {
+    if (lessonId === undefined) return;
+    try {
+      const result = updateProgress(
+        window.localStorage,
+        (progress) => completeLesson(progress, lessonId, Date.now()),
+        currentProgress
+      );
+      currentProgress = result.progress;
+      progressContext.progress = result.progress;
+      if (result.notice !== null) progressNotice = result.notice;
+    } catch {
+      currentProgress = completeLesson(currentProgress, lessonId, Date.now());
+      progressContext.progress = currentProgress;
+      progressNotice = 'unavailable';
+    }
+  }
 
   const itemsById = $derived(new Map(items.map((item) => [item.id, item])));
   const currentPracticeItem = $derived(itemsById.get(currentItem(session)?.id ?? ''));
@@ -125,9 +174,16 @@
     if (session.phase === 'asking') {
       const updated = submitAnswer(session, answer, Date.now);
       blankSubmitted = updated === session;
+      if (updated !== session) {
+        const saved = updated.answers.at(-1);
+        if (saved) saveAnswer(saved.itemId, saved.correct, saved.answeredAt);
+      }
       session = updated;
     } else if (session.phase === 'answered') {
       session = nextQuestion(session);
+      if (session.phase === 'finished' && session.answers.length === run.questionCount) {
+        saveLessonCompletion();
+      }
       answer = '';
       await tick();
       if (session.phase === 'finished') resultsHeading?.focus();
@@ -144,6 +200,8 @@
   async function choose(text: string) {
     if (session.phase !== 'asking') return;
     session = submitAnswer(session, text, Date.now);
+    const saved = session.answers.at(-1);
+    if (saved) saveAnswer(saved.itemId, saved.correct, saved.answeredAt);
     await tick();
     document.getElementById('next-question')?.focus();
   }
@@ -191,6 +249,16 @@
     focusQuestion();
   }
 </script>
+
+{#if progressNotice}
+  <p class="progress-notice" role="status">
+    {progressNotice === 'reload'
+      ? 'Progress was saved by a newer version. Reload before continuing.'
+      : progressNotice === 'recovered'
+        ? 'Saved progress could not be read. A recovery copy was kept, and progress was reset.'
+        : 'Browser storage is unavailable. This progress may not be saved.'}
+  </p>
+{/if}
 
 {#if session.phase !== 'finished' && current}
   <p class="instructions">{instructions}</p>
@@ -342,6 +410,13 @@
 
   .instructions {
     color: var(--color-text-muted);
+  }
+
+  .progress-notice {
+    padding: var(--space-3) var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
   }
 
   .question {

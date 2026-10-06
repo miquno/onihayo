@@ -186,7 +186,7 @@ test('keyboard-only learner goes from the home page through every lesson and pra
 }) => {
   test.slow();
   await page.goto('/');
-  await page.getByRole('link', { name: /^Start here:/u }).focus();
+  await page.getByRole('link', { name: /^Continue:/u }).focus();
   await page.keyboard.press('Enter');
 
   const input = page.getByLabel('Romaji for this hiragana');

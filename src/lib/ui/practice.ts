@@ -84,6 +84,7 @@ const lessonRounds = 2;
 
 /** Everything a lesson practice page needs. */
 export interface LessonPracticeData {
+  readonly id: string;
   readonly slug: string;
   readonly title: string;
   readonly items: readonly PracticeItem[];
@@ -110,6 +111,7 @@ export function lessonPractice(
   const items = kanaPracticeItems(records, lessons).filter((item) => taught.has(item.id));
   const next = nextLesson(lessons, lesson);
   return {
+    id: lesson.id,
     slug: lessonSlug(lesson),
     title: lesson.title,
     items,

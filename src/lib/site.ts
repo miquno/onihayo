@@ -17,8 +17,9 @@ export const primaryNavigation = [
   { route: '/about', label: 'About' }
 ] as const satisfies readonly NavigationEntry[];
 
-/** Site information linked from the footer, in display order. */
+/** Utility and site information links shown in the footer. */
 export const footerNavigation = [
+  { route: '/settings', label: 'Settings' },
   { route: '/privacy', label: 'Privacy' },
   { route: '/licences', label: 'Licences' }
 ] as const satisfies readonly NavigationEntry[];

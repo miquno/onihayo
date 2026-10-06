@@ -4,8 +4,9 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Practice now saves item outcomes and completed lessons in this browser. The home page continues with the next incomplete lesson, and Settings lets learners export, import, or reset progress.
 - Guest progress storage now validates a bounded, versioned browser document; if saved data is damaged, Onihayo recovers with empty progress and explains what happened.
-- A landing page that explains what Onihayo is, with one clear first step: a "Start here" button that opens the first hiragana lesson.
+- A landing page that explains what Onihayo is, with one clear first step into the kana lessons.
 - Japanese text uses a Japanese system font where one is available, so kana and kanji show their Japanese forms.
 - Every page has a header with the site name and main navigation, a footer, and a "Skip to main content" link for keyboard and screen reader users.
 - Pages fit screens from 320 px wide and stay readable at 200 % zoom without sideways scrolling; long words and links wrap.
