@@ -1,0 +1,88 @@
+{
+  "provenance": {
+    "source": "Onihayo contributors",
+    "licence": "CC-BY-SA-4.0"
+  },
+  "lessons": [
+    {
+      "id": "lesson.words.people",
+      "title": "People and introductions",
+      "note": "Start with words for yourself, family, friends, and people around you. Japanese often leaves out a subject when the context makes it clear.",
+      "wordIds": [
+        "word.jmdict.1311110",
+        "word.jmdict.1580640",
+        "word.jmdict.1540170",
+        "word.jmdict.1387990",
+        "word.jmdict.1206900",
+        "word.jmdict.1192150",
+        "word.jmdict.1002590",
+        "word.jmdict.1002650"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.places",
+      "title": "Places",
+      "note": "These are places you may talk about in everyday life. The words are shown in kana; kanji forms can wait until you have learned them.",
+      "wordIds": [
+        "word.jmdict.1191730",
+        "word.jmdict.1499320",
+        "word.jmdict.1273270",
+        "word.jmdict.1582710",
+        "word.jmdict.1592250",
+        "word.jmdict.1603990",
+        "word.jmdict.1582120",
+        "word.jmdict.1175140"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.food",
+      "title": "Food and everyday things",
+      "note": "Learn a few familiar things to eat, drink, and read. ごはん can mean cooked rice or a meal, depending on the context.",
+      "wordIds": [
+        "word.jmdict.1371260",
+        "word.jmdict.1002430",
+        "word.jmdict.1270590",
+        "word.jmdict.1578010",
+        "word.jmdict.1463520",
+        "word.jmdict.1537370",
+        "word.jmdict.1193060",
+        "word.jmdict.1522150"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.actions",
+      "title": "Everyday actions",
+      "note": "These verbs are shown in their dictionary form, the form used to look them up. Each one ends in る or む here.",
+      "wordIds": [
+        "word.jmdict.1358280",
+        "word.jmdict.1169870",
+        "word.jmdict.1578850",
+        "word.jmdict.1547720",
+        "word.jmdict.1259290",
+        "word.jmdict.1591110",
+        "word.jmdict.1456360",
+        "word.jmdict.1473740"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.time",
+      "title": "Time and descriptions",
+      "note": "Finish this set with words for days, parts of the day, and simple descriptions.",
+      "wordIds": [
+        "word.jmdict.1579110",
+        "word.jmdict.1584660",
+        "word.jmdict.1579260",
+        "word.jmdict.1428280",
+        "word.jmdict.1536350",
+        "word.jmdict.1588880",
+        "word.jmdict.1347750",
+        "word.jmdict.1486650"
+      ],
+      "origin": "authored"
+    }
+  ]
+}

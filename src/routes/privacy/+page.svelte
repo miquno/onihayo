@@ -12,7 +12,7 @@
 
 <h1>Privacy</h1>
 <p class="lead">Onihayo does not send your learning data to its server or share it with others.</p>
-<p class="updated">Last updated: <time datetime="2026-10-06">6 October 2026</time></p>
+<p class="updated">Last updated: <time datetime="2026-10-07">7 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 <p>There are no accounts and nothing to sign up for.</p>
@@ -24,8 +24,8 @@
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed
-  answers are never sent to Onihayo or saved. The rows, mode, and length you pick for the kana quiz
-  are part of the page address, like any link, so you can bookmark a quiz.
+  answers are never sent to Onihayo or saved. Kana quiz settings and vocabulary practice direction
+  are part of the page address, like any link, so you can bookmark a practice session.
 </p>
 <p>Onihayo sets no cookies.</p>
 <p>
@@ -35,7 +35,7 @@
   preserved when progress is next saved.
 </p>
 
-<h2>No tracking and no third parties</h2>
+<h2>No tracking or external services</h2>
 <ul>
   <li>No analytics, advertising, or tracking of any kind.</li>
   <li>
@@ -65,8 +65,9 @@
 
 <h2>Links to other websites</h2>
 <p>
-  Some pages link to Onihayo's source code and roadmap on GitHub. Nothing is sent to GitHub unless
-  you follow one of those links; once you do, GitHub's own privacy policy applies.
+  Some pages link to Onihayo's source code and roadmap on GitHub, and the Licences page links to
+  EDRDG and Creative Commons for vocabulary attribution. Nothing is sent to those sites unless you
+  follow a link; each site's own privacy policy applies then.
 </p>
 
 <h2>When this changes</h2>

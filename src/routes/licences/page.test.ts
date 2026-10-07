@@ -49,4 +49,12 @@ describe('licences page', () => {
     expect(body).toContain('This list is generated when Onihayo is built for production.');
     expect(body).not.toContain('<details');
   });
+
+  it('credits JMdict and states the licence for selected vocabulary data', () => {
+    const { body } = render(LicencesPage, { props: props(null) });
+    expect(body).toContain('JMdict English-only Next Generation 1.10');
+    expect(body).toMatch(/selected and\s+transformed dataset is available under the same licence/u);
+    expect(body).toMatch(/Other JMdict language\s+translations are excluded\./u);
+    expect(body).toContain('https://creativecommons.org/licenses/by-sa/4.0/');
+  });
 });

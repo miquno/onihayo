@@ -38,4 +38,9 @@ describe('about page', () => {
   it('links to the privacy page', () => {
     expect(body).toContain('<a href="/privacy">privacy page</a>');
   });
+
+  it('describes the first vocabulary set as available', () => {
+    expect(body).toMatch(/a first set of 40 vocabulary\s+words are available/u);
+    expect(body).toContain('<a href="/words">vocabulary lessons</a>');
+  });
 });

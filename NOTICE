@@ -9,11 +9,21 @@ text. See docs/decisions/0006-code-and-content-licensing.md.
 
 Third-party learning data
 -------------------------
-None yet.
+JMdict English-only Next Generation 1.10 (selected Japanese readings, written
+forms, English meanings, and part-of-speech data) is provided by the Electronic
+Dictionary Research and Development Group (EDRDG):
+https://www.edrdg.org/jmdict/j_jmdict.html
+The JMdict Japanese and English components are licensed under CC BY-SA 4.0:
+https://creativecommons.org/licenses/by-sa/4.0/
+The selected and transformed JMdict dataset is available under the same licence.
+Onihayo's word selection, lesson grouping, and lesson notes are authored by
+Onihayo contributors and licensed under CC BY-SA 4.0. The exact source release,
+checksum, transformations, and licence location are documented in
+docs/content/sources.md and scripts/content/jmdict/README.md.
 
 Every imported dataset is listed here with its source, licence, required
-attribution, and the repository path that holds it, before it is merged.
-The same attributions are shown to learners on the site's licences page.
+attribution, and repository path. The same attributions are shown to learners
+on the site's licences page.
 Process: docs/content/README.md. Register: docs/content/sources.md.
 
 Third-party software

@@ -171,3 +171,13 @@ export type WordRecord =
       readonly sourceEntry?: never;
       readonly origin: 'authored';
     };
+
+/** An authored, ordered lesson of vocabulary items. */
+export interface WordLesson {
+  /** Stable ID, e.g. `lesson.words.people`; progress records refer to it. */
+  readonly id: string;
+  readonly title: string;
+  readonly note: string;
+  readonly wordIds: readonly WordRecord['id'][];
+  readonly origin: 'authored';
+}

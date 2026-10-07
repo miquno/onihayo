@@ -47,8 +47,14 @@
 
 <h2>Learning data</h2>
 <p>
-  Onihayo does not include third-party learning data yet. Datasets added later, such as word lists,
-  will be credited here with their licences.
+  The first vocabulary set uses selected Japanese readings, written forms, English meanings, and
+  part-of-speech data from EDRDG's
+  <a href="https://www.edrdg.org/jmdict/j_jmdict.html">JMdict English-only Next Generation 1.10</a>.
+  The JMdict Japanese and English components are licensed under
+  <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The selected and
+  transformed dataset is available under the same licence. Onihayo's word selection, lesson groups,
+  and lesson notes are authored by Onihayo contributors under CC BY-SA 4.0. Other JMdict language
+  translations are excluded.
 </p>
 
 <style>

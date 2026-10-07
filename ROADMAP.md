@@ -172,10 +172,10 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] ADR and register entry for the vocabulary source (JMdict/EDRDG): licence verified from the publisher, attribution text, share-alike handling, and repository location of the licence.
 - [x] Import script in `scripts/content/` that reads a pinned, checksum-verified JMdict release and emits a compact dataset limited to Onihayo's selection list; transformations documented; the output is committed, the script is re-runnable.
 - [x] Word item model: stable ID, kana, optional kanji forms, English meanings, part of speech, source entry reference, origin (`imported`/`authored`).
-- [ ] First word set: an Onihayo-authored selection of kana-only beginner words, grouped into lessons.
-- [ ] Word adapter for the practice engine: meaning → reading and reading → meaning modes.
-- [ ] Word lesson and word detail pages (`/words/[id]`).
-- [ ] Attribution added to `NOTICE` and the Licences page.
+- [x] First word set: an Onihayo-authored selection of kana-only beginner words, grouped into lessons.
+- [x] Word adapter for the practice engine: meaning → reading and reading → meaning modes.
+- [x] Word lesson and word detail pages (`/words/[id]`).
+- [x] Attribution added to `NOTICE` and the Licences page.
 
 **Acceptance criteria:** all vocabulary data traces back to a pinned source and a documented transformation; words only use kana the learner has been taught.
 **Required tests:** D (word dataset: IDs, required fields, origins, only taught kana), U (import transformation on a fixture, word adapter), E + A (word lesson → practice).

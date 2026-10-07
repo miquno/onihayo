@@ -32,4 +32,9 @@ describe('home page', () => {
   it('marks Japanese as Japanese', () => {
     expect(html).toContain('<span lang="ja">ひらがな</span>');
   });
+
+  it('links to the first vocabulary set without adding another primary action', () => {
+    expect(html).toContain('40 vocabulary words');
+    expect(html).toContain('<a href="/words">five short lessons</a>');
+  });
 });

@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Vocabulary: 40 kana-only beginner words in five short lessons, with word detail pages and practice from meaning to reading and reading to meaning. JMdict data and Onihayo-authored lesson selection are attributed and licensed.
 - Practice now saves item outcomes and completed lessons in this browser. The home page continues with the next incomplete lesson, and Settings lets learners export, import, or reset progress.
 - Guest progress storage now validates a bounded, versioned browser document; if saved data is damaged, Onihayo recovers with empty progress and explains what happened.
 - A landing page that explains what Onihayo is, with one clear first step into the kana lessons.
