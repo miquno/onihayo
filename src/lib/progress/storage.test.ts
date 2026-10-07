@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { recordAnswer, emptyProgress, type LearnerProgress } from './records';
+import { completeLesson, emptyProgress, recordAnswer, type LearnerProgress } from './records';
 import {
   currentProgressVersion,
+  exportProgress,
+  importProgress,
   maxProgressDocumentLength,
   progressStorageKey,
   readProgress,
   rejectedProgressStorageKey,
+  resetProgress,
   updateProgress,
   type ProgressStorage
 } from './storage';
@@ -192,5 +195,61 @@ describe('updateProgress', () => {
 
     expect(result.progress.items.get('kana.hiragana.shi')).toMatchObject({ attempts: 2 });
     expect(result.notice).toBe('unavailable');
+  });
+});
+
+describe('progress export, import, and reset', () => {
+  it('exports and imports identical known progress', () => {
+    const source = new MemoryStorage();
+    const expected = updateProgress(source, (progress) =>
+      recordAnswer(progress, { itemId: 'kana.hiragana.shi', correct: true, answeredAt: 123 })
+    ).progress;
+    const withLesson = updateProgress(source, (progress) =>
+      completeLesson(progress, 'lesson.hiragana.ka', 456)
+    ).progress;
+    const destination = new MemoryStorage();
+
+    expect(importProgress(destination, exportProgress(withLesson))).toEqual({
+      imported: true,
+      progress: withLesson
+    });
+    expect(readProgress(destination).progress).toEqual(withLesson);
+    expect(expected.items.get('kana.hiragana.shi')).toEqual(
+      withLesson.items.get('kana.hiragana.shi')
+    );
+  });
+
+  it.each([
+    ['malformed', '{bad json'],
+    ['oversized', ' '.repeat(maxProgressDocumentLength + 1)],
+    ['invalid schema', JSON.stringify({ version: currentProgressVersion, items: [] })]
+  ])('does not replace progress for %s import data', (_label, raw) => {
+    const storage = new MemoryStorage();
+    storage.values.set(progressStorageKey, stored());
+
+    expect(importProgress(storage, raw)).toEqual({ imported: false, reason: 'invalid' });
+    expect(storage.values.get(progressStorageKey)).toBe(stored());
+  });
+
+  it('preserves newer-version data and reports unavailable storage', () => {
+    const newer = JSON.stringify({ version: currentProgressVersion + 1 });
+    const storage = new MemoryStorage();
+    expect(importProgress(storage, newer)).toEqual({ imported: false, reason: 'newer' });
+
+    storage.values.set(progressStorageKey, newer);
+    expect(importProgress(storage, stored())).toEqual({ imported: false, reason: 'newer' });
+    expect(storage.values.get(progressStorageKey)).toBe(newer);
+
+    storage.failWrite = true;
+    storage.values.delete(progressStorageKey);
+    expect(importProgress(storage, stored())).toEqual({ imported: false, reason: 'unavailable' });
+  });
+
+  it('removes active progress and its recovery copy on reset', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(progressStorageKey, stored());
+    storage.values.set(rejectedProgressStorageKey, '{damaged');
+    expect(resetProgress(storage)).toBe(true);
+    expect(storage.values.size).toBe(0);
   });
 });

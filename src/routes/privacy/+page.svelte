@@ -11,16 +11,16 @@
 </svelte:head>
 
 <h1>Privacy</h1>
-<p class="lead">Onihayo does not collect or share personal data.</p>
-<p class="updated">Last updated: <time datetime="2026-10-04">4 October 2026</time></p>
+<p class="lead">Onihayo does not send your learning data to its server or share it with others.</p>
+<p class="updated">Last updated: <time datetime="2026-10-06">6 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 <p>There are no accounts and nothing to sign up for.</p>
 <p>
-  Onihayo does not yet save practice results. The progress storage is being added in stages. When it
-  is connected, it will keep each item's learning stage, answer counts and dates, and completed
-  lessons in your browser's local storage. It will stay on your device and clearing this site's
-  browser data will delete it.
+  Onihayo saves each item's learning stage, answer counts and dates, and completed lessons in your
+  browser's local storage. It does not save the answers you type. Progress stays on your device;
+  clearing this site's browser data deletes it. Settings lets you export progress to a JSON file,
+  import a validated file, or reset saved progress.
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed
@@ -29,9 +29,10 @@
 </p>
 <p>Onihayo sets no cookies.</p>
 <p>
-  If a progress document is present, Onihayo checks it before use. If it is damaged, Onihayo keeps
-  one local recovery copy, starts with empty progress, and shows a notice. Data from items this
-  version does not know is ignored for this visit and preserved when progress is next saved.
+  If a progress document is present, Onihayo checks it before use and limits imported files to 1 MB.
+  If stored progress is damaged, Onihayo keeps one local recovery copy, starts with empty progress,
+  and shows a notice. Data from items this version does not know is ignored for this visit and
+  preserved when progress is next saved.
 </p>
 
 <h2>No tracking and no third parties</h2>

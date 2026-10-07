@@ -1,20 +1,34 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, setContext } from 'svelte';
   import '$lib/ui/tokens.css';
   import '../app.css';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { footerNavigation, navigationCurrent, primaryNavigation, siteName } from '$lib/site';
+  import { emptyProgress } from '$lib/progress/records';
+  import { progressContextKey } from '$lib/progress/context';
   import { readProgress, type ProgressNotice } from '$lib/progress/storage';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
   let progressNotice = $state<ProgressNotice | null>(null);
+  let progress = $state(emptyProgress());
+  setContext(progressContextKey, {
+    get progress() {
+      return progress;
+    },
+    set progress(value) {
+      progress = value;
+    }
+  });
 
   onMount(() => {
     try {
-      progressNotice = readProgress(window.localStorage).notice;
+      const loaded = readProgress(window.localStorage);
+      progress = loaded.progress;
+      progressNotice = loaded.notice;
     } catch {
+      progress = emptyProgress();
       progressNotice = 'unavailable';
     }
   });

@@ -22,6 +22,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "content:jmdict": "node --experimental-strip-types scripts/content/jmdict/cli.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check && pnpm test && pnpm build"
   },
   "devDependencies": {
@@ -35,6 +36,7 @@
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.23.0",
+    "fast-xml-parser": "5.11.2",
     "globals": "17.12.0",
     "prettier": "3.9.8",
     "prettier-plugin-svelte": "4.1.1",

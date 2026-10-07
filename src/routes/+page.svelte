@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { getContext } from 'svelte';
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
   import LinkButton from '$lib/ui/LinkButton.svelte';
-  import type { PageProps } from './$types';
+  import { progressContextKey, type ProgressContext } from '$lib/progress/context';
+  import { nextLessonToLearn } from '$lib/progress/next-step';
 
-  let { data }: PageProps = $props();
+  const progressContext = getContext<ProgressContext>(progressContextKey);
+  let nextLesson = $derived(nextLessonToLearn(progressContext.progress));
 </script>
 
 <svelte:head>
@@ -21,11 +24,21 @@
   New to Japanese? Start with <span lang="ja">ひらがな</span> (hiragana), the first Japanese script: short
   lessons, one row of characters at a time, each followed by its own practice.
 </p>
-<p class="start">
-  <LinkButton href={resolve('/hiragana/[lesson]', { lesson: data.firstLesson.slug })}>
-    Start here: {data.firstLesson.title}
-  </LinkButton>
-</p>
+{#if nextLesson}
+  <p class="start">
+    {#if nextLesson.script === 'hiragana'}
+      <LinkButton href={resolve('/hiragana/[lesson]', { lesson: nextLesson.slug })}>
+        Continue: {nextLesson.title}
+      </LinkButton>
+    {:else}
+      <LinkButton href={resolve('/katakana/[lesson]', { lesson: nextLesson.slug })}>
+        Continue: {nextLesson.title}
+      </LinkButton>
+    {/if}
+  </p>
+{:else}
+  <p class="start">You have completed every kana lesson.</p>
+{/if}
 <p>Onihayo is in early development; vocabulary, kanji, and the rest of the path to N5 follow.</p>
 <p>
   Development follows a public, milestone-based

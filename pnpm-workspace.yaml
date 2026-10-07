@@ -10,6 +10,11 @@ minimumReleaseAge: 10080
 strictDepBuilds: true
 onlyBuiltDependencies: []
 
+# GHSA-68fv-2mgg-jv7q: postcss's source-map-js 1.2.1 is vulnerable; keep all
+# transitive consumers on the first patched release.
+overrides:
+  source-map-js: 1.2.2
+
 savePrefix: ''
 
 # Reviewed audit exceptions. Every entry needs a justification here and in
