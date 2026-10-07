@@ -79,6 +79,26 @@ describe('readProgress', () => {
     expect([...result.progress.lessons.keys()]).toEqual(['lesson.hiragana.ka']);
   });
 
+  it('keeps word and vocabulary-lesson progress across reads', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(
+      progressStorageKey,
+      stored(
+        [
+          [
+            'word.jmdict.1311110',
+            { stage: 'learning', attempts: 1, correct: 1, firstSeen: 30, lastSeen: 30 }
+          ]
+        ],
+        [['lesson.words.people', { completedAt: 40 }]]
+      )
+    );
+
+    const result = readProgress(storage);
+    expect(result.progress.items.has('word.jmdict.1311110')).toBe(true);
+    expect(result.progress.lessons.has('lesson.words.people')).toBe(true);
+  });
+
   it.each([
     ['invalid JSON', '{not json'],
     [

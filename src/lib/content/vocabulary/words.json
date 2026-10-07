@@ -5,5 +5,809 @@
   },
   "release": "2026-10-07",
   "sha256": "99698a96225ac60ae55886bea6406c49cdce6b568707943ac628ef88f8922f85",
-  "entries": []
+  "entries": [
+    {
+      "id": "word.jmdict.1002430",
+      "kana": "おちゃ",
+      "kanji": ["お茶", "御茶"],
+      "meanings": ["tea (esp. green or barley)", "tea break", "teatime", "tea ceremony"],
+      "partOfSpeech": [
+        "noun (common) (futsuumeishi)",
+        "noun or participle which takes the aux. verb suru",
+        "intransitive verb"
+      ],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1002430
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1002590",
+      "kana": "おとうさん",
+      "kanji": ["お父さん", "御父さん"],
+      "meanings": [
+        "father",
+        "dad",
+        "papa",
+        "pa",
+        "pop",
+        "daddy",
+        "dada",
+        "husband",
+        "you (of an elderly person older than the speaker)",
+        "he",
+        "him"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "pronoun"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1002590
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1002650",
+      "kana": "おかあさん",
+      "kanji": ["お母さん", "御母さん"],
+      "meanings": [
+        "mother",
+        "mom",
+        "mum",
+        "ma",
+        "wife",
+        "you (of an elderly person older than the speaker)",
+        "she",
+        "her"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "pronoun"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1002650
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1169870",
+      "kana": "のむ",
+      "kanji": ["飲む", "呑む", "飮む", "吞む"],
+      "meanings": [
+        "to drink",
+        "to swallow",
+        "to take (medicine)",
+        "to smoke (tobacco)",
+        "to swallow up",
+        "to engulf",
+        "to suppress (one's anger, bitter feelings, etc.)",
+        "to keep down",
+        "to hold back",
+        "to swallow (one's tears)",
+        "to catch (one's breath)",
+        "to accept (a demand, conditions, etc.)",
+        "to agree to",
+        "to make light of (someone)",
+        "to think nothing of",
+        "to overwhelm",
+        "to overawe",
+        "to carry (a concealed dagger, etc.)",
+        "to conceal (up one's sleeve, etc.)"
+      ],
+      "partOfSpeech": ["Godan verb with 'mu' ending", "transitive verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1169870
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1175140",
+      "kana": "えき",
+      "kanji": ["駅", "驛"],
+      "meanings": [
+        "railway station",
+        "train station",
+        "staging post on a highway (in pre-modern Japan)",
+        "counter for railway stations and bus stations"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "counter"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1175140
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1191730",
+      "kana": "いえ",
+      "kanji": ["家"],
+      "meanings": [
+        "house",
+        "residence",
+        "dwelling",
+        "home",
+        "family",
+        "household",
+        "lineage",
+        "family name"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1191730
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1192150",
+      "kana": "かぞく",
+      "kanji": ["家族"],
+      "meanings": ["family"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1192150
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1193060",
+      "kana": "くだもの",
+      "kanji": ["果物", "菓物"],
+      "meanings": ["fruit"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1193060
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1206900",
+      "kana": "がくせい",
+      "kanji": ["学生", "學生"],
+      "meanings": ["student (esp. a university student)"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1206900
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1259290",
+      "kana": "みる",
+      "kanji": ["見る", "観る", "視る", "覧る"],
+      "meanings": [
+        "to see",
+        "to look",
+        "to watch",
+        "to view",
+        "to observe",
+        "to examine",
+        "to look over",
+        "to assess",
+        "to check",
+        "to judge",
+        "to look after",
+        "to attend to",
+        "to take care of",
+        "to keep an eye on",
+        "to experience",
+        "to meet with (misfortune, success, etc.)",
+        "to try ...",
+        "to have a go at ...",
+        "to give ... a try",
+        "to see (that) ...",
+        "to find (that) ..."
+      ],
+      "partOfSpeech": ["Ichidan verb", "transitive verb", "auxiliary verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1259290
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1270590",
+      "kana": "ごはん",
+      "kanji": ["ご飯", "御飯"],
+      "meanings": ["cooked rice", "meal"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1270590
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1273270",
+      "kana": "こうえん",
+      "kanji": ["公園", "公苑"],
+      "meanings": ["(public) park"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1273270
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1311110",
+      "kana": "わたし",
+      "kanji": ["私"],
+      "meanings": ["I", "me"],
+      "partOfSpeech": ["pronoun"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1311110
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1347750",
+      "kana": "ちいさい",
+      "kanji": ["小さい"],
+      "meanings": [
+        "small",
+        "little",
+        "tiny",
+        "slight",
+        "below average (in degree, amount, etc.)",
+        "minor",
+        "low (e.g. sound)",
+        "soft (e.g. voice)",
+        "unimportant",
+        "petty",
+        "insignificant",
+        "trifling",
+        "trivial",
+        "young",
+        "juvenile"
+      ],
+      "partOfSpeech": ["adjective (keiyoushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1347750
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1358280",
+      "kana": "たべる",
+      "kanji": ["食べる", "喰べる"],
+      "meanings": ["to eat", "to live on (e.g. a salary)", "to live off", "to subsist on"],
+      "partOfSpeech": ["Ichidan verb", "transitive verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1358280
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1371260",
+      "kana": "みず",
+      "kanji": ["水"],
+      "meanings": [
+        "water (esp. cool or cold)",
+        "fluid (esp. in an animal tissue)",
+        "liquid",
+        "flood",
+        "floodwaters",
+        "water offered to wrestlers just prior to a bout",
+        "break granted to wrestlers engaged in a prolonged bout"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1371260
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1387990",
+      "kana": "せんせい",
+      "kanji": ["先生"],
+      "meanings": [
+        "teacher",
+        "instructor",
+        "master",
+        "sensei",
+        "title or form of address for a teacher, master, doctor, lawyer, etc.",
+        "intimate or teasing form of address",
+        "one's elder"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "noun, used as a suffix"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1387990
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1428280",
+      "kana": "あさ",
+      "kanji": ["朝"],
+      "meanings": ["morning", "breakfast"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "adverb (fukushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1428280
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1456360",
+      "kana": "よむ",
+      "kanji": ["読む", "讀む", "訓む"],
+      "meanings": [
+        "to read",
+        "to recite (e.g. a sutra)",
+        "to chant",
+        "to predict",
+        "to guess",
+        "to forecast",
+        "to read (someone's thoughts)",
+        "to see (e.g. into someone's heart)",
+        "to divine",
+        "to pronounce",
+        "to read (e.g. a kanji)",
+        "to decipher",
+        "to read (a meter, graph, music, etc.)",
+        "to tell (the time)",
+        "to count",
+        "to estimate",
+        "to read (a kanji) with its native Japanese reading"
+      ],
+      "partOfSpeech": ["Godan verb with 'mu' ending", "transitive verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1456360
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1463520",
+      "kana": "にく",
+      "kanji": ["肉"],
+      "meanings": [
+        "flesh",
+        "meat",
+        "flesh (of a fruit)",
+        "pulp",
+        "the physical body (as opposed to the spirit)",
+        "thickness",
+        "content",
+        "substance",
+        "ink pad"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1463520
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1473740",
+      "kana": "かう",
+      "kanji": ["買う"],
+      "meanings": [
+        "to buy",
+        "to purchase",
+        "to value (highly)",
+        "to think highly of",
+        "to have a high opinion of",
+        "to appreciate",
+        "to recognize",
+        "to incur (someone's anger, displeasure, etc.)",
+        "to elicit (e.g. sneers)",
+        "to invite (e.g. scorn)",
+        "to evoke",
+        "to arouse",
+        "to win (someone's favour)",
+        "to accept",
+        "to take on",
+        "to take up",
+        "to pay for (a prostitute, geisha, etc.)"
+      ],
+      "partOfSpeech": ["Godan verb with 'u' ending", "transitive verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1473740
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1486650",
+      "kana": "おいしい",
+      "kanji": ["美味しい", "旨味しい"],
+      "meanings": [
+        "good(-tasting)",
+        "nice",
+        "delicious",
+        "tasty",
+        "attractive (offer, opportunity, etc.)",
+        "appealing",
+        "convenient",
+        "favorable",
+        "desirable",
+        "profitable"
+      ],
+      "partOfSpeech": ["adjective (keiyoushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1486650
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1499320",
+      "kana": "へや",
+      "kanji": ["部屋"],
+      "meanings": ["room", "chamber", "apartment", "flat", "pad", "stable"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1499320
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1522150",
+      "kana": "ほん",
+      "kanji": ["本"],
+      "meanings": [
+        "book",
+        "volume",
+        "script",
+        "this",
+        "present",
+        "current",
+        "... in question",
+        "... at issue",
+        "main",
+        "head",
+        "principal",
+        "real",
+        "genuine",
+        "regular",
+        "proper",
+        "counter for long, thin objects (sticks, tubes, strings, bottles, pillars, rivers, rail lines, etc.)",
+        "counter for films, TV shows, etc.",
+        "counter for telephone calls, letters, and emails",
+        "counter for goals, home runs, etc.",
+        "counter for rounds or points (in judo, kendo, etc.)"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "prefix", "counter"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1522150
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1536350",
+      "kana": "よる",
+      "kanji": ["夜"],
+      "meanings": ["night", "evening", "dinner"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "adverb (fukushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1536350
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1537370",
+      "kana": "やさい",
+      "kanji": ["野菜"],
+      "meanings": ["vegetable", "marijuana", "cannabis"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1537370
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1540170",
+      "kana": "ともだち",
+      "kanji": ["友達", "友だち"],
+      "meanings": ["friend", "companion"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1540170
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1547720",
+      "kana": "くる",
+      "kanji": ["来る", "來る"],
+      "meanings": [
+        "to come (spatially or temporally)",
+        "to approach",
+        "to arrive",
+        "to come back",
+        "to do ... and come back",
+        "to come to be",
+        "to become",
+        "to get",
+        "to grow",
+        "to continue",
+        "to come from",
+        "to be caused by",
+        "to derive from",
+        "to come to (e.g. \"when it comes to spinach ...\")"
+      ],
+      "partOfSpeech": ["Kuru verb - special class", "intransitive verb", "auxiliary verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1547720
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1578010",
+      "kana": "さかな",
+      "kanji": ["魚"],
+      "meanings": ["fish"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1578010
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1578850",
+      "kana": "いく",
+      "kanji": ["行く", "往く"],
+      "meanings": [
+        "to go",
+        "to move (towards)",
+        "to head (towards)",
+        "to leave (for)",
+        "to move through",
+        "to travel across",
+        "to walk along (e.g. a road)",
+        "to go (well, badly, etc.)",
+        "to proceed",
+        "to turn out",
+        "to get along",
+        "to do (in a particular way)",
+        "to go (with; a choice)",
+        "to try",
+        "to pass (of time, seasons, etc.)",
+        "to go by",
+        "to stream",
+        "to flow",
+        "to die",
+        "to pass away",
+        "to reach (a stage, extent, age, etc.)",
+        "to get to",
+        "to go (so far as ...)",
+        "to reach (of information, instructions, wind, etc.)",
+        "to arrive",
+        "to continue ...",
+        "to go on ...",
+        "to (progress) steadily",
+        "to gradually ...",
+        "to progressively ...",
+        "to have an orgasm",
+        "to come",
+        "to cum",
+        "to trip",
+        "to get high",
+        "to have a drug-induced hallucination"
+      ],
+      "partOfSpeech": [
+        "Godan verb - Iku/Yuku special class",
+        "intransitive verb",
+        "auxiliary verb"
+      ],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1578850
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1579110",
+      "kana": "きょう",
+      "kanji": ["今日"],
+      "meanings": ["today", "this day", "these days", "recently", "nowadays"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "adverb (fukushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1579110
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1579260",
+      "kana": "きのう",
+      "kanji": ["昨日"],
+      "meanings": ["yesterday"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "adverb (fukushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1579260
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1580640",
+      "kana": "ひと",
+      "kanji": ["人"],
+      "meanings": [
+        "person",
+        "someone",
+        "somebody",
+        "human beings",
+        "mankind",
+        "man",
+        "people",
+        "humans",
+        "human (Homo sapiens)",
+        "(other) people",
+        "others",
+        "character",
+        "personality",
+        "nature",
+        "capable person",
+        "competent person",
+        "suitable person",
+        "right person",
+        "adult",
+        "grown-up",
+        "I",
+        "me",
+        "one"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1580640
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1582120",
+      "kana": "みせ",
+      "kanji": ["店", "見世"],
+      "meanings": ["store", "shop", "establishment", "restaurant"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1582120
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1582710",
+      "kana": "にほん",
+      "kanji": ["日本"],
+      "meanings": ["Japan"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1582710
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1584660",
+      "kana": "あした",
+      "kanji": ["明日"],
+      "meanings": ["tomorrow", "near future"],
+      "partOfSpeech": ["noun (common) (futsuumeishi)", "adverb (fukushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1584660
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1588880",
+      "kana": "おおきい",
+      "kanji": ["大きい", "巨きい"],
+      "meanings": [
+        "big",
+        "large",
+        "great",
+        "loud",
+        "extensive",
+        "spacious",
+        "important",
+        "decisive",
+        "valuable",
+        "older",
+        "grown-up"
+      ],
+      "partOfSpeech": ["adjective (keiyoushi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1588880
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1591110",
+      "kana": "きく",
+      "kanji": ["聞く", "聴く"],
+      "meanings": [
+        "to hear",
+        "to listen (e.g. to music)",
+        "to ask",
+        "to enquire",
+        "to query",
+        "to hear about",
+        "to hear of",
+        "to learn of",
+        "to follow (advice, order, etc.)",
+        "to obey",
+        "to listen to",
+        "to comply with",
+        "to hear (e.g. a plea)",
+        "to grant (a request)",
+        "to accept (e.g. an argument)",
+        "to give consideration to",
+        "to smell (esp. incense)",
+        "to sample (a fragrance)",
+        "to taste (alcohol)",
+        "to try"
+      ],
+      "partOfSpeech": ["Godan verb with 'ku' ending", "transitive verb"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1591110
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1592250",
+      "kana": "くに",
+      "kanji": ["国", "邦", "國", "故郷", "郷里"],
+      "meanings": [
+        "country",
+        "state",
+        "region",
+        "national government",
+        "central government",
+        "home (i.e. hometown, home country)",
+        "province (of Japan)",
+        "land",
+        "earth"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1592250
+      },
+      "origin": "imported"
+    },
+    {
+      "id": "word.jmdict.1603990",
+      "kana": "まち",
+      "kanji": ["町", "街"],
+      "meanings": [
+        "town",
+        "block",
+        "neighbourhood",
+        "neighborhood",
+        "downtown",
+        "main street",
+        "street",
+        "road"
+      ],
+      "partOfSpeech": ["noun (common) (futsuumeishi)"],
+      "sourceEntry": {
+        "source": "JMdict",
+        "sequence": 1603990
+      },
+      "origin": "imported"
+    }
+  ]
 }

@@ -9,18 +9,18 @@ pnpm content:jmdict -- /path/to/JMdict_e_NG.gz
 
 It verifies the compressed archive's SHA-256 and the XML creation date and version before reading
 entries. It emits only the entry sequence numbers in `selection.json`, in source order. The
-selection is empty until the separate first-word-set roadmap item is selected, so the checked-in
-dataset currently contains provenance and no imported entries. The CLI accepts the selection and
-output paths as optional second and third arguments. When entries are selected, the
+selection file is Onihayo's authored list of 40 beginner entry sequence numbers. The CLI accepts
+the selection and output paths as optional second and third arguments. The
 transformation keeps the first Japanese reading, available written forms, English glosses, and
 part-of-speech codes; it assigns `word.jmdict.<sequence>` IDs and retains the JMdict sequence as the
-source reference. It does not infer JLPT level or author teaching order.
+source reference. It does not infer JLPT level or author teaching order. Onihayo-authored lesson
+grouping and notes are stored separately in `src/lib/content/vocabulary/lessons.json`.
 
 The selected JMdict-derived dataset and its transformations are licensed CC BY-SA 4.0 under ADR
 0010; the licence text is in `src/lib/content/vocabulary/LICENSE`. The source archive is not
-committed while no vocabulary has been selected. The selection file, checksum pin, fixtures, and
-generated output make filtering deterministic. Review and update the pinned release deliberately
-at least monthly to follow the EDRDG licence's update condition.
+committed; the selection file, checksum pin, fixtures, and generated output make filtering
+deterministic. Review and update the pinned release deliberately at least monthly to follow the
+EDRDG licence's update condition.
 
 ## Parser dependency
 

@@ -39,7 +39,10 @@
 {:else}
   <p class="start">You have completed every kana lesson.</p>
 {/if}
-<p>Onihayo is in early development; vocabulary, kanji, and the rest of the path to N5 follow.</p>
+<p>
+  The first 40 vocabulary words are ready in <a href={resolve('/words')}>five short lessons</a>. The
+  full N5 word list, kanji, and the rest of the path follow.
+</p>
 <p>
   Development follows a public, milestone-based
   <a href="https://github.com/miquno/onihayo/blob/main/ROADMAP.md">roadmap</a>.

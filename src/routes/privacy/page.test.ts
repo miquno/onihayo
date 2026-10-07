@@ -25,6 +25,7 @@ describe('privacy page', () => {
 
   it('says that practice answers are neither sent nor saved', () => {
     expect(body).toContain('never sent to Onihayo or saved');
+    expect(body).toContain('vocabulary practice direction');
   });
 
   it('says what error logs contain and what they leave out', () => {
@@ -35,6 +36,11 @@ describe('privacy page', () => {
   });
 
   it('gives a machine-readable date for the last update', () => {
-    expect(body).toMatch(/<time datetime="\d{4}-\d{2}-\d{2}">/u);
+    expect(body).toContain('<time datetime="2026-10-07">7 October 2026</time>');
+  });
+
+  it('explains that source links only contact third parties when followed', () => {
+    expect(body).toMatch(/links to\s+EDRDG and Creative Commons\s+for vocabulary attribution/u);
+    expect(body).toMatch(/Nothing is sent to those sites unless you\s+follow a link/u);
   });
 });

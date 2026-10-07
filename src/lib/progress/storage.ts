@@ -8,6 +8,7 @@ import { hiragana } from '$lib/content/kana/hiragana';
 import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
 import { katakana } from '$lib/content/kana/katakana';
 import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
+import { wordLessons, words } from '$lib/content/word-lessons';
 import {
   emptyProgress,
   type LearnerProgress,
@@ -57,9 +58,11 @@ const progressDocumentSchema = v.strictObject({
 });
 type ProgressDocument = v.InferOutput<typeof progressDocumentSchema>;
 
-const knownItemIds = new Set<string>([...hiragana, ...katakana].map(({ id: itemId }) => itemId));
+const knownItemIds = new Set<string>(
+  [...hiragana, ...katakana, ...words].map(({ id: itemId }) => itemId)
+);
 const knownLessonIds = new Set<string>(
-  [...hiraganaLessons, ...katakanaLessons].map(({ id: lessonId }) => lessonId)
+  [...hiraganaLessons, ...katakanaLessons, ...wordLessons].map(({ id: lessonId }) => lessonId)
 );
 
 /** Read and validate the stored document, recovering malformed data without throwing. */

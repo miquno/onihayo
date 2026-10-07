@@ -60,8 +60,8 @@
   <li>Calm design, without manipulative streaks, ads, or visual noise.</li>
   <li>Accessible from the start: usable with a keyboard, a screen reader, and on small screens.</li>
   <li>
-    Private by design: no tracking and no third parties. See the <a href={resolve('/privacy')}
-      >privacy page</a
+    Private by design: no tracking, cookies, or third-party services. See the <a
+      href={resolve('/privacy')}>privacy page</a
     >.
   </li>
   <li>Original learning content, written for Onihayo or taken from openly licensed sources.</li>
@@ -69,8 +69,9 @@
 
 <h2>Where Onihayo is today</h2>
 <p>
-  Onihayo is in early development. Lessons for hiragana and katakana and a kana quiz are available;
-  vocabulary and everything after it follow a public
+  Onihayo is in early development. Hiragana, katakana, a kana quiz, and a first set of 40 vocabulary
+  words are available in the <a href={resolve('/words')}>vocabulary lessons</a>. The full N5 word
+  list and later subjects follow the public
   <a href="https://github.com/miquno/onihayo/blob/main/ROADMAP.md">roadmap</a>.
 </p>
 <p>Onihayo is an independent project and is not affiliated with the organisers of the JLPT.</p>

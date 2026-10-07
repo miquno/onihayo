@@ -68,6 +68,26 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Katakana', state: 'true' }
   },
   {
+    path: '/words',
+    title: 'Vocabulary — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary' }
+  },
+  {
+    path: '/words/lessons/people',
+    title: 'People and introductions — Vocabulary — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/practice/people?mode=word-meaning-to-reading&seed=1',
+    title: 'Practice: People and introductions — Vocabulary — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/word.jmdict.1311110',
+    title: 'わたし — Vocabulary — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
     path: '/quiz',
     title: 'Kana quiz — Onihayo',
     current: { navigation: 'Primary', link: 'Kana quiz' }
@@ -247,9 +267,11 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Home',
     'Hiragana',
     'Katakana',
+    'Vocabulary',
     'Kana quiz',
     'About',
     'Continue: Vowels',
+    'five short lessons',
     'roadmap',
     'source code on GitHub',
     'Settings',
