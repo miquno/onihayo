@@ -7,7 +7,7 @@ const fixture = `<?xml version="1.0"?>
 <!DOCTYPE JMdict [<!ENTITY n "noun">]>
 <JMdict created="2026-10-07" version="1.10">
   <entry><ent_seq>100</ent_seq><k_ele><keb>猫</keb></k_ele><r_ele><reb>ねこ</reb></r_ele><sense><pos>&n;</pos><gloss xml:lang="eng">cat</gloss></sense></entry>
-  <entry><ent_seq>200</ent_seq><r_ele><reb>みず</reb></r_ele><sense><pos>&n;</pos><gloss>water &amp; ice</gloss></sense></entry>
+  <entry><ent_seq>200</ent_seq><r_ele><reb>みず</reb></r_ele><sense><pos>&n;</pos><gloss>water &amp; ice &amp;lt;script</gloss></sense></entry>
 </JMdict>`;
 
 describe('JMdict import pipeline', () => {
@@ -23,8 +23,8 @@ describe('JMdict import pipeline', () => {
       {
         id: 'word.jmdict.200',
         kana: 'みず',
-        meanings: ['water & ice'],
-        partOfSpeech: ['n'],
+        meanings: ['water & ice &lt;script'],
+        partOfSpeech: ['noun'],
         sourceEntry: { source: 'JMdict', sequence: 200 },
         origin: 'imported'
       }
@@ -46,7 +46,7 @@ describe('JMdict import pipeline', () => {
     );
   });
 
-  it('checks the pinned compressed archive and release metadata before import', () => {
+  it('rejects an unpinned compressed archive before import', () => {
     const archive = gzipSync(fixture);
     const digest = createHash('sha256').update(archive).digest('hex');
     expect(() => readPinnedJmdictArchive(archive)).toThrow(/checksum mismatch/);

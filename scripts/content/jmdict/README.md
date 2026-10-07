@@ -21,3 +21,12 @@ The selected JMdict-derived dataset and its transformations are licensed CC BY-S
 committed while no vocabulary has been selected. The selection file, checksum pin, fixtures, and
 generated output make filtering deterministic. Review and update the pinned release deliberately
 at least monthly to follow the EDRDG licence's update condition.
+
+## Parser dependency
+
+The offline tool uses `fast-xml-parser` 5.11.2 (MIT, development-only; about 1.4 MiB, never shipped
+to learners). JMdict uses DTD-defined entities and nested XML records; a hand-written regular
+expression parser risks corrupting entity values and tag boundaries. The parser is actively
+maintained ([project releases](https://github.com/NaturalIntelligence/fast-xml-parser/releases))
+and keeps entity size, count, expansion depth, total expansions, and expanded text bounded for this
+source format.

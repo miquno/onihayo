@@ -1,10 +1,23 @@
 import { createHash } from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
+import { XMLParser } from 'fast-xml-parser';
 import * as v from 'valibot';
 import type { WordRecord } from '../../../src/lib/content/model.ts';
 import { jmdictSource } from './source.ts';
 
 const sequenceSchema = v.pipe(v.number(), v.integer(), v.minValue(1));
+const parser = new XMLParser({
+  attributeNamePrefix: '@_',
+  ignoreAttributes: false,
+  parseTagValue: false,
+  processEntities: {
+    maxEntitySize: 10_000,
+    maxExpansionDepth: 10,
+    maxTotalExpansions: 1_000_000,
+    maxExpandedLength: 10_000_000,
+    maxEntityCount: 1_000
+  }
+});
 
 /** Validate a selection list before it is used to filter the publisher's data. */
 export function parseSelection(input: unknown): readonly number[] {
@@ -32,47 +45,74 @@ export function readPinnedJmdictArchive(archive: Uint8Array): string {
   return xml;
 }
 
-function decodeXmlText(text: string): string {
-  return text
-    .replace(/&#x([0-9a-f]+);/gi, (_match, code: string) =>
-      String.fromCodePoint(Number.parseInt(code, 16))
-    )
-    .replace(/&#([0-9]+);/g, (_match, code: string) =>
-      String.fromCodePoint(Number.parseInt(code, 10))
-    )
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;/g, "'");
+function asRecord(value: unknown): Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error('JMdict XML contains an unexpected object shape.');
+  }
+  return value as Record<string, unknown>;
 }
 
-function textValues(xml: string, tag: string): string[] {
-  const pattern = new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tag}>`, 'g');
-  return [...xml.matchAll(pattern)]
-    .map((match) => {
-      const inner = match[1];
-      if (inner === undefined) throw new Error(`JMdict ${tag} element is malformed.`);
-      const raw = inner
-        .replace(/<[^>]+>/g, '')
-        .replace(/&([A-Za-z][A-Za-z0-9-]*);/g, (entity, name: string) =>
-          ['amp', 'lt', 'gt', 'quot', 'apos'].includes(name) ? entity : name
-        );
-      return decodeXmlText(raw.trim());
-    })
-    .filter(Boolean);
+function asRecordOrEmpty(value: unknown): Record<string, unknown> {
+  return value === '' ? {} : asRecord(value);
 }
 
-function recordFromEntry(entry: string, sequence: number): WordRecord {
-  const readings = textValues(entry, 'reb');
+function asArray(value: unknown): readonly unknown[] {
+  if (value === undefined) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+function textContent(value: unknown): string {
+  if (typeof value === 'string') return value.trim();
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return '';
+  const text = asRecord(value)['#text'];
+  return typeof text === 'string' ? text.trim() : '';
+}
+
+function directTextValues(parent: Record<string, unknown>, childName: string): string[] {
+  return asArray(parent[childName]).map(textContent).filter(Boolean);
+}
+
+function entrySequence(entry: Record<string, unknown>): number {
+  const sequence = textContent(entry.ent_seq);
+  if (!/^[1-9][0-9]*$/.test(sequence)) {
+    throw new Error('JMdict entry has an invalid sequence number.');
+  }
+  const value = Number(sequence);
+  if (!Number.isSafeInteger(value))
+    throw new Error('JMdict entry sequence exceeds the safe integer range.');
+  return value;
+}
+
+function recordFromEntry(entry: Record<string, unknown>, sequence: number): WordRecord {
+  const readings = asArray(entry.r_ele).flatMap((value) =>
+    directTextValues(asRecordOrEmpty(value), 'reb')
+  );
   const [kana] = readings;
-  const meanings = [...new Set(textValues(entry, 'gloss'))];
+  const kanji = [
+    ...new Set(
+      asArray(entry.k_ele).flatMap((value) => directTextValues(asRecordOrEmpty(value), 'keb'))
+    )
+  ];
+  const senses = asArray(entry.sense).map(asRecordOrEmpty);
+  const meanings = [
+    ...new Set(
+      senses.flatMap((sense) =>
+        asArray(sense.gloss)
+          .filter((value) => {
+            if (typeof value !== 'object' || value === null || Array.isArray(value)) return true;
+            const language = asRecord(value)['@_xml:lang'];
+            return language === undefined || language === 'eng';
+          })
+          .map(textContent)
+          .filter(Boolean)
+      )
+    )
+  ];
+  const partOfSpeech = [...new Set(senses.flatMap((sense) => directTextValues(sense, 'pos')))];
   if (!kana || meanings.length === 0) {
     throw new Error(`JMdict entry ${String(sequence)} has no reading or English meaning.`);
   }
 
-  const kanji = [...new Set(textValues(entry, 'keb'))];
-  const partOfSpeech = [...new Set(textValues(entry, 'pos'))];
   return {
     id: `word.jmdict.${String(sequence)}`,
     kana,
@@ -91,20 +131,11 @@ export function importSelectedWords(
 ): readonly WordRecord[] {
   const selected = new Set(selection);
   const found = new Map<number, WordRecord>();
-  const rootStart = xml.search(/<JMdict\b[^>]*>/);
-  const rootEnd = xml.lastIndexOf('</JMdict>');
-  if (rootStart < 0 || rootEnd < rootStart)
-    throw new Error('JMdict XML root is missing or incomplete.');
-
-  const body = xml.slice(rootStart, rootEnd).replace(/<!--[\s\S]*?-->/g, '');
-  for (const match of body.matchAll(/<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/g)) {
-    const entry = match[1];
-    if (entry === undefined) throw new Error('JMdict entry is malformed.');
-    const sequenceText = textValues(entry, 'ent_seq')[0];
-    if (!sequenceText || !/^[1-9][0-9]*$/.test(sequenceText)) {
-      throw new Error('JMdict entry has an invalid sequence number.');
-    }
-    const sequence = Number(sequenceText);
+  const document = asRecord(parser.parse(xml));
+  const root = asRecord(document.JMdict);
+  for (const value of asArray(root.entry)) {
+    const entry = asRecord(value);
+    const sequence = entrySequence(entry);
     if (!selected.has(sequence)) continue;
     if (found.has(sequence))
       throw new Error(`JMdict entry ${String(sequence)} occurs more than once.`);
