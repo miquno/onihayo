@@ -150,3 +150,24 @@ export interface KanaLesson {
   readonly lookAlikes?: readonly LookAlikeNote[];
   readonly origin: ContentOrigin;
 }
+
+/** A vocabulary word with stable identity and explicit source ownership. */
+export type WordRecord =
+  | {
+      readonly id: string;
+      readonly kana: string;
+      readonly kanji?: readonly string[] | undefined;
+      readonly meanings: readonly string[];
+      readonly partOfSpeech: readonly string[];
+      readonly sourceEntry: { readonly source: 'JMdict'; readonly sequence: number };
+      readonly origin: 'imported';
+    }
+  | {
+      readonly id: string;
+      readonly kana: string;
+      readonly kanji?: readonly string[] | undefined;
+      readonly meanings: readonly string[];
+      readonly partOfSpeech: readonly string[];
+      readonly sourceEntry?: never;
+      readonly origin: 'authored';
+    };

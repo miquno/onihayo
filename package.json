@@ -22,6 +22,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "content:jmdict": "node --experimental-strip-types scripts/content/jmdict/cli.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check && pnpm test && pnpm build"
   },
   "devDependencies": {
