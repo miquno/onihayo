@@ -39,13 +39,14 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 
 ## Production configuration
 
-| Variable                      | Required                    | Notes                                                                                                                             |
-| ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `ORIGIN`                      | Yes                         | The public `https://` origin, e.g. `https://onihayo.example`. Needed for the CSRF origin check and correct URLs behind the proxy. |
-| `PORT`, `HOST`                | Platform-dependent          | Bind address inside the container (`HOST=0.0.0.0` in containers).                                                                 |
-| `BODY_SIZE_LIMIT`             | Recommended                 | Keep small (e.g. `64K`); Onihayo accepts no uploads.                                                                              |
-| `ADDRESS_HEADER`, `XFF_DEPTH` | Only behind a trusted proxy | Needed for per-IP rate limiting (0.9). Never trust these headers when clients can set them.                                       |
-| `DATABASE_URL`                | From 0.9                    | Application role credentials only; stored in the platform's secret store.                                                         |
+| Variable                      | Required                    | Notes                                                                                                                                               |
+| ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ORIGIN`                      | Yes                         | The public `https://` origin, e.g. `https://onihayo.example`. Needed for the CSRF origin check and correct URLs behind the proxy.                   |
+| `PORT`, `HOST`                | Platform-dependent          | Bind address inside the container (`HOST=0.0.0.0` in containers).                                                                                   |
+| `BODY_SIZE_LIMIT`             | Recommended                 | Keep small (e.g. `64K`); Onihayo accepts no uploads.                                                                                                |
+| `ADDRESS_HEADER`, `XFF_DEPTH` | Only behind a trusted proxy | Needed for per-IP rate limiting (0.9). Never trust these headers when clients can set them.                                                         |
+| `DATABASE_URL`                | From 0.9                    | Application role credentials only; stored in the platform's secret store.                                                                           |
+| `MIGRATION_DATABASE_URL`      | Migration job only (0.9)    | Separate migration role credential; remote URLs must use `sslmode=verify-full`; available only to the protected migration job, not the app process. |
 
 - Configuration comes from environment variables set in the hosting platform. Secrets live only in its secret store — never in the repository, image, or logs.
 - Separate environments (production, optional staging) use separate databases and secrets.

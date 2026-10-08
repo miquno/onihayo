@@ -1,0 +1,15 @@
+CREATE ROLE onihayo_migration
+  LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT
+  PASSWORD :'migration_password';
+
+CREATE ROLE onihayo_app
+  LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT
+  PASSWORD :'app_password';
+
+REVOKE ALL ON DATABASE onihayo FROM PUBLIC;
+GRANT CONNECT ON DATABASE onihayo TO onihayo_migration, onihayo_app;
+GRANT CREATE ON DATABASE onihayo TO onihayo_migration;
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM onihayo_app;
+GRANT USAGE, CREATE ON SCHEMA public TO onihayo_migration;

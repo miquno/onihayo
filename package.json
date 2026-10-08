@@ -22,6 +22,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "content:jmdict": "node --experimental-strip-types scripts/content/jmdict/cli.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check && pnpm test && pnpm build"
   },
@@ -33,6 +35,8 @@
     "@sveltejs/kit": "2.70.3",
     "@sveltejs/vite-plugin-svelte": "7.3.0",
     "@types/node": "24.13.6",
+    "@types/pg": "8.23.1",
+    "drizzle-kit": "0.31.11",
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.23.0",
@@ -48,6 +52,8 @@
     "vitest": "5.0.1"
   },
   "dependencies": {
+    "drizzle-orm": "0.45.3",
+    "pg": "8.23.1",
     "valibot": "1.5.0"
   }
 }

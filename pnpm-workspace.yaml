@@ -8,12 +8,18 @@ minimumReleaseAge: 10080
 # install scripts after it is reviewed and listed here; unknown build scripts fail
 # the install instead of being silently skipped.
 strictDepBuilds: true
-onlyBuiltDependencies: []
+# esbuild's pinned postinstall verifies the platform binary (and downloads it
+# only when the matching optional platform package is unavailable).
+onlyBuiltDependencies:
+  - esbuild
 
 # GHSA-68fv-2mgg-jv7q: postcss's source-map-js 1.2.1 is vulnerable; keep all
 # transitive consumers on the first patched release.
 overrides:
   source-map-js: 1.2.2
+  # drizzle-kit@0.31.11 still declares a deprecated loader with esbuild 0.18.20.
+  # Keep its helper on the patched esbuild line until upstream removes the unused loader.
+  '@esbuild-kit/core-utils>esbuild': 0.25.12
 
 savePrefix: ''
 

@@ -12,4 +12,5 @@ Server-only code. SvelteKit refuses to import anything under `$lib/server` into 
 - Never add `'unsafe-inline'` or `'unsafe-eval'` to `script-src`, and never add a third-party origin to any directive without a documented decision.
 - Read configuration from `$env/dynamic/private` or `$env/static/private` only here, and validate it at startup. Never log secret values.
 - Errors returned to clients are generic. Details go to server logs, without request bodies, tokens, passwords, or email addresses.
-- Future `db/` and `auth/` folders get their own `AGENTS.md` when they are created (roadmap 0.9).
+- `db/` owns the server-only schema and connection setup; follow `db/AGENTS.md`. Runtime code uses only the restricted app-role URL, never migration credentials.
+- Future `auth/` code gets its own `AGENTS.md` when it is created.

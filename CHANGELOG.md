@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- The home page now puts reviews available within today's limit before the next kana lesson.
 - Reviews: lesson practice now schedules its items, and a Reviews page mixes due kana and vocabulary through the shared practice engine. Correct answers advance the schedule; misses bring an item back the next local day.
 - Settings now stores a daily review limit (20 by default) and a gentle new-lesson target (one by default). The review limit bounds each day's review workload; days off do not create penalties. Progress storage version 3 preserves and migrates earlier schedules and progress.
 - Saved progress now migrates from version 1 to version 2, preserving existing records and adding an empty review-schedule field for each item.
