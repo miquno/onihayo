@@ -1,6 +1,6 @@
 # First deployment runbook
 
-**Status: draft.** This covers the ROADMAP 0.2 item "first deployment to a public HTTPS domain". Nothing here has been carried out. It assumes [ADR 0007](../decisions/0007-hosting-provider-and-region.md) is accepted with its proposed option (Scaleway Serverless Containers, `fr-par`). If another option is chosen, the owner steps keep the same shape and only the provider-specific details change.
+**Status: draft.** This covers the ROADMAP 1.0 item "first deployment to a public HTTPS domain" after the zero-to-N5 path and prelaunch checks are complete. Nothing here has been carried out. It assumes [ADR 0007](../decisions/0007-hosting-provider-and-region.md) is accepted with its proposed option (Scaleway Serverless Containers, `fr-par`). If another option is chosen, the owner steps keep the same shape and only the provider-specific details change.
 
 Steps marked **Owner** involve accounts, billing, domains, credentials, or production. Only the repository owner performs or approves them. Steps marked **PR** are ordinary pull requests.
 
@@ -54,4 +54,4 @@ curl -sI https://onihayo.com/does-not-exist      # 404 with security headers
 
 ## Rollback
 
-Update the container to the previous image tag. Each deployed tag is a commit SHA in the registry. There is no database before 0.9, so rollback is always safe.
+Update the container to the previous image tag. Each deployed tag is a commit SHA in the registry. Apply only backward-compatible migrations before rollout; if a schema problem occurs, fix forward with a reviewed migration and use the tested backup restore plan when necessary.
