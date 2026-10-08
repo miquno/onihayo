@@ -7,7 +7,14 @@
  */
 
 import type { AnswerRecord } from '$lib/learning/session';
-import type { ReviewSchedule } from '$lib/srs/scheduler';
+import {
+  isScheduleMastered,
+  rateReview,
+  startSchedule,
+  type ReviewSchedule,
+  type ReviewRating,
+  type SchedulerClock
+} from '$lib/srs/scheduler';
 import { nextStage, type Stage } from './stages';
 
 /**
@@ -40,14 +47,89 @@ export interface LearnerProgress {
   readonly items: ReadonlyMap<string, ProgressRecord>;
   /** Completion records by lesson ID. */
   readonly lessons: ReadonlyMap<string, LessonCompletion>;
+  /** Local review and new-lesson pacing preferences. */
+  readonly settings: ProgressSettings;
 }
+
+export const dailyReviewCapOptions = [5, 10, 20, 50, 100] as const;
+export const newLessonsPerDayOptions = [1, 2, 3, 4, 5] as const;
+
+export interface ProgressSettings {
+  /** Maximum reviews completed in one learner-local day. */
+  readonly dailyReviewCap: (typeof dailyReviewCapOptions)[number];
+  /** Gentle target for newly completed lessons in one learner-local day. */
+  readonly newLessonsPerDay: (typeof newLessonsPerDayOptions)[number];
+}
+
+export const defaultProgressSettings: ProgressSettings = {
+  dailyReviewCap: 20,
+  newLessonsPerDay: 1
+};
 
 /** What progress keeps of one answered question: not the text that was typed. */
 export type AnsweredItem = Pick<AnswerRecord, 'itemId' | 'correct' | 'answeredAt'>;
 
 /** The progress of a learner who has not answered or completed anything. */
 export function emptyProgress(): LearnerProgress {
-  return { items: new Map(), lessons: new Map() };
+  return { items: new Map(), lessons: new Map(), settings: defaultProgressSettings };
+}
+
+/** Replace validated learner preferences without changing progress records. */
+export function setProgressSettings(
+  progress: LearnerProgress,
+  settings: ProgressSettings
+): LearnerProgress {
+  assertSettings(settings);
+  if (
+    progress.settings.dailyReviewCap === settings.dailyReviewCap &&
+    progress.settings.newLessonsPerDay === settings.newLessonsPerDay
+  ) {
+    return progress;
+  }
+  return { ...progress, settings: { ...settings } };
+}
+
+/** Schedule each item from a completed lesson once, keeping repeat completion idempotent. */
+export function completeLessonPractice(
+  progress: LearnerProgress,
+  lessonId: string,
+  itemIds: readonly string[],
+  completedAt: number,
+  clock: SchedulerClock
+): LearnerProgress {
+  const next = completeLesson(progress, lessonId, completedAt);
+  let items: Map<string, ProgressRecord> | undefined;
+  for (const itemId of new Set(itemIds)) {
+    const record = (items ?? next.items).get(itemId);
+    if (record === undefined || record.reviewSchedule !== null) continue;
+    items ??= new Map(next.items);
+    items.set(itemId, { ...record, reviewSchedule: startSchedule(clock) });
+  }
+  return items === undefined ? next : { ...next, items };
+}
+
+/** Record a review outcome and move its bounded schedule forward by one rating. */
+export function recordReview(
+  progress: LearnerProgress,
+  answer: AnsweredItem,
+  rating: ReviewRating,
+  clock: SchedulerClock
+): LearnerProgress {
+  const previous = progress.items.get(answer.itemId);
+  if (previous?.reviewSchedule === null || previous === undefined) {
+    throw new RangeError(`Item ${answer.itemId} is not scheduled for review`);
+  }
+  const schedule = rateReview(previous.reviewSchedule, rating, clock);
+  const answered = recordAnswer(progress, answer);
+  const record = answered.items.get(answer.itemId);
+  if (record === undefined) throw new Error('Reviewed item record is missing');
+  const items = new Map(answered.items);
+  items.set(answer.itemId, {
+    ...record,
+    stage: isScheduleMastered(schedule) ? 'mastered' : record.stage,
+    reviewSchedule: schedule
+  });
+  return { ...answered, items };
 }
 
 /** The stage of an item: its record's, or `new` for an item never answered. */
@@ -110,5 +192,14 @@ function assertTimestamp(time: number): void {
     throw new RangeError(
       `A time must be whole milliseconds since the Unix epoch, got ${String(time)}`
     );
+  }
+}
+
+function assertSettings(settings: ProgressSettings): void {
+  if (
+    !dailyReviewCapOptions.includes(settings.dailyReviewCap) ||
+    !newLessonsPerDayOptions.includes(settings.newLessonsPerDay)
+  ) {
+    throw new RangeError('Progress settings are invalid');
   }
 }

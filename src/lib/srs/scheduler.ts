@@ -9,6 +9,8 @@ export interface SchedulerClock {
   now(): number;
   /** Whole calendar days since 1970-01-01 in the learner's local calendar. */
   localDay(): number;
+  /** The learner-local calendar-day ordinal containing an earlier instant. */
+  localDayFor(timestamp: number): number;
 }
 
 /** Bounded state for one item's next review. */

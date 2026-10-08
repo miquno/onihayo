@@ -43,6 +43,7 @@ test('lesson results persist, home continues, and exported progress imports in a
 
   const saved = storedProgress(await page.evaluate(() => localStorage.getItem('onihayo:progress')));
   expect(saved.items).toHaveLength(5);
+  expect(JSON.stringify(saved.items)).toContain('"reviewSchedule":{"dueDay"');
   expect(saved.lessons).toContainEqual(['lesson.hiragana.a', { completedAt: expect.any(Number) }]);
   expect(JSON.stringify(saved)).not.toContain('given');
 

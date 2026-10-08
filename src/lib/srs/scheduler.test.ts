@@ -6,12 +6,18 @@ import {
   startSchedule,
   type SchedulerClock
 } from './scheduler';
+import { localDayOrdinal } from './calendar';
 
 function clock(now: number, localDay: number): SchedulerClock {
-  return { now: () => now, localDay: () => localDay };
+  return { now: () => now, localDay: () => localDay, localDayFor: () => localDay };
 }
 
 describe('review scheduler', () => {
+  it('keeps calendar-day ordinals consecutive across daylight-saving boundaries', () => {
+    expect(localDayOrdinal(2026, 2, 30) - localDayOrdinal(2026, 2, 29)).toBe(1);
+    expect(localDayOrdinal(2026, 9, 26) - localDayOrdinal(2026, 9, 25)).toBe(1);
+  });
+
   it('starts in the first box on the next learner-local day', () => {
     expect(startSchedule(clock(1_000, 20_000))).toEqual({
       dueDay: 20_001,
