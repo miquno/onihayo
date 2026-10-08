@@ -9,6 +9,7 @@ Zero → Kana → Vocabulary → Kanji → Grammar → Reading / Listening → J
 ## How this roadmap works
 
 - Milestones are delivered in order. Each one leaves a working, deployable application and builds on the previous one.
+- The first public production launch is the 1.0 zero-to-N5 release. Earlier milestones are developed and checked locally or in private staging; being deployable does not mean going live.
 - Every checklist item is one pull request (or a small, named series) that can be implemented and reviewed on its own. Items are ordered: the first unchecked item of the current milestone is the next task.
 - An item is ticked only when its code, tests, and docs are merged and its acceptance criteria hold.
 - Scope is JLPT N5. The data model may leave room for later levels, but no N4–N1 features are built.
@@ -41,10 +42,10 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 ---
 
-## 0.2 — Application shell and design system
+## 0.2 — Application shell and design system ✅
 
-**Goal:** an accessible, responsive shell and a small design system that every later feature plugs into; the site can be deployed publicly.
-**User-visible result:** a consistent site with header, navigation, footer, About/Privacy/Licences pages, and friendly error pages, usable on phones and desktops, reachable at a public HTTPS address.
+**Goal:** an accessible, responsive shell and a small design system that every later feature plugs into; the production image is ready for the later public launch.
+**User-visible result:** a consistent site with header, navigation, footer, About/Privacy/Licences pages, and friendly error pages, usable on phones and desktops.
 **Prerequisites:** 0.1.
 
 - [x] Design tokens as CSS custom properties in `src/lib/ui/`: colors (light and dark), spacing scale, type scale with a Japanese-capable system font stack and a large display size for kana, radius, focus ring, and motion durations that become zero under `prefers-reduced-motion`.
@@ -55,7 +56,6 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] About page (what Onihayo is, the learning path from zero to N5) and Privacy page (what is stored: nothing; no cookies, tracking, or third parties).
 - [x] Licences page listing the licences of third-party packages bundled into the production build, generated at build time from the build's module graph and checked against the lockfile.
 - [x] Production container image: multi-stage `Dockerfile` (Node 24, `--frozen-lockfile`, non-root user, only `build/` and production files, `HEALTHCHECK` on `/healthz`); CI builds it on every pull request.
-- [ ] Hosting ADR choosing the provider and region; first deployment to a public HTTPS domain with the proxy requirements from `docs/deployment/hosting.md` (**owner approval required**).
 
 **Acceptance criteria:**
 
@@ -63,7 +63,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - All pages are fully usable with keyboard only; the skip link moves focus to `main`.
 - No layout overflows at 320 px; text remains readable at 200 % zoom.
 - Error pages never show stack traces or internal messages.
-- The deployed site returns the documented security headers on HTML and static files and redirects HTTP to HTTPS.
+- The production image passes its container smoke test, including security headers on application responses. HTTPS, static-file edge headers, and HTTP redirects are verified at the 1.0 public launch.
 
 **Required tests:** U (component logic where present; token contrast pairs meet WCAG AA), E + A (every route: axe light/dark, skip link, keyboard navigation, 404 page, viewport widths 320/768/1280), CI image build.
 **Security/privacy:** error handling without leaks; static-file headers at the proxy; still no cookies or third-party requests; threat model updated with the hosting provider.
@@ -219,7 +219,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [ ] Progress sync: server as source of truth when signed in; explicit upload/merge of guest progress on sign-up.
 - [ ] Per-user authorization in every data-access function, with cross-user integration tests.
 - [ ] Account deletion (immediate, cascading, all sessions revoked) and JSON data export.
-- [ ] Deployment: managed PostgreSQL, migration release step, backups with point-in-time recovery; privacy page, threat model, web security table, and hosting doc updated; re-review the `cookie` audit exception.
+- [ ] Deployment preparation in private staging: managed PostgreSQL, migration release step, backups with point-in-time recovery; privacy page, threat model, web security table, and hosting doc updated; re-review the `cookie` audit exception. Public production launch remains in 1.0.
 
 **Acceptance criteria:** guests are unaffected; no endpoint lets one user read or change another user's data; responses do not reveal whether an email is registered; deleting an account removes all its rows.
 **Required tests:** U (validation, merge logic), I (auth flows, session expiry/rotation, rate limits, cross-user isolation, deletion cascade, migrations apply cleanly to an empty database), E + A (sign up → sync → sign in elsewhere → delete).
@@ -391,11 +391,12 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **Prerequisites:** 0.17.
 
 - [ ] All N5 content complete and reviewed by a fluent speaker.
+- [ ] Hosting ADR chooses the provider and region; first deployment to a public HTTPS domain follows `docs/deployment/hosting.md` and the first-deployment runbook (**owner approval required**).
 - [ ] Release process: version tags, changelog release section, deploy and rollback runbook.
 - [ ] Final privacy notice and Licences page.
 - [ ] Launch checklist executed (headers, backups, monitoring, rate limits, error pages).
 
-**Acceptance criteria:** a new learner can follow the path from the home page to N5 readiness without leaving Onihayo.
+**Acceptance criteria:** a new learner can follow the path from the home page to N5 readiness without leaving Onihayo; the public site uses HTTPS, redirects HTTP to HTTPS, and serves the documented security headers on HTML and static files.
 **Required tests:** full suite green; manual release checklist.
 **Security/privacy:** final threat-model sign-off.
 **Content/licensing:** every source attributed; licences verified.

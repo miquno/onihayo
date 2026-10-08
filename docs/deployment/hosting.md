@@ -1,6 +1,6 @@
 # Hosting and deployment
 
-**Status: nothing is deployed yet.** This document describes how Onihayo is meant to be hosted safely. The first deployment is a roadmap item in milestone 0.2 and needs the owner's approval, a chosen provider, and a domain. The provider options and a proposal are in [ADR 0007](../decisions/0007-hosting-provider-and-region.md) (Proposed); the steps are in the [first deployment runbook](first-deployment.md). It also updates the Privacy page (`src/routes/privacy/+page.svelte`) to name the provider and say what its infrastructure logs and for how long, replacing the "not publicly hosted yet" paragraph.
+**Status: nothing is deployed yet.** This document describes how Onihayo is meant to be hosted safely. The first public deployment is a roadmap item in the 1.0 zero-to-N5 release and needs the owner's approval, a chosen provider, and a domain. The provider options and a proposal are in [ADR 0007](../decisions/0007-hosting-provider-and-region.md) (Proposed); the steps are in the [first deployment runbook](first-deployment.md). It also updates the Privacy page (`src/routes/privacy/+page.svelte`) to name the provider and say what its infrastructure logs and for how long, replacing the "not publicly hosted yet" paragraph.
 
 ## Target architecture
 
@@ -67,7 +67,7 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 - Decide `includeSubDomains` and HSTS `preload` only once the domain's subdomain usage is known.
 - Add DNS CAA records for the certificate authority in use.
 
-## Deployment pipeline (from 0.2)
+## Deployment pipeline (at the 1.0 public launch)
 
 1. A pull request merges to `main` after all required checks pass.
 2. CI builds the container image from that exact commit and tags it with the commit SHA.

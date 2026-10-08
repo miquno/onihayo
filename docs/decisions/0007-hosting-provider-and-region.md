@@ -1,6 +1,6 @@
 # 0007. Hosting provider and region
 
-- Status: Proposed — the repository owner chooses the provider and region before the first deployment (milestone 0.2)
+- Status: Proposed — the repository owner chooses the provider and region before the first public deployment (milestone 1.0)
 - Date: 2026-09-29
 
 ## Context
