@@ -13,6 +13,7 @@ Browser tests. Unit tests do not live here; they sit next to the code in `src/` 
 - `e2e/layout.spec.ts` — for every page and error route in its `pages` list: shell landmarks, one `h1`, page title, correct `aria-current` state in the header and footer navigation, no requests to other origins, no console errors (which catches CSP violations), no cookies, and no local progress writes on a simple page visit (SvelteKit may keep its own `sessionStorage` scroll keys), skip link moving focus to `main`, no horizontal overflow at 320, 768, 1280, and 1440 px and at 200 % zoom, and axe in light and dark mode. Also the keyboard tab order on the home page.
 - `e2e/progress-storage.spec.ts` — corrupt stored progress is quarantined and shown as a learner-facing notice; a newer document is left untouched and asks the learner to reload.
 - `e2e/progress.spec.ts` — lesson outcomes and completion persist, home continues to the next lesson, Settings exports and imports into a fresh browser, rejects invalid/oversized files, and resets after confirmation.
+- `e2e/reviews.spec.ts` — scheduled kana and vocabulary use the shared review session and persist scheduler ratings; Settings persists the daily cap and new-lesson target.
 
 ## Rules
 

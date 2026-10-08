@@ -22,12 +22,14 @@
   import { choiceKeyAction, optionShortcut } from './choice-keys';
   import { ignoreNextSubmit, imeKeydown, type ImeEvent } from './ime';
   import {
-    completeLesson,
+    completeLessonPractice,
     emptyProgress,
     recordAnswer,
+    recordReview,
     type LearnerProgress
   } from '$lib/progress/records';
   import { progressContextKey, type ProgressContext } from '$lib/progress/context';
+  import { browserSchedulerClock } from '$lib/ui/scheduler-clock';
   import { updateProgress, type ProgressNotice } from '$lib/progress/storage';
   import {
     answerLabel,
@@ -59,6 +61,8 @@
     nextStep: Snippet;
     /** Stable lesson ID, set only for a lesson's own practice. */
     lessonId?: string;
+    /** Save each result as a scheduler rating for an existing review schedule. */
+    reviewSession?: boolean;
     /** Further links after "Practise again". */
     moreLinks?: Snippet;
   }
@@ -71,6 +75,7 @@
     endless = false,
     seed,
     lessonId,
+    reviewSession = false,
     nextStep,
     moreLinks
   }: Props = $props();
@@ -108,7 +113,15 @@
     try {
       const result = updateProgress(
         window.localStorage,
-        (progress) => recordAnswer(progress, { itemId, correct, answeredAt }),
+        (progress) =>
+          reviewSession
+            ? recordReview(
+                progress,
+                { itemId, correct, answeredAt },
+                correct ? 'good' : 'again',
+                browserSchedulerClock(answeredAt)
+              )
+            : recordAnswer(progress, { itemId, correct, answeredAt }),
         currentProgress
       );
       currentProgress = result.progress;
@@ -123,17 +136,31 @@
 
   function saveLessonCompletion() {
     if (lessonId === undefined) return;
+    const completedAt = Date.now();
     try {
       const result = updateProgress(
         window.localStorage,
-        (progress) => completeLesson(progress, lessonId, Date.now()),
+        (progress) =>
+          completeLessonPractice(
+            progress,
+            lessonId,
+            items.map((item) => item.id),
+            completedAt,
+            browserSchedulerClock(completedAt)
+          ),
         currentProgress
       );
       currentProgress = result.progress;
       progressContext.progress = result.progress;
       if (result.notice !== null) progressNotice = result.notice;
     } catch {
-      currentProgress = completeLesson(currentProgress, lessonId, Date.now());
+      currentProgress = completeLessonPractice(
+        currentProgress,
+        lessonId,
+        items.map((item) => item.id),
+        completedAt,
+        browserSchedulerClock(completedAt)
+      );
       progressContext.progress = currentProgress;
       progressNotice = 'unavailable';
     }

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { completeLesson, emptyProgress, recordAnswer, type LearnerProgress } from './records';
+import {
+  completeLesson,
+  emptyProgress,
+  recordAnswer,
+  setProgressSettings,
+  type LearnerProgress
+} from './records';
 import {
   currentProgressVersion,
   exportProgress,
@@ -127,8 +133,53 @@ describe('readProgress', () => {
     expect(result.progress.lessons.get('lesson.hiragana.ka')).toEqual({ completedAt: 40 });
     expect(JSON.parse(storage.values.get(progressStorageKey) ?? 'null')).toMatchObject({
       version: currentProgressVersion,
-      items: [['kana.hiragana.shi', { reviewSchedule: null }]]
+      items: [['kana.hiragana.shi', { reviewSchedule: null }]],
+      settings: { dailyReviewCap: 20, newLessonsPerDay: 1 }
     });
+  });
+
+  it('migrates version 2 schedules and lessons to version 3 defaults', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(
+      progressStorageKey,
+      JSON.stringify({
+        version: 2,
+        items: [
+          [
+            'kana.hiragana.shi',
+            {
+              stage: 'reviewing',
+              attempts: 2,
+              correct: 2,
+              firstSeen: 10,
+              lastSeen: 20,
+              reviewSchedule: {
+                dueDay: 21,
+                intervalDays: 1,
+                successfulReviews: 0,
+                lapses: 0,
+                lastReviewedAt: 20
+              }
+            }
+          ]
+        ],
+        lessons: [['lesson.hiragana.a', { completedAt: 30 }]],
+        settings: {}
+      })
+    );
+
+    const result = readProgress(storage);
+    expect(result.notice).toBeNull();
+    expect(result.progress.items.get('kana.hiragana.shi')?.reviewSchedule).toEqual({
+      dueDay: 21,
+      intervalDays: 1,
+      successfulReviews: 0,
+      lapses: 0,
+      lastReviewedAt: 20
+    });
+    expect(result.progress.settings).toEqual({ dailyReviewCap: 20, newLessonsPerDay: 1 });
+    const migrated: unknown = JSON.parse(storage.values.get(progressStorageKey) ?? 'null');
+    expect(migrated).toMatchObject({ version: 3 });
   });
 
   it('keeps migrated progress in memory when writing the migration fails', () => {
@@ -206,7 +257,22 @@ describe('updateProgress', () => {
     expect(second.progress.items.size).toBe(2);
     expect(JSON.parse(storage.values.get(progressStorageKey) ?? 'null')).toMatchObject({
       version: currentProgressVersion,
-      settings: {}
+      settings: { dailyReviewCap: 20, newLessonsPerDay: 1 }
+    });
+  });
+
+  it('persists preferences and includes them in export/import', () => {
+    const storage = new MemoryStorage();
+    const saved = updateProgress(storage, (progress) =>
+      setProgressSettings(progress, { dailyReviewCap: 10, newLessonsPerDay: 3 })
+    );
+    expect(saved.progress.settings).toEqual({ dailyReviewCap: 10, newLessonsPerDay: 3 });
+    const exported = exportProgress(saved.progress);
+    const fresh = new MemoryStorage();
+    const imported = importProgress(fresh, exported);
+    expect(imported).toMatchObject({
+      imported: true,
+      progress: { settings: saved.progress.settings }
     });
   });
 

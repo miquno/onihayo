@@ -73,6 +73,11 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Vocabulary' }
   },
   {
+    path: '/reviews',
+    title: 'Reviews — Onihayo',
+    current: { navigation: 'Primary', link: 'Reviews' }
+  },
+  {
     path: '/words/lessons/people',
     title: 'People and introductions — Vocabulary — Onihayo',
     current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
@@ -268,6 +273,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Hiragana',
     'Katakana',
     'Vocabulary',
+    'Reviews',
     'Kana quiz',
     'About',
     'Continue: Vowels',

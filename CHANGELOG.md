@@ -4,6 +4,8 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Reviews: lesson practice now schedules its items, and a Reviews page mixes due kana and vocabulary through the shared practice engine. Correct answers advance the schedule; misses bring an item back the next local day.
+- Settings now stores a daily review limit (20 by default) and a gentle new-lesson target (one by default). The review limit bounds each day's review workload; days off do not create penalties. Progress storage version 3 preserves and migrates earlier schedules and progress.
 - Saved progress now migrates from version 1 to version 2, preserving existing records and adding an empty review-schedule field for each item.
 - Vocabulary: 40 kana-only beginner words in five short lessons, with word detail pages and practice from meaning to reading and reading to meaning. JMdict data and Onihayo-authored lesson selection are attributed and licensed.
 - Practice now saves item outcomes and completed lessons in this browser. The home page continues with the next incomplete lesson, and Settings lets learners export, import, or reset progress.
@@ -13,7 +15,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 - Every page has a header with the site name and main navigation, a footer, and a "Skip to main content" link for keyboard and screen reader users.
 - Pages fit screens from 320 px wide and stay readable at 200 % zoom without sideways scrolling; long words and links wrap.
 - Missing and unexpected pages now show a friendly way back home; unexpected errors include a reference ID without exposing internal details.
-- An About page explains what Onihayo is and the learning path from zero to JLPT N5, and a Privacy page, linked from every page's footer, explains that Onihayo stores nothing about you and uses no cookies, tracking, or third parties.
+- An About page explains what Onihayo is and the learning path from zero to JLPT N5, and a Privacy page, linked from every page's footer, explains what stays in your browser and that Onihayo uses no cookies, tracking, or third parties.
 - A Licences page, linked from the footer, lists every open-source package included in Onihayo with its version, licence, and full licence text. The list is generated automatically each time Onihayo is built.
 - Hiragana lessons: a new Hiragana section in the main navigation lists 18 short lessons, one row of kana at a time. Each lesson shows every character large with its reading, explains how the row is pronounced, notes the characters that sound different from what their spelling suggests, and links to the next lesson.
 - Hiragana practice: every lesson has a "Practise this lesson" button. You see each character of the lesson twice in random order, type its romaji, and learn straight away whether it was right; after a miss the correct reading is shown and announced to screen readers. Enter checks your answer and moves on. At the end a summary shows how many you got right and which characters to look at again. Practice runs entirely in your browser: nothing is sent or stored.

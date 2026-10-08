@@ -192,9 +192,9 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 - [x] ADR: scheduling algorithm (evaluate FSRS via a maintained library vs. a simple SM-2/Leitner variant), rating model, and the "mastered" threshold.
 - [x] Scheduler in `src/lib/srs/`: pure, clock-injected, with due calculation that respects the learner's local day boundary.
-- [ ] Items enter the review schedule after their lesson practice.
-- [ ] Review session using the practice engine; answers map to scheduler ratings.
-- [ ] Daily review cap and new-lesson pacing settings with calm defaults; no penalties for missed days.
+- [x] Items enter the review schedule after their lesson practice.
+- [x] Review session using the practice engine; answers map to scheduler ratings.
+- [x] Daily review cap and new-lesson pacing settings with calm defaults; no penalties for missed days.
 - [x] Progress storage migration adding scheduling state.
 - [ ] Home page next-step logic: due reviews, otherwise next lesson.
 

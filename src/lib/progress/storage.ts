@@ -11,6 +11,9 @@ import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
 import { wordLessons, words } from '$lib/content/word-lessons';
 import {
   emptyProgress,
+  defaultProgressSettings,
+  dailyReviewCapOptions,
+  newLessonsPerDayOptions,
   type LearnerProgress,
   type LessonCompletion,
   type ProgressRecord
@@ -19,7 +22,7 @@ import { stages } from './stages';
 
 export const progressStorageKey = 'onihayo:progress';
 export const rejectedProgressStorageKey = 'onihayo:progress.rejected';
-export const currentProgressVersion = 2;
+export const currentProgressVersion = 3;
 /** ADR 0008 budgets under 1 MB for the full N5 progress document. */
 export const maxProgressDocumentLength = 1_000_000;
 
@@ -65,20 +68,48 @@ const progressRecordV1Schema = v.strictObject({
   firstSeen: nonNegativeInteger,
   lastSeen: nonNegativeInteger
 });
+const progressRecordV2Schema = v.strictObject({
+  stage: v.picklist(stages),
+  attempts: v.pipe(v.number(), v.safeInteger(), v.minValue(1)),
+  correct: nonNegativeInteger,
+  firstSeen: nonNegativeInteger,
+  lastSeen: nonNegativeInteger,
+  reviewSchedule: v.nullable(
+    v.strictObject({
+      dueDay: v.pipe(v.number(), v.safeInteger()),
+      intervalDays: v.picklist([1, 3, 7, 14, 30]),
+      successfulReviews: nonNegativeInteger,
+      lapses: nonNegativeInteger,
+      lastReviewedAt: nonNegativeInteger
+    })
+  )
+});
 const lessonCompletionSchema = v.strictObject({ completedAt: nonNegativeInteger });
+const legacySettingsSchema = v.strictObject({});
+const settingsSchema = v.strictObject({
+  dailyReviewCap: v.picklist(dailyReviewCapOptions),
+  newLessonsPerDay: v.picklist(newLessonsPerDayOptions)
+});
 const progressDocumentV1Schema = v.strictObject({
   version: v.literal(1),
   items: v.pipe(v.array(v.tuple([id, progressRecordV1Schema])), v.maxLength(10_000)),
   lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
-  settings: v.strictObject({})
+  settings: legacySettingsSchema
+});
+const progressDocumentV2Schema = v.strictObject({
+  version: v.literal(2),
+  items: v.pipe(v.array(v.tuple([id, progressRecordV2Schema])), v.maxLength(10_000)),
+  lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
+  settings: legacySettingsSchema
 });
 const progressDocumentSchema = v.strictObject({
   version: v.literal(currentProgressVersion),
   items: v.pipe(v.array(v.tuple([id, progressRecordSchema])), v.maxLength(10_000)),
   lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
-  settings: v.strictObject({})
+  settings: settingsSchema
 });
 type ProgressDocumentV1 = v.InferOutput<typeof progressDocumentV1Schema>;
+type ProgressDocumentV2 = v.InferOutput<typeof progressDocumentV2Schema>;
 type ProgressDocument = v.InferOutput<typeof progressDocumentSchema>;
 
 const knownItemIds = new Set<string>(
@@ -155,7 +186,7 @@ export function exportProgress(progress: LearnerProgress): string {
     version: currentProgressVersion,
     items: [...progress.items].map(([itemId, record]) => [itemId, record]),
     lessons: [...progress.lessons].map(([lessonId, completion]) => [lessonId, completion]),
-    settings: {}
+    settings: progress.settings
   };
   const serialized = JSON.stringify(document);
   if (serialized.length > maxProgressDocumentLength) {
@@ -220,7 +251,7 @@ function writeDocument(
         ([lessonId, completion]): ProgressDocument['lessons'][number] => [lessonId, completion]
       )
     ],
-    settings: {}
+    settings: progress.settings
   };
   const serialized = JSON.stringify(document);
   if (serialized.length > maxProgressDocumentLength) {
@@ -255,7 +286,17 @@ function parseDocument(
   if (isVersion(input, 1)) {
     const result = v.safeParse(progressDocumentV1Schema, input);
     if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
-    return { kind: 'valid', value: migrateV1ToV2(result.output), migrated: true };
+    return {
+      kind: 'valid',
+      value: migrateV2ToV3(migrateV1ToV2(result.output)),
+      migrated: true
+    };
+  }
+
+  if (isVersion(input, 2)) {
+    const result = v.safeParse(progressDocumentV2Schema, input);
+    if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
+    return { kind: 'valid', value: migrateV2ToV3(result.output), migrated: true };
   }
 
   const result = v.safeParse(progressDocumentSchema, input);
@@ -280,7 +321,9 @@ function isVersion(input: unknown, version: number): boolean {
   );
 }
 
-function hasValidRecords(document: ProgressDocument | ProgressDocumentV1): boolean {
+function hasValidRecords(
+  document: ProgressDocument | ProgressDocumentV2 | ProgressDocumentV1
+): boolean {
   const itemIds = new Set<string>();
   for (const [itemId, record] of document.items) {
     if (
@@ -311,21 +354,35 @@ function toLearnerProgress(document: ProgressDocument): LearnerProgress {
   for (const [lessonId, completion] of document.lessons) {
     if (knownLessonIds.has(lessonId)) lessons.set(lessonId, completion);
   }
-  return { items, lessons };
+  return { items, lessons, settings: document.settings };
 }
 
 /** Version 1 had no scheduler state; preserve all existing progress and start unscheduled. */
-function migrateV1ToV2(document: ProgressDocumentV1): ProgressDocument {
+function migrateV1ToV2(document: ProgressDocumentV1): ProgressDocumentV2 {
   return {
-    version: currentProgressVersion,
+    version: 2,
     items: document.items.map(([itemId, record]) => [itemId, { ...record, reviewSchedule: null }]),
     lessons: document.lessons,
     settings: {}
   };
 }
 
+function migrateV2ToV3(document: ProgressDocumentV2): ProgressDocument {
+  return {
+    version: currentProgressVersion,
+    items: document.items,
+    lessons: document.lessons,
+    settings: defaultProgressSettings
+  };
+}
+
 function emptyDocument(): ProgressDocument {
-  return { version: currentProgressVersion, items: [], lessons: [], settings: {} };
+  return {
+    version: currentProgressVersion,
+    items: [],
+    lessons: [],
+    settings: defaultProgressSettings
+  };
 }
 
 function recover(storage: ProgressStorage, raw: string): ProgressLoad {

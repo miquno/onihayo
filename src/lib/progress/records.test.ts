@@ -9,8 +9,11 @@ import {
 } from '$lib/learning/session';
 import {
   completeLesson,
+  completeLessonPractice,
   emptyProgress,
   recordAnswer,
+  recordReview,
+  setProgressSettings,
   stageOf,
   type AnsweredItem,
   type LearnerProgress,
@@ -25,6 +28,10 @@ const lessonKa = 'lesson.hiragana.ka';
 
 function answer(itemId: string, correct: boolean, answeredAt: number): AnsweredItem {
   return { itemId, correct, answeredAt };
+}
+
+function schedulerClock(now: number, localDay: number) {
+  return { now: () => now, localDay: () => localDay, localDayFor: () => localDay };
 }
 
 function recordAll(progress: LearnerProgress, answers: readonly AnsweredItem[]): LearnerProgress {
@@ -285,6 +292,71 @@ describe('recordAnswer', () => {
         'stage'
       ]);
     }
+  });
+});
+
+describe('completeLessonPractice', () => {
+  it('schedules each practised item once when lesson practice is completed', () => {
+    const progress = recordAll(emptyProgress(), [answer(shi, true, 100), answer(tsu, false, 200)]);
+    const completed = completeLessonPractice(
+      progress,
+      lessonKa,
+      [shi, tsu, shi],
+      300,
+      schedulerClock(300, 50)
+    );
+
+    expect(completed.lessons.get(lessonKa)).toEqual({ completedAt: 300 });
+    expect(completed.items.get(shi)?.reviewSchedule).toMatchObject({
+      dueDay: 51,
+      lastReviewedAt: 300
+    });
+    expect(completed.items.get(tsu)?.reviewSchedule).toMatchObject({
+      dueDay: 51,
+      lastReviewedAt: 300
+    });
+    expect(
+      completeLessonPractice(completed, lessonKa, [shi, tsu], 400, schedulerClock(400, 51))
+    ).toBe(completed);
+  });
+
+  it('does not create records for lesson items without practice outcomes', () => {
+    expect(
+      completeLessonPractice(emptyProgress(), lessonKa, [shi], 300, schedulerClock(300, 50)).items
+        .size
+    ).toBe(0);
+  });
+});
+
+describe('review progress and settings', () => {
+  it('maps a review outcome into the scheduler and keeps answer text out of progress', () => {
+    const learned = completeLessonPractice(
+      recordAnswer(emptyProgress(), answer(shi, true, 100)),
+      lessonKa,
+      [shi],
+      200,
+      schedulerClock(200, 10)
+    );
+    const reviewed = recordReview(learned, answer(shi, true, 300), 'good', schedulerClock(300, 11));
+    expect(reviewed.items.get(shi)).toMatchObject({
+      attempts: 2,
+      reviewSchedule: { dueDay: 14, intervalDays: 3, successfulReviews: 1 }
+    });
+    expect(JSON.stringify([...reviewed.items])).not.toContain('given');
+  });
+
+  it('changes settings immutably and validates their supported bounds', () => {
+    const progress = emptyProgress();
+    const updated = setProgressSettings(progress, { dailyReviewCap: 10, newLessonsPerDay: 2 });
+    expect(progress.settings).toEqual({ dailyReviewCap: 20, newLessonsPerDay: 1 });
+    expect(updated.settings).toEqual({ dailyReviewCap: 10, newLessonsPerDay: 2 });
+    expect(setProgressSettings(updated, updated.settings)).toBe(updated);
+    expect(() =>
+      setProgressSettings(progress, {
+        dailyReviewCap: 101,
+        newLessonsPerDay: 1
+      } as unknown as Parameters<typeof setProgressSettings>[1])
+    ).toThrow(RangeError);
   });
 });
 

@@ -19,7 +19,7 @@ test('recovers a damaged progress document and shows the learner a notice', asyn
 });
 
 test('asks the learner to reload when another version wrote progress', async ({ page }) => {
-  const newer = JSON.stringify({ version: 3, preserved: 'future progress' });
+  const newer = JSON.stringify({ version: 4, preserved: 'future progress' });
   await page.addInitScript((value) => {
     localStorage.setItem('onihayo:progress', value);
   }, newer);
