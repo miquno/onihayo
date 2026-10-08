@@ -61,7 +61,8 @@ describe('stageOf', () => {
       attempts: 4,
       correct: 3,
       firstSeen: 1000,
-      lastSeen: 5000
+      lastSeen: 5000,
+      reviewSchedule: null
     };
     const progress: LearnerProgress = { ...emptyProgress(), items: new Map([[shi, record]]) };
     expect(stageOf(progress, shi)).toBe('reviewing');
@@ -80,7 +81,14 @@ describe('recordAnswer', () => {
     const progress = recordAnswer(emptyProgress(), answer(shi, true, 1000));
     expect(plain(progress)).toEqual({
       items: {
-        [shi]: { stage: 'learning', attempts: 1, correct: 1, firstSeen: 1000, lastSeen: 1000 }
+        [shi]: {
+          stage: 'learning',
+          attempts: 1,
+          correct: 1,
+          firstSeen: 1000,
+          lastSeen: 1000,
+          reviewSchedule: null
+        }
       },
       lessons: {}
     });
@@ -93,7 +101,8 @@ describe('recordAnswer', () => {
       attempts: 1,
       correct: 0,
       firstSeen: 1000,
-      lastSeen: 1000
+      lastSeen: 1000,
+      reviewSchedule: null
     });
   });
 
@@ -109,7 +118,8 @@ describe('recordAnswer', () => {
       attempts: 4,
       correct: 3,
       firstSeen: 1000,
-      lastSeen: 4000
+      lastSeen: 4000,
+      reviewSchedule: null
     });
   });
 
@@ -120,8 +130,22 @@ describe('recordAnswer', () => {
       answer(shi, false, 3000)
     ]);
     expect(plain(progress).items).toEqual({
-      [shi]: { stage: 'learning', attempts: 2, correct: 1, firstSeen: 1000, lastSeen: 3000 },
-      [tsu]: { stage: 'learning', attempts: 1, correct: 0, firstSeen: 2000, lastSeen: 2000 }
+      [shi]: {
+        stage: 'learning',
+        attempts: 2,
+        correct: 1,
+        firstSeen: 1000,
+        lastSeen: 3000,
+        reviewSchedule: null
+      },
+      [tsu]: {
+        stage: 'learning',
+        attempts: 1,
+        correct: 0,
+        firstSeen: 2000,
+        lastSeen: 2000,
+        reviewSchedule: null
+      }
     });
   });
 
@@ -132,7 +156,8 @@ describe('recordAnswer', () => {
         attempts: 4,
         correct: 3,
         firstSeen: 1000,
-        lastSeen: 5000
+        lastSeen: 5000,
+        reviewSchedule: null
       };
       const before: LearnerProgress = { ...emptyProgress(), items: new Map([[shi, record]]) };
       for (const correct of [true, false]) {
@@ -141,7 +166,8 @@ describe('recordAnswer', () => {
           attempts: 5,
           correct: correct ? 4 : 3,
           firstSeen: 1000,
-          lastSeen: 6000
+          lastSeen: 6000,
+          reviewSchedule: null
         });
       }
     }
@@ -214,7 +240,8 @@ describe('recordAnswer', () => {
       attempts: 1,
       correct: 1,
       firstSeen: 1000,
-      lastSeen: 1000
+      lastSeen: 1000,
+      reviewSchedule: null
     });
     expect(stageOf(progress, 'toString')).toBe('new');
   });
@@ -254,6 +281,7 @@ describe('recordAnswer', () => {
         'correct',
         'firstSeen',
         'lastSeen',
+        'reviewSchedule',
         'stage'
       ]);
     }

@@ -7,6 +7,7 @@
  */
 
 import type { AnswerRecord } from '$lib/learning/session';
+import type { ReviewSchedule } from '$lib/srs/scheduler';
 import { nextStage, type Stage } from './stages';
 
 /**
@@ -23,6 +24,8 @@ export interface ProgressRecord {
   readonly firstSeen: number;
   /** When the item was last answered. Never before `firstSeen`. */
   readonly lastSeen: number;
+  /** The bounded review schedule, or null until this item enters review. */
+  readonly reviewSchedule: ReviewSchedule | null;
 }
 
 /** That a lesson has been completed. A lesson without a record is not completed. */
@@ -72,7 +75,8 @@ export function recordAnswer(progress: LearnerProgress, answer: AnsweredItem): L
     attempts: (record?.attempts ?? 0) + 1,
     correct: (record?.correct ?? 0) + (correct ? 1 : 0),
     firstSeen: Math.min(record?.firstSeen ?? answeredAt, answeredAt),
-    lastSeen: Math.max(record?.lastSeen ?? answeredAt, answeredAt)
+    lastSeen: Math.max(record?.lastSeen ?? answeredAt, answeredAt),
+    reviewSchedule: record?.reviewSchedule ?? null
   });
   return { ...progress, items };
 }

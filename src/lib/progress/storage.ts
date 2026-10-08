@@ -19,7 +19,7 @@ import { stages } from './stages';
 
 export const progressStorageKey = 'onihayo:progress';
 export const rejectedProgressStorageKey = 'onihayo:progress.rejected';
-export const currentProgressVersion = 1;
+export const currentProgressVersion = 2;
 /** ADR 0008 budgets under 1 MB for the full N5 progress document. */
 export const maxProgressDocumentLength = 1_000_000;
 
@@ -47,15 +47,38 @@ const progressRecordSchema = v.strictObject({
   attempts: v.pipe(v.number(), v.safeInteger(), v.minValue(1)),
   correct: nonNegativeInteger,
   firstSeen: nonNegativeInteger,
+  lastSeen: nonNegativeInteger,
+  reviewSchedule: v.nullable(
+    v.strictObject({
+      dueDay: v.pipe(v.number(), v.safeInteger()),
+      intervalDays: v.picklist([1, 3, 7, 14, 30]),
+      successfulReviews: nonNegativeInteger,
+      lapses: nonNegativeInteger,
+      lastReviewedAt: nonNegativeInteger
+    })
+  )
+});
+const progressRecordV1Schema = v.strictObject({
+  stage: v.picklist(stages),
+  attempts: v.pipe(v.number(), v.safeInteger(), v.minValue(1)),
+  correct: nonNegativeInteger,
+  firstSeen: nonNegativeInteger,
   lastSeen: nonNegativeInteger
 });
 const lessonCompletionSchema = v.strictObject({ completedAt: nonNegativeInteger });
+const progressDocumentV1Schema = v.strictObject({
+  version: v.literal(1),
+  items: v.pipe(v.array(v.tuple([id, progressRecordV1Schema])), v.maxLength(10_000)),
+  lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
+  settings: v.strictObject({})
+});
 const progressDocumentSchema = v.strictObject({
   version: v.literal(currentProgressVersion),
   items: v.pipe(v.array(v.tuple([id, progressRecordSchema])), v.maxLength(10_000)),
   lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
   settings: v.strictObject({})
 });
+type ProgressDocumentV1 = v.InferOutput<typeof progressDocumentV1Schema>;
 type ProgressDocument = v.InferOutput<typeof progressDocumentSchema>;
 
 const knownItemIds = new Set<string>(
@@ -78,6 +101,18 @@ export function readProgress(storage: ProgressStorage): ProgressLoad {
   const document = parseDocument(raw);
   if (document.kind === 'newer') return { progress: emptyProgress(), notice: 'reload' };
   if (document.kind === 'invalid') return recover(storage, raw);
+
+  if (document.migrated) {
+    const migratedRaw = JSON.stringify(document.value);
+    if (migratedRaw.length > maxProgressDocumentLength) {
+      return { progress: toLearnerProgress(document.value), notice: 'unavailable' };
+    }
+    try {
+      storage.setItem(progressStorageKey, migratedRaw);
+    } catch {
+      return { progress: toLearnerProgress(document.value), notice: 'unavailable' };
+    }
+  }
 
   return { progress: toLearnerProgress(document.value), notice: null };
 }
@@ -203,7 +238,7 @@ function writeDocument(
 function parseDocument(
   raw: string
 ):
-  | { readonly kind: 'valid'; readonly value: ProgressDocument }
+  | { readonly kind: 'valid'; readonly value: ProgressDocument; readonly migrated: boolean }
   | { readonly kind: 'invalid' }
   | { readonly kind: 'newer' } {
   if (raw.length > maxProgressDocumentLength) return { kind: 'invalid' };
@@ -216,9 +251,16 @@ function parseDocument(
   }
 
   if (isNewerVersion(input)) return { kind: 'newer' };
+
+  if (isVersion(input, 1)) {
+    const result = v.safeParse(progressDocumentV1Schema, input);
+    if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
+    return { kind: 'valid', value: migrateV1ToV2(result.output), migrated: true };
+  }
+
   const result = v.safeParse(progressDocumentSchema, input);
   if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
-  return { kind: 'valid', value: result.output };
+  return { kind: 'valid', value: result.output, migrated: false };
 }
 
 function isNewerVersion(input: unknown): boolean {
@@ -232,7 +274,13 @@ function isNewerVersion(input: unknown): boolean {
   );
 }
 
-function hasValidRecords(document: ProgressDocument): boolean {
+function isVersion(input: unknown, version: number): boolean {
+  return (
+    typeof input === 'object' && input !== null && 'version' in input && input.version === version
+  );
+}
+
+function hasValidRecords(document: ProgressDocument | ProgressDocumentV1): boolean {
   const itemIds = new Set<string>();
   for (const [itemId, record] of document.items) {
     if (
@@ -264,6 +312,16 @@ function toLearnerProgress(document: ProgressDocument): LearnerProgress {
     if (knownLessonIds.has(lessonId)) lessons.set(lessonId, completion);
   }
   return { items, lessons };
+}
+
+/** Version 1 had no scheduler state; preserve all existing progress and start unscheduled. */
+function migrateV1ToV2(document: ProgressDocumentV1): ProgressDocument {
+  return {
+    version: currentProgressVersion,
+    items: document.items.map(([itemId, record]) => [itemId, { ...record, reviewSchedule: null }]),
+    lessons: document.lessons,
+    settings: {}
+  };
 }
 
 function emptyDocument(): ProgressDocument {

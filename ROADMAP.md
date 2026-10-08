@@ -190,12 +190,12 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** a Reviews page with the number of due reviews, calm review sessions mixing kana and words, and the home page putting due reviews before new lessons.
 **Prerequisites:** 0.7.
 
-- [ ] ADR: scheduling algorithm (evaluate FSRS via a maintained library vs. a simple SM-2/Leitner variant), rating model, and the "mastered" threshold.
-- [ ] Scheduler in `src/lib/srs/`: pure, clock-injected, with due calculation that respects the learner's local day boundary.
+- [x] ADR: scheduling algorithm (evaluate FSRS via a maintained library vs. a simple SM-2/Leitner variant), rating model, and the "mastered" threshold.
+- [x] Scheduler in `src/lib/srs/`: pure, clock-injected, with due calculation that respects the learner's local day boundary.
 - [ ] Items enter the review schedule after their lesson practice.
 - [ ] Review session using the practice engine; answers map to scheduler ratings.
 - [ ] Daily review cap and new-lesson pacing settings with calm defaults; no penalties for missed days.
-- [ ] Progress storage migration adding scheduling state.
+- [x] Progress storage migration adding scheduling state.
 - [ ] Home page next-step logic: due reviews, otherwise next lesson.
 
 **Acceptance criteria:** scheduling is reproducible in tests; skipping days never produces an unbounded backlog beyond the cap; storage migration preserves 0.6 progress.

@@ -35,7 +35,7 @@ class MemoryStorage implements ProgressStorage {
 }
 
 function stored(items: unknown[] = [], lessons: unknown[] = []): string {
-  return JSON.stringify({ version: currentProgressVersion, items, lessons, settings: {} });
+  return JSON.stringify({ version: 1, items, lessons, settings: {} });
 }
 
 function progressWithKnownRecord(): LearnerProgress {
@@ -97,6 +97,57 @@ describe('readProgress', () => {
     const result = readProgress(storage);
     expect(result.progress.items.has('word.jmdict.1311110')).toBe(true);
     expect(result.progress.lessons.has('lesson.words.people')).toBe(true);
+  });
+
+  it('migrates version 1 records to version 2 without losing progress', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(
+      progressStorageKey,
+      stored(
+        [
+          [
+            'kana.hiragana.shi',
+            { stage: 'reviewing', attempts: 3, correct: 2, firstSeen: 10, lastSeen: 30 }
+          ]
+        ],
+        [['lesson.hiragana.ka', { completedAt: 40 }]]
+      )
+    );
+
+    const result = readProgress(storage);
+    expect(result.notice).toBeNull();
+    expect(result.progress.items.get('kana.hiragana.shi')).toEqual({
+      stage: 'reviewing',
+      attempts: 3,
+      correct: 2,
+      firstSeen: 10,
+      lastSeen: 30,
+      reviewSchedule: null
+    });
+    expect(result.progress.lessons.get('lesson.hiragana.ka')).toEqual({ completedAt: 40 });
+    expect(JSON.parse(storage.values.get(progressStorageKey) ?? 'null')).toMatchObject({
+      version: currentProgressVersion,
+      items: [['kana.hiragana.shi', { reviewSchedule: null }]]
+    });
+  });
+
+  it('keeps migrated progress in memory when writing the migration fails', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(
+      progressStorageKey,
+      stored([
+        [
+          'kana.hiragana.shi',
+          { stage: 'learning', attempts: 1, correct: 0, firstSeen: 10, lastSeen: 10 }
+        ]
+      ])
+    );
+    storage.failWrite = true;
+
+    expect(readProgress(storage)).toMatchObject({
+      notice: 'unavailable',
+      progress: { items: new Map([['kana.hiragana.shi', { reviewSchedule: null }]]) }
+    });
   });
 
   it.each([
@@ -180,7 +231,14 @@ describe('updateProgress', () => {
     }
     expect(written.items).toContainEqual([
       'kana.future.word',
-      { stage: 'reviewing', attempts: 3, correct: 2, firstSeen: 10, lastSeen: 30 }
+      {
+        stage: 'reviewing',
+        attempts: 3,
+        correct: 2,
+        firstSeen: 10,
+        lastSeen: 30,
+        reviewSchedule: null
+      }
     ]);
   });
 
