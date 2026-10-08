@@ -12,15 +12,18 @@
 
 <h1>Privacy</h1>
 <p class="lead">Onihayo does not send your learning data to its server or share it with others.</p>
-<p class="updated">Last updated: <time datetime="2026-10-07">7 October 2026</time></p>
+<p class="updated">Last updated: <time datetime="2026-10-08">8 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 <p>There are no accounts and nothing to sign up for.</p>
 <p>
-  Onihayo saves each item's learning stage, answer counts and dates, and completed lessons in your
-  browser's local storage. It does not save the answers you type. Progress stays on your device;
-  clearing this site's browser data deletes it. Settings lets you export progress to a JSON file,
-  import a validated file, or reset saved progress.
+  Onihayo saves each item's learning stage, answer counts and dates, review schedule, and completed
+  lessons in your browser's local storage. It does not save the answers you type. Progress stays on
+  your device; clearing this site's browser data deletes it.
+</p>
+<p>
+  Settings lets you export progress to a JSON file, import a validated file, or reset saved
+  progress.
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed

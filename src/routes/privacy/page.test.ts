@@ -36,7 +36,7 @@ describe('privacy page', () => {
   });
 
   it('gives a machine-readable date for the last update', () => {
-    expect(body).toContain('<time datetime="2026-10-07">7 October 2026</time>');
+    expect(body).toContain('<time datetime="2026-10-08">8 October 2026</time>');
   });
 
   it('explains that source links only contact third parties when followed', () => {
