@@ -1,5 +1,49 @@
 import { expect, test } from '@playwright/test';
 
+test('home prioritizes due reviews over the next lesson', async ({ page }) => {
+  await page.addInitScript(() => {
+    const now = Date.now();
+    const date = new Date(now);
+    const today = Math.floor(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86_400_000
+    );
+    localStorage.setItem(
+      'onihayo:progress',
+      JSON.stringify({
+        version: 3,
+        items: [
+          [
+            'kana.hiragana.a',
+            {
+              stage: 'reviewing',
+              attempts: 1,
+              correct: 1,
+              firstSeen: now - 1000,
+              lastSeen: now - 1000,
+              reviewSchedule: {
+                dueDay: today,
+                intervalDays: 1,
+                successfulReviews: 0,
+                lapses: 0,
+                lastReviewedAt: now - 1000
+              }
+            }
+          ]
+        ],
+        lessons: [],
+        settings: { dailyReviewCap: 20, newLessonsPerDay: 1 }
+      })
+    );
+  });
+
+  await page.goto('/');
+  const nextStep = page.getByRole('link', { name: 'Review 1 due item' });
+  await expect(nextStep).toHaveAttribute('href', '/reviews');
+  await nextStep.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Reviews' })).toBeVisible();
+  await expect(page.getByText('This session has 1 item.')).toBeVisible();
+});
+
 test('reviews due kana and vocabulary through the shared practice engine', async ({ page }) => {
   await page.addInitScript(() => {
     const now = Date.now();

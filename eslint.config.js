@@ -28,7 +28,12 @@ export default defineConfig(
       parserOptions: {
         projectService: {
           // Root config files outside the SvelteKit-generated tsconfig.
-          allowDefaultProject: ['eslint.config.js', 'svelte.config.js', 'playwright.config.ts']
+          allowDefaultProject: [
+            'drizzle.config.ts',
+            'eslint.config.js',
+            'svelte.config.js',
+            'playwright.config.ts'
+          ]
         },
         tsconfigRootDir: import.meta.dirname,
         extraFileExtensions: ['.svelte']

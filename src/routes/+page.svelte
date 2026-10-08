@@ -1,13 +1,30 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
+  import { getContext, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
   import LinkButton from '$lib/ui/LinkButton.svelte';
   import { progressContextKey, type ProgressContext } from '$lib/progress/context';
-  import { nextLessonToLearn } from '$lib/progress/next-step';
+  import { nextLearningStep, nextLessonToLearn } from '$lib/progress/next-step';
+  import { browserSchedulerClock } from '$lib/ui/scheduler-clock';
 
   const progressContext = getContext<ProgressContext>(progressContextKey);
-  let nextLesson = $derived(nextLessonToLearn(progressContext.progress));
+  let now = $state<number | null>(null);
+  let nextStep = $derived.by(() => {
+    if (now !== null) return nextLearningStep(progressContext.progress, browserSchedulerClock(now));
+    const lesson = nextLessonToLearn(progressContext.progress);
+    return lesson === null ? { kind: 'complete' as const } : { kind: 'lesson' as const, lesson };
+  });
+
+  onMount(() => {
+    const updateClock = () => {
+      now = Date.now();
+    };
+    updateClock();
+    const timer = window.setInterval(updateClock, 60_000);
+    return () => {
+      window.clearInterval(timer);
+    };
+  });
 </script>
 
 <svelte:head>
@@ -24,20 +41,28 @@
   New to Japanese? Start with <span lang="ja">ひらがな</span> (hiragana), the first Japanese script: short
   lessons, one row of characters at a time, each followed by its own practice.
 </p>
-{#if nextLesson}
+{#if nextStep.kind === 'reviews'}
   <p class="start">
-    {#if nextLesson.script === 'hiragana'}
-      <LinkButton href={resolve('/hiragana/[lesson]', { lesson: nextLesson.slug })}>
-        Continue: {nextLesson.title}
+    <LinkButton href={resolve('/reviews')}>
+      Review {nextStep.itemCount} due {nextStep.itemCount === 1 ? 'item' : 'items'}
+    </LinkButton>
+  </p>
+{:else if nextStep.kind === 'lesson'}
+  <p class="start">
+    {#if nextStep.lesson.script === 'hiragana'}
+      <LinkButton href={resolve('/hiragana/[lesson]', { lesson: nextStep.lesson.slug })}>
+        Continue: {nextStep.lesson.title}
       </LinkButton>
     {:else}
-      <LinkButton href={resolve('/katakana/[lesson]', { lesson: nextLesson.slug })}>
-        Continue: {nextLesson.title}
+      <LinkButton href={resolve('/katakana/[lesson]', { lesson: nextStep.lesson.slug })}>
+        Continue: {nextStep.lesson.title}
       </LinkButton>
     {/if}
   </p>
 {:else}
-  <p class="start">You have completed every kana lesson.</p>
+  <p class="start">
+    You have completed every kana lesson. No reviews are available within today's limit.
+  </p>
 {/if}
 <p>
   The first 40 vocabulary words are ready in <a href={resolve('/words')}>five short lessons</a>. The

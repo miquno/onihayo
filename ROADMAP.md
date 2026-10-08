@@ -196,7 +196,7 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Review session using the practice engine; answers map to scheduler ratings.
 - [x] Daily review cap and new-lesson pacing settings with calm defaults; no penalties for missed days.
 - [x] Progress storage migration adding scheduling state.
-- [ ] Home page next-step logic: due reviews, otherwise next lesson.
+- [x] Home page next-step logic: due reviews, otherwise next lesson.
 
 **Acceptance criteria:** scheduling is reproducible in tests; skipping days never produces an unbounded backlog beyond the cap; storage migration preserves 0.6 progress.
 **Required tests:** U (intervals, lapses, due dates across time zones and DST changes, cap, migration), E + A (review session journey).
@@ -211,8 +211,8 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** sign up, sign in, sign out, verify email, recover access, sync progress, export data, and delete the account.
 **Prerequisites:** 0.8. Requirements in `docs/security/authentication.md`.
 
-- [ ] ADR: authentication library, credential method(s), session strategy, email provider, and rate-limiting approach, measured against `docs/security/authentication.md`.
-- [ ] PostgreSQL + Drizzle: schema in `src/lib/server/db/`, committed migrations in `drizzle/`, separate migration and application roles, Docker Compose database for local development, `.env.example` updated.
+- [x] ADR: authentication library, credential method(s), session strategy, email provider, and rate-limiting approach, measured against `docs/security/authentication.md`.
+- [x] PostgreSQL + Drizzle: schema in `src/lib/server/db/`, committed migrations in `drizzle/`, separate migration and application roles, Docker Compose database for local development, `.env.example` updated.
 - [ ] CI integration-test job with a PostgreSQL service container.
 - [ ] Sign-up, sign-in, sign-out with secure `__Host-` session cookies, session rotation, and expiry.
 - [ ] Email verification and account recovery with single-use, hashed, short-lived tokens and enumeration-safe responses.
