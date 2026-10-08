@@ -1,21 +1,38 @@
 <script lang="ts">
   import { pageTitle } from '$lib/site';
+  import type { PageData } from './$types';
+
+  let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
   <title>{pageTitle('Privacy')}</title>
   <meta
     name="description"
-    content="Onihayo has no accounts, cookies, tracking, or third parties. Learning progress stays in your browser."
+    content="Onihayo keeps guest learning progress in your browser. Optional accounts use email links and secure sessions when enabled."
   />
 </svelte:head>
 
 <h1>Privacy</h1>
-<p class="lead">Onihayo does not send your learning data to its server or share it with others.</p>
+<p class="lead">Onihayo keeps your learning progress in your browser.</p>
 <p class="updated">Last updated: <time datetime="2026-10-08">8 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
-<p>There are no accounts and nothing to sign up for.</p>
+{#if data.accountsEnabled}
+  <p>
+    Accounts are optional. Your email address and the time it was verified are stored in PostgreSQL
+    when you confirm a sign-in link. Signing in does not yet upload or sync your learning progress.
+  </p>
+  <p>
+    An account session uses a Secure, HTTP-only, SameSite=Lax cookie. The server keeps only a hash
+    of its random token. Sessions expire after 30 days without use or 180 days in total. Email-link
+    requests keep the address, a hash of the one-time token, and timestamps until cleanup; a link
+    expires after 30 minutes. The server stores keyed digests of IP addresses and email addresses
+    with short-lived counters to limit abuse, never the raw IP in those counters.
+  </p>
+{:else}
+  <p>Accounts are not enabled here, so there is nothing to sign up for.</p>
+{/if}
 <p>
   Onihayo saves each item's learning stage, answer counts and dates, review schedule, completed
   lessons, and your daily review and lesson pace settings in your browser's local storage. It does
@@ -31,7 +48,11 @@
   answers are never sent to Onihayo or saved. Kana quiz settings and vocabulary practice direction
   are part of the page address, like any link, so you can bookmark a practice session.
 </p>
-<p>Onihayo sets no cookies.</p>
+{#if data.accountsEnabled}
+  <p>Guests receive no account cookie. Signing in sets only the session cookie described above.</p>
+{:else}
+  <p>Onihayo sets no cookies while accounts are disabled.</p>
+{/if}
 <p>
   If a progress document is present, Onihayo checks it before use and limits imported files to 1 MB.
   If stored progress is damaged, Onihayo keeps one local recovery copy, starts with empty progress,
@@ -39,7 +60,7 @@
   preserved when progress is next saved.
 </p>
 
-<h2>No tracking or external services</h2>
+<h2>No tracking</h2>
 <ul>
   <li>No analytics, advertising, or tracking of any kind.</li>
   <li>
@@ -50,17 +71,26 @@
     Onihayo's pages tell your browser to block content from any other website, so nothing is loaded
     from elsewhere even by mistake.
   </li>
+  {#if data.accountsEnabled}
+    <li>
+      If you request an account link, the server sends your email address and a plain-text message
+      through Amazon SES in Frankfurt. The email has no tracking pixel or tracked link. SES
+      configuration and privacy review are required before this feature is enabled publicly.
+    </li>
+  {/if}
 </ul>
 
 <h2>Server logs</h2>
 <p>
   To deliver any web page, a server needs your device's IP address. Onihayo's own code does not log
-  or store it.
+  the raw address. When accounts are enabled, authentication requests create a keyed digest of it
+  for the short-lived rate limit described above.
 </p>
 <p>
   If Onihayo hits an unexpected error, it logs a random error ID and which kind of page failed. It
-  does not log the address you visited, anything you entered, or your IP address. The error page
-  shows you the same ID, so you can mention it if you report the problem.
+  does not log the address you visited, anything you entered, your email address, a token, or your
+  raw IP address. The error page shows you the same ID, so you can mention it if you report the
+  problem.
 </p>
 <p>
   Onihayo is not publicly hosted yet. Before it is, this page will name the hosting provider and say

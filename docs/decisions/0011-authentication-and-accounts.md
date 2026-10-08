@@ -11,7 +11,7 @@ The requirements include a server-side session referenced by an opaque cookie to
 
 ## Decision
 
-- Implement a small, application-owned SvelteKit authentication boundary following the current [Lucia session guidance](https://lucia-auth.com/sessions/basic-api/) and using maintained `@oslojs` primitives for secure token generation, encoding, and hashing. Use only standard cryptographic algorithms and platform-secure random sources; do not invent algorithms or token formats. Auth endpoints stay in `src/lib/server/auth/` and data access stays in `src/lib/server/db/`.
+- Implement a small, application-owned SvelteKit authentication boundary following the current [Lucia session guidance](https://lucia-auth.com/sessions/basic-api/). Node 24's built-in `crypto` module supplies secure random bytes, SHA-256, and HMAC. The previously proposed `@oslojs/crypto` package is deprecated, so the implementation uses the maintained platform primitives directly. Auth endpoints stay in `src/lib/server/auth/` and data access stays in `src/lib/server/db/`.
 - Start with **passwordless email sign-in links**. Each link is random, single-use, stored hashed, and expires after 30 minutes. Email verification is required before an account can sync progress. Guest learning never depends on an email account.
 - Use PostgreSQL-backed opaque sessions. Store only a SHA-256 hash of a high-entropy random session token. Send the raw token only in a `__Host-onihayo.session` cookie with `Secure`, `HttpOnly`, `SameSite=Lax`, `Path=/`, and no `Domain`. Enforce both idle and absolute expiry (30 days idle, 180 days absolute); rotate at sign-in and privilege changes; revoke on sign-out, credential change, and account deletion.
 - Use Amazon Simple Email Service (SES) in the Frankfurt region (`eu-central-1`) for transactional verification and sign-in email. Call the regional endpoint from server-only code. Send plain-text messages with no open or click tracking. Before enabling sending, the owner must configure the sending domain and credentials and re-check the AWS DPA, SES retention behavior, region, and current transfer terms. The Privacy page and threat model must describe the provider before the first message is sent.
@@ -30,7 +30,7 @@ The requirements include a server-side session referenced by an opaque cookie to
 
 - Account flows are not enabled by this decision alone. The 0.9 implementation must add the controls above, configure SES without tracking, update the Privacy page and threat model, and test authentication and cross-user authorization against real PostgreSQL.
 - Use a database-backed rate-limit table so multiple application replicas share counters. Store only a keyed digest for email-based buckets and define expiry/cleanup as part of the auth implementation.
-- Add `@oslojs` packages only when the auth code uses them, pinned exactly under the dependency policy. No email SDK is needed until the sending adapter is implemented.
+- The email adapter uses the pinned, Apache-2.0-licensed `@aws-sdk/client-ses` package. It runs only on the server, sends plain text, and uses the environment's AWS credential chain. A direct regional HTTPS call would require maintaining AWS Signature V4 signing ourselves; the SDK keeps that protocol in a maintained package.
 - The hosting provider decision in ADR 0007 remains pending. SES's Frankfurt endpoint is independent of the eventual application host, but owner approval and a configured sender domain remain prerequisites to sending.
 
 ## References

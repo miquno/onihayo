@@ -1,6 +1,6 @@
 # Authentication and accounts
 
-**Status: not implemented.** Onihayo is guest-first ([ADR 0002](../decisions/0002-guest-first-learning.md)). Optional accounts arrive in roadmap milestone 0.9. This document fixes the requirements that milestone must meet; the milestone's own ADR records the concrete library and provider choices against them.
+**Status: account authentication implemented behind `AUTH_ENABLED`; progress sync, account export/deletion, and production provider setup remain open.** Onihayo is guest-first ([ADR 0002](../decisions/0002-guest-first-learning.md)). [ADR 0011](../decisions/0011-authentication-and-accounts.md) records the chosen credential and provider.
 
 ## Why accounts (and only for this)
 
@@ -13,7 +13,7 @@ Accounts never gate learning content. A learner can always use Onihayo as a gues
 
 ### General
 
-- Use an **established, maintained authentication library** that integrates with SvelteKit and PostgreSQL/Drizzle (candidates to evaluate: Better Auth; a minimal session implementation following the Lucia guidance on `@oslojs` primitives). No custom cryptography, token formats, or password hashing.
+- Use a reviewed session design with PostgreSQL and Drizzle. ADR 0011 selects a small implementation following Lucia's session guidance because the evaluated full library stores the raw bearer token, contrary to the hash-only storage requirement. Node 24 supplies the cryptographic primitives; no custom cryptographic algorithms or password hashing are used.
 - Minimal data: an email address (for recovery) and whatever the chosen credential needs. No names, birthdays, or profile photos.
 
 ### Credentials

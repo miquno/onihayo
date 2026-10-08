@@ -8,6 +8,20 @@
       "when": 1791441438341,
       "tag": "0000_daily_lady_ursula",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791447366133,
+      "tag": "0001_whole_gertrude_yorkes",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791448039300,
+      "tag": "0002_chunky_magneto",
+      "breakpoints": true
     }
   ]
 }

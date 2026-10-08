@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Optional accounts can be created and accessed through a one-time email link, with sign-out and recovery. Account sessions expire automatically, and guests can continue learning without an account. The account feature stays disabled until the email provider and production data controls are configured; signing in does not yet sync progress.
 - The home page now puts reviews available within today's limit before the next kana lesson.
 - Reviews: lesson practice now schedules its items, and a Reviews page mixes due kana and vocabulary through the shared practice engine. Correct answers advance the schedule; misses bring an item back the next local day.
 - Settings now stores a daily review limit (20 by default) and a gentle new-lesson target (one by default). The review limit bounds each day's review workload; days off do not create penalties. Progress storage version 3 preserves and migrates earlier schedules and progress.

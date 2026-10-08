@@ -12,7 +12,7 @@ Learner ──HTTPS──▶ Platform edge / reverse proxy ──HTTP (private)�
                    headers for static files                                  private network, TLS, backups
 ```
 
-- **One container image** built from the repository's `Dockerfile` (see [Container image](#container-image)): `pnpm install --frozen-lockfile && pnpm build`, then `node build` as a non-root user with only the `build/` output and `package.json`.
+- **One container image** built from the repository's `Dockerfile` (see [Container image](#container-image)): `pnpm install --frozen-lockfile && pnpm build`, then `node build` as a non-root user with the `build/` output and production-only Node dependencies.
 - **Stateless app process.** Any number of replicas can run; nothing is stored on local disk. One replica is enough at launch.
 - **Boring hosting.** Any provider that runs a container behind managed TLS works. Two acceptable shapes:
   1. A container platform (PaaS) with managed TLS and, later, managed PostgreSQL in the same region.
@@ -21,7 +21,7 @@ Learner ──HTTPS──▶ Platform edge / reverse proxy ──HTTP (private)�
 
 ## Container image
 
-The multi-stage `Dockerfile` builds with pnpm in one stage and copies only the self-contained adapter-node output into the runtime stage. The runtime has no `node_modules`, no npm, Corepack, or pnpm, and no source code. It runs as the unprivileged `node` user (uid 1000); the application files are owned by root, so the process cannot change them. `.dockerignore` is an allow-list, so `.env` files, `.git`, and local build output never reach the build context.
+The multi-stage `Dockerfile` builds with pnpm in one stage, removes development dependencies, and copies the adapter-node output and production dependencies into the runtime stage. The runtime has no npm, Corepack, pnpm, or source code. It runs as the unprivileged `node` user (uid 1000); the application files are owned by root, so the process cannot change them. `.dockerignore` is an allow-list, so `.env` files, `.git`, and local build output never reach the build context.
 
 ```bash
 docker build --tag onihayo .
@@ -47,9 +47,15 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 | `ADDRESS_HEADER`, `XFF_DEPTH` | Only behind a trusted proxy | Needed for per-IP rate limiting (0.9). Never trust these headers when clients can set them.                                                         |
 | `DATABASE_URL`                | From 0.9                    | Application role credentials only; stored in the platform's secret store.                                                                           |
 | `MIGRATION_DATABASE_URL`      | Migration job only (0.9)    | Separate migration role credential; remote URLs must use `sslmode=verify-full`; available only to the protected migration job, not the app process. |
+| `AUTH_ENABLED`                | Optional; default `false`   | Enable only after SES sender, AWS permissions, migrations, privacy review, and HTTPS/proxy configuration are ready.                                 |
+| `AUTH_EMAIL_FROM`             | When accounts are enabled   | Verified SES sender address.                                                                                                                        |
+| `AUTH_RATE_LIMIT_KEY`         | When accounts are enabled   | Per-environment 32-byte base64url secret for keyed IP/email rate-limit buckets.                                                                     |
+| AWS credential chain          | When accounts are enabled   | Grant only SES send permission for the approved sender in `eu-central-1`; provide through the platform role or secret store.                        |
 
 - Configuration comes from environment variables set in the hosting platform. Secrets live only in its secret store — never in the repository, image, or logs.
 - Separate environments (production, optional staging) use separate databases and secrets.
+- Account links carry a single-use bearer in the URL. Proxy and platform access logs must redact query strings on `/account/confirm`; keep access logs short-lived. Account responses use `Cache-Control: no-store` and `Referrer-Policy: no-referrer`.
+- Expired link rows and rate-limit buckets are removed on subsequent authentication requests. Until account deletion and retention controls are implemented, keep `AUTH_ENABLED=false` in public deployments. Before enabling it, define periodic cleanup and retention for inactive accounts and database backups, and complete the SES DPA/retention/transfer review in ADR 0011.
 
 ## Reverse proxy / edge requirements
 

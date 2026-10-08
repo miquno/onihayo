@@ -5,6 +5,8 @@ Server-only code. SvelteKit refuses to import anything under `$lib/server` into 
 ## Map
 
 - `security-headers.ts` — the response headers `hooks.server.ts` applies to every SvelteKit response. The CSP is not here: it is generated from `kit.csp` in `svelte.config.js` so SvelteKit can add nonces.
+- `db/` — schema, restricted runtime connection, account persistence, and PostgreSQL integration tests.
+- `auth/` — account input validation, cryptographic primitives, shared rate limiting, sessions, and SES delivery.
 
 ## Rules
 
@@ -13,4 +15,4 @@ Server-only code. SvelteKit refuses to import anything under `$lib/server` into 
 - Read configuration from `$env/dynamic/private` or `$env/static/private` only here, and validate it at startup. Never log secret values.
 - Errors returned to clients are generic. Details go to server logs, without request bodies, tokens, passwords, or email addresses.
 - `db/` owns the server-only schema and connection setup; follow `db/AGENTS.md`. Runtime code uses only the restricted app-role URL, never migration credentials.
-- Future `auth/` code gets its own `AGENTS.md` when it is created.
+- Follow `auth/AGENTS.md` for account work.

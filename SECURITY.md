@@ -49,5 +49,5 @@ Out of scope:
 
 - [docs/security/threat-model.md](docs/security/threat-model.md) — assets, trust boundaries, threats, and mitigations
 - [docs/security/web-security.md](docs/security/web-security.md) — status of each web security control
-- [docs/security/authentication.md](docs/security/authentication.md) — requirements for accounts (not implemented yet)
+- [docs/security/authentication.md](docs/security/authentication.md) — account requirements and implementation status
 - [docs/security/dependencies.md](docs/security/dependencies.md) — dependency and supply-chain policy

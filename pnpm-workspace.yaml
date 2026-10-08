@@ -28,5 +28,6 @@ savePrefix: ''
 auditConfig:
   ignoreGhsas:
     # cookie <0.7.0 via @sveltejs/kit: only exploitable when untrusted input is used
-    # as a cookie name, path, or domain. Onihayo sets no cookies (reviewed 2026-09-29).
+    # as a cookie name, path, or domain. Our session uses a fixed name and path,
+    # and no Domain (reviewed 2026-10-08; see docs/security/dependencies.md).
     - GHSA-pxg6-pf52-xh8x

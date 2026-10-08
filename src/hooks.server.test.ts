@@ -3,8 +3,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { handle, handleError } from './hooks.server';
 import { securityHeaders } from '$lib/server/security-headers';
 
-// The hook only forwards the event to `resolve`, so an empty event is enough.
-const event = {} as RequestEvent;
+function eventForRoute(id: string | null = '/'): RequestEvent {
+  return {
+    locals: { user: null },
+    cookies: { get: () => undefined },
+    route: { id }
+  } as unknown as RequestEvent;
+}
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -13,7 +18,7 @@ afterEach(() => {
 describe('handle', () => {
   it('adds every security header to a resolved response', async () => {
     const response = await handle({
-      event,
+      event: eventForRoute(),
       resolve: () => new Response('ok', { headers: { 'Content-Type': 'text/plain' } })
     });
 
@@ -25,7 +30,7 @@ describe('handle', () => {
 
   it('adds security headers to error responses too', async () => {
     const response = await handle({
-      event,
+      event: eventForRoute(),
       resolve: () => new Response('not found', { status: 404 })
     });
 
@@ -35,11 +40,21 @@ describe('handle', () => {
 
   it('overrides a weaker value set by a route', async () => {
     const response = await handle({
-      event,
+      event: eventForRoute(),
       resolve: () => new Response('ok', { headers: { 'X-Frame-Options': 'SAMEORIGIN' } })
     });
 
     expect(response.headers.get('X-Frame-Options')).toBe('DENY');
+  });
+
+  it('keeps account pages and link tokens out of shared caches and referrers', async () => {
+    const response = await handle({
+      event: eventForRoute('/account/confirm'),
+      resolve: () => new Response('confirm')
+    });
+
+    expect(response.headers.get('Cache-Control')).toBe('no-store');
+    expect(response.headers.get('Referrer-Policy')).toBe('no-referrer');
   });
 });
 

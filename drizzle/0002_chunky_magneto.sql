@@ -1,0 +1,2 @@
+ALTER TABLE "app"."email_sign_in_tokens" ADD COLUMN "purpose" varchar(16) DEFAULT 'sign_in' NOT NULL;--> statement-breakpoint
+ALTER TABLE "app"."email_sign_in_tokens" ADD CONSTRAINT "email_sign_in_tokens_purpose_check" CHECK ("app"."email_sign_in_tokens"."purpose" in ('sign_in', 'recover'));

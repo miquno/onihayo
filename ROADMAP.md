@@ -213,10 +213,9 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 - [x] ADR: authentication library, credential method(s), session strategy, email provider, and rate-limiting approach, measured against `docs/security/authentication.md`.
 - [x] PostgreSQL + Drizzle: schema in `src/lib/server/db/`, committed migrations in `drizzle/`, separate migration and application roles, Docker Compose database for local development, `.env.example` updated.
-- [ ] CI integration-test job with a PostgreSQL service container.
-- [ ] Sign-up, sign-in, sign-out with secure `__Host-` session cookies, session rotation, and expiry.
-- [ ] Email verification and account recovery with single-use, hashed, short-lived tokens and enumeration-safe responses.
-- [ ] Rate limiting on all authentication endpoints per IP and per account.
+- [x] CI integration-test job with a PostgreSQL service container.
+- [x] Sign-up, sign-in, sign-out with secure `__Host-` session cookies, session rotation, and expiry; distributed rate limiting on every authentication endpoint per IP and per account, with bounded cooldowns.
+- [x] Email verification and account recovery with single-use, hashed, short-lived tokens and enumeration-safe responses.
 - [ ] Progress sync: server as source of truth when signed in; explicit upload/merge of guest progress on sign-up.
 - [ ] Per-user authorization in every data-access function, with cross-user integration tests.
 - [ ] Account deletion (immediate, cascading, all sessions revoked) and JSON data export.
