@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-# Production image for Onihayo: build with pnpm, then run only the self-contained
-# adapter-node output as a non-root user. See docs/deployment/hosting.md.
+# Production image for Onihayo: build with pnpm, then run the adapter-node
+# output and production dependencies as a non-root user. See docs/deployment/hosting.md.
 #
 # The base image is pinned by tag and digest, like every other dependency. Update
 # both together, deliberately (docs/security/dependencies.md).
@@ -23,6 +23,7 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # .dockerignore allow-lists what reaches the build context.
 COPY . .
 RUN pnpm build
+RUN pnpm prune --prod --ignore-scripts
 
 FROM ${NODE_IMAGE} AS runtime
 # The runtime needs no package manager: remove the npm and Corepack that ship
@@ -36,12 +37,12 @@ ENV NODE_ENV=production \
     PORT=3000 \
     BODY_SIZE_LIMIT=64K
 
-# Vite bundles server runtime dependencies into build/ (see ssr.noExternal in
-# vite.config.ts), so the runtime has no node_modules or package manager.
-# package.json only supplies "type": "module". Files stay owned by root: the
+# Keep only production dependencies needed by server-side auth and database
+# access. The runtime has no package manager. Files stay owned by root, so the
 # app cannot modify itself.
 COPY --from=build /app/package.json ./
 COPY --from=build /app/build ./build
+COPY --from=build /app/node_modules ./node_modules
 
 # `node` (uid 1000) is the unprivileged user of the official Node.js images.
 USER node

@@ -109,6 +109,21 @@ const pages: PageCase[] = [
   },
   { path: '/about', title: 'About — Onihayo', current: { navigation: 'Primary', link: 'About' } },
   {
+    path: '/account',
+    title: 'Account — Onihayo',
+    current: { navigation: 'Site information', link: 'Account' }
+  },
+  {
+    path: '/account/recover',
+    title: 'Restore access — Onihayo',
+    current: { navigation: 'Site information', link: 'Account', state: 'true' }
+  },
+  {
+    path: '/account/confirm',
+    title: 'Confirm account — Onihayo',
+    current: { navigation: 'Site information', link: 'Account', state: 'true' }
+  },
+  {
     path: '/settings',
     title: 'Settings — Onihayo',
     current: { navigation: 'Site information', link: 'Settings' }
@@ -280,6 +295,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'five short lessons',
     'roadmap',
     'source code on GitHub',
+    'Account',
     'Settings',
     'Privacy',
     'Licences'

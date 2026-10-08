@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Starts the production image the way docs/deployment/hosting.md recommends
 # (read-only root filesystem, no capabilities, no privilege escalation) and checks
-# that it runs as a non-root user without a package manager or node_modules,
+# that it runs as a non-root user without a package manager or development dependencies,
 # becomes healthy through its HEALTHCHECK, and serves pages with the security
 # headers.
 set -euo pipefail
@@ -25,7 +25,11 @@ user=$(docker image inspect --format '{{.Config.User}}' "$image")
 [ "$user" = "node" ] || fail "image runs as '$user', expected 'node'"
 
 contents=$(docker run --rm --entrypoint ls "$image" -A /app | tr '\n' ' ')
-[ "$contents" = "build package.json " ] || fail "unexpected /app contents: $contents"
+[ "$contents" = "build node_modules package.json " ] || fail "unexpected /app contents: $contents"
+
+docker run --rm --entrypoint sh "$image" -c \
+  'test -d /app/node_modules/drizzle-orm && test -d /app/node_modules/pg && test ! -e /app/node_modules/vite' ||
+  fail "runtime dependencies are missing or development tools remain"
 
 managers=$(docker run --rm --entrypoint sh "$image" -c 'command -v npm npx corepack pnpm yarn || true')
 [ -z "$managers" ] || fail "the runtime image contains a package manager: $managers"

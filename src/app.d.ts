@@ -4,7 +4,9 @@ declare global {
     interface Error {
       errorId?: string;
     }
-    // interface Locals {}
+    interface Locals {
+      user: { id: string; email: string } | null;
+    }
     // interface PageData {}
     // interface PageState {}
     // interface Platform {}

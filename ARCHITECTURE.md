@@ -12,10 +12,10 @@ Browser ──HTTPS──▶ TLS reverse proxy / platform edge ──HTTP──�
 
 - SvelteKit renders pages on the server and hydrates them in the browser. Pages work with keyboard and screen readers, and core reading content does not depend on client-side JavaScript.
 - Learning content ships inside the application as versioned, validated data ([ADR 0003](docs/decisions/0003-content-as-versioned-data.md)). It is public and identical for every learner, so it needs no database.
-- Until accounts exist, learners are guests and their progress stays in their own browser ([ADR 0002](docs/decisions/0002-guest-first-learning.md)). The server stores no personal data.
+- Guest progress stays in the learner's browser ([ADR 0002](docs/decisions/0002-guest-first-learning.md)). Optional accounts store a verified email and session metadata when authentication is enabled; progress sync is a later roadmap item.
 - The root layout reads validated guest progress once in the browser and provides per-page reactive state; practice writes item outcomes and lesson completions through the progress adapter. Settings imports, exports, and resets the same local document.
 - PostgreSQL with Drizzle ORM and committed migrations is introduced only when server-side user data arrives ([ADR 0004](docs/decisions/0004-postgresql-and-drizzle.md)).
-- The initial 0.9 database foundation lives under `src/lib/server/db/`, with schema migrations under `drizzle/`. Local Compose creates separate migration and restricted application roles; no request route uses the database until the account and synced-progress roadmap items are implemented.
+- The 0.9 database foundation lives under `src/lib/server/db/`, with schema migrations under `drizzle/`. Local Compose creates separate migration and restricted application roles. Account routes use the restricted application role only when `AUTH_ENABLED=true`; synced progress is not implemented yet.
 
 ## Layers and module boundaries
 

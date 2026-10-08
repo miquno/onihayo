@@ -29,9 +29,9 @@ Install with `pnpm add -D <name>` (versions are saved exactly). The 7-day `minim
 
 ## Reviewed audit exceptions
 
-| Advisory                                                                 | Package (path)                               | Severity | Why it does not affect Onihayo                                                                                                                                       | Reviewed   |
-| ------------------------------------------------------------------------ | -------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| [GHSA-pxg6-pf52-xh8x](https://github.com/advisories/GHSA-pxg6-pf52-xh8x) | `cookie` <0.7.0 (`@sveltejs/kit` → `cookie`) | Low      | Only exploitable when untrusted input is used as a cookie name, path, or domain. Onihayo sets no cookies. Must be re-assessed when accounts (0.9) introduce cookies. | 2026-09-29 |
+| Advisory                                                                 | Package (path)                               | Severity | Why it does not affect Onihayo                                                                                                                                                                                                                     | Reviewed   |
+| ------------------------------------------------------------------------ | -------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [GHSA-pxg6-pf52-xh8x](https://github.com/advisories/GHSA-pxg6-pf52-xh8x) | `cookie` <0.7.0 (`@sveltejs/kit` → `cookie`) | Low      | Only exploitable when untrusted input controls cookie name, path, or domain. The account cookie uses a fixed `__Host-onihayo.session` name, fixed `/` path, and no Domain; the untrusted bearer is only the value. Re-review on SvelteKit updates. | 2026-10-08 |
 
 ## Secrets
 

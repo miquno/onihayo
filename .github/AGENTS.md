@@ -5,7 +5,7 @@ GitHub Actions workflows, issue and pull request templates, and code owners. (Na
 ## Workflows
 
 - `workflows/ci.yml` — required pull request gate. Runs on pull requests, pushes to `main`, weekly on a schedule, and on manual dispatch.
-  - `checks`: `pnpm install --frozen-lockfile`, format check, lint, type check, unit tests, production build.
+  - `checks`: `pnpm install --frozen-lockfile`, format check, lint, type check, unit tests, PostgreSQL service with migrations and integration tests, production build. Keeping database tests in this required job means they cannot be skipped by branch protection.
   - `e2e`: installs Chromium and runs the Playwright + axe suite against the production server. Uploads the HTML report on failure.
   - `image`: builds the production `Dockerfile` with the runner's Docker and runs `scripts/smoke-test-image.sh` against it. Nothing is pushed. Not yet a required check: adding it to the `main` ruleset is a repository-settings change for the maintainer.
   - `audit`: `pnpm audit`; fails on any advisory not explicitly reviewed in `pnpm-workspace.yaml`. The weekly schedule surfaces new advisories without code changes.

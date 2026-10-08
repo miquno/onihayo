@@ -16,13 +16,13 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `lib/learning/` — the learning engine: answer normalization, the seeded random source, the practice item contract with kana and word adapters, question modes, distractor selection, and the practice session state machine. See its `AGENTS.md`.
 - `lib/progress/` — learner progress as immutable values: per-item records and lesson completions keyed by stable ID, stage and next-step rules, a per-page context owned by the root layout, and the versioned, validated browser storage adapter with import/export/reset. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
-- `lib/server/` — server-only code. See its `AGENTS.md`.
+- `lib/server/` — server-only code, including database access and optional account authentication. See its `AGENTS.md`.
 - `lib/testing/` — helpers for unit tests only: `withoutHydrationMarkers()` strips Svelte's hydration comments from server-rendered markup (repeating until nothing changes, so no comment can survive a removal).
 
 ## Planned layout (create a folder only when its roadmap item needs it)
 
 - `lib/srs/` — review scheduling (0.8).
-- `lib/server/db/`, `lib/server/auth/` — persistence and authentication (0.9).
+- Synced progress data access (0.9).
 
 ## Rules
 

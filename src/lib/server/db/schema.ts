@@ -1,5 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { index, pgSchema, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import {
+  check,
+  index,
+  integer,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar
+} from 'drizzle-orm/pg-core';
 
 const appSchema = pgSchema('app');
 
@@ -49,13 +58,28 @@ export const emailSignInTokens = appSchema.table(
     id: text('id').primaryKey(),
     email: varchar('email', { length: 254 }).notNull(),
     tokenHash: varchar('token_hash', { length: 64 }).notNull(),
+    purpose: varchar('purpose', { length: 16 }).notNull().default('sign_in'),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
     expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
     consumedAt: timestamp('consumed_at', { withTimezone: true, mode: 'date' })
   },
   (table) => [
+    check('email_sign_in_tokens_purpose_check', sql`${table.purpose} in ('sign_in', 'recover')`),
     uniqueIndex('email_sign_in_tokens_hash_unique').on(table.tokenHash),
     index('email_sign_in_tokens_email_created_idx').on(table.email, table.createdAt),
     index('email_sign_in_tokens_expires_at_idx').on(table.expiresAt)
   ]
+);
+
+/** Shared counters for authentication abuse protection; keys are HMAC digests. */
+export const authRateLimits = appSchema.table(
+  'auth_rate_limits',
+  {
+    bucketHash: varchar('bucket_hash', { length: 64 }).primaryKey(),
+    attempts: integer('attempts').notNull(),
+    windowStartsAt: timestamp('window_starts_at', { withTimezone: true, mode: 'date' }).notNull(),
+    blockedUntil: timestamp('blocked_until', { withTimezone: true, mode: 'date' }),
+    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
+  },
+  (table) => [index('auth_rate_limits_expires_at_idx').on(table.expiresAt)]
 );

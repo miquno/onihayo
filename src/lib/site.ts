@@ -21,6 +21,7 @@ export const primaryNavigation = [
 
 /** Utility and site information links shown in the footer. */
 export const footerNavigation = [
+  { route: '/account', label: 'Account' },
   { route: '/settings', label: 'Settings' },
   { route: '/privacy', label: 'Privacy' },
   { route: '/licences', label: 'Licences' }
