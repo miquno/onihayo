@@ -34,7 +34,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   applySecurityHeaders(response.headers);
   if (event.route.id?.startsWith('/account')) {
     response.headers.set('Cache-Control', 'no-store');
-    response.headers.set('Referrer-Policy', 'no-referrer');
+    // Origin-only referrers omit the token URL while preserving the Origin
+    // header needed by SvelteKit's CSRF check on account form POSTs.
+    response.headers.set('Referrer-Policy', 'origin');
   }
   return response;
 };

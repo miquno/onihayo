@@ -4,6 +4,7 @@ import { expect, test } from '@playwright/test';
 import { Client } from 'pg';
 
 const databaseUrl = process.env.INTEGRATION_DATABASE_URL;
+const origin = 'http://localhost:4174';
 
 async function issueLink(email: string): Promise<string> {
   if (databaseUrl === undefined) throw new Error('Integration database URL is required.');
@@ -25,11 +26,11 @@ async function issueLink(email: string): Promise<string> {
 
 test('guest merge, cross-device sign-in, account export, and deletion', async ({ browser }) => {
   const email = `${randomUUID()}@example.invalid`;
-  const first = await browser.newContext();
+  const first = await browser.newContext({ baseURL: origin });
   const page = await first.newPage();
   await page.goto('/');
   const guestWrite = await page.request.post('/api/progress', {
-    headers: { Origin: 'http://localhost:4174' },
+    headers: { Origin: origin },
     data: { document: '{}' }
   });
   expect(guestWrite.status()).toBe(401);
@@ -57,6 +58,7 @@ test('guest merge, cross-device sign-in, account export, and deletion', async ({
     );
   });
   await page.goto(`/account/confirm?token=${await issueLink(email)}`);
+  expect(new URL(page.url()).origin).toBe(origin);
   await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByText(`Signed in as ${email}.`)).toBeVisible();
   const crossOriginWrite = await page.request.post('/api/progress', {
@@ -75,7 +77,7 @@ test('guest merge, cross-device sign-in, account export, and deletion', async ({
   await page.getByLabel('Daily review limit').selectOption('10');
   expect((await synced).ok()).toBe(true);
 
-  const second = await browser.newContext();
+  const second = await browser.newContext({ baseURL: origin });
   const otherPage = await second.newPage();
   await otherPage.goto(`/account/confirm?token=${await issueLink(email)}`);
   await otherPage.getByRole('button', { name: 'Continue' }).click();
