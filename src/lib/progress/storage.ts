@@ -19,6 +19,7 @@ import {
   type ProgressRecord
 } from './records';
 import { stages } from './stages';
+import { mergeProgress } from './merge';
 
 export const progressStorageKey = 'onihayo:progress';
 export const rejectedProgressStorageKey = 'onihayo:progress.rejected';
@@ -192,6 +193,40 @@ export function exportProgress(progress: LearnerProgress): string {
   if (serialized.length > maxProgressDocumentLength) {
     throw new RangeError('Progress is too large to export.');
   }
+  return serialized;
+}
+
+/** Validate a document received from the network without touching browser storage. */
+export function parseProgress(raw: string): LearnerProgress | null {
+  const parsed = parseDocument(raw);
+  return parsed.kind === 'valid' ? toLearnerProgress(parsed.value) : null;
+}
+
+/** Merge two validated documents while retaining IDs from a newer content build. */
+export function mergeProgressDocuments(accountRaw: string, guestRaw: string): string | null {
+  const account = parseDocument(accountRaw);
+  const guest = parseDocument(guestRaw);
+  if (account.kind !== 'valid' || guest.kind !== 'valid') return null;
+  const merged = mergeProgress(toLearnerProgress(account.value), toLearnerProgress(guest.value));
+  const unknownItems = new Map<string, ProgressDocument['items'][number][1]>();
+  const unknownLessons = new Map<string, ProgressDocument['lessons'][number][1]>();
+  for (const document of [guest.value, account.value]) {
+    for (const [itemId, record] of document.items) {
+      if (!knownItemIds.has(itemId)) unknownItems.set(itemId, record);
+    }
+    for (const [lessonId, completion] of document.lessons) {
+      if (!knownLessonIds.has(lessonId)) unknownLessons.set(lessonId, completion);
+    }
+  }
+  const document: ProgressDocument = {
+    version: currentProgressVersion,
+    items: [...unknownItems, ...merged.items],
+    lessons: [...unknownLessons, ...merged.lessons],
+    settings: merged.settings
+  };
+  const serialized = JSON.stringify(document);
+  if (serialized.length > maxProgressDocumentLength)
+    throw new RangeError('Merged progress is too large.');
   return serialized;
 }
 

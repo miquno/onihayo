@@ -1,6 +1,6 @@
 # Authentication and accounts
 
-**Status: account authentication implemented behind `AUTH_ENABLED`; progress sync, account export/deletion, and production provider setup remain open.** Onihayo is guest-first ([ADR 0002](../decisions/0002-guest-first-learning.md)). [ADR 0011](../decisions/0011-authentication-and-accounts.md) records the chosen credential and provider.
+**Status: account authentication, progress sync, and account export/deletion implemented behind `AUTH_ENABLED`; production provider and database preparation remain open.** Onihayo is guest-first ([ADR 0002](../decisions/0002-guest-first-learning.md)). [ADR 0011](../decisions/0011-authentication-and-accounts.md) records the chosen credential and provider.
 
 ## Why accounts (and only for this)
 
@@ -57,3 +57,5 @@ Accounts never gate learning content. A learner can always use Onihayo as a gues
 - **Deletion:** self-service, immediate removal of the account and all its rows (`ON DELETE CASCADE`), all sessions revoked, confirmation required; backups expire within the documented retention period.
 - **Export:** self-service JSON export of the learner's data.
 - **Guest merge:** on sign-up, the learner explicitly chooses to upload local progress.
+
+The account page merges a validated guest document only after an explicit click. Overlapping counters use the greater count, not a sum that could double-count answers; the account's pace settings remain in force. Signed-in writes use a user-scoped revision check, and a stale writer must reload. Account export contains account fields, versioned progress, session timestamps, and email-link metadata without bearer hashes. Deletion requires typing `DELETE`, removes the user and cascading sessions/progress immediately, and removes outstanding email links for that address. Backup retention remains a deployment prerequisite.

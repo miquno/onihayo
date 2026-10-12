@@ -9,5 +9,5 @@ Server-only PostgreSQL access and Drizzle schema. SvelteKit must keep this direc
 - Keep queries parameterized through Drizzle. Raw SQL is limited to Drizzle's `sql` template tag and reviewed migration SQL; never concatenate input into SQL.
 - Schema changes require a new committed SQL migration under `/drizzle`; never use `drizzle-kit push` or mutate a shared database by hand.
 - Learner-owned tables require a non-null `user_id` foreign key with `ON DELETE CASCADE`; every data-access function must scope rows by the authenticated user ID. The first auth foundation tables do not yet hold synced progress.
-- Account routes may use the restricted app role for the selected authentication items. Synced learner progress requires its own roadmap item and ownership tests.
+- Learner progress uses a user-owned row and a revision check. Reads, writes, merge, export, and deletion receive the session's user ID from server code; integration tests must prove cross-user isolation.
 - Tests sit beside the code as `*.test.ts`. PostgreSQL integration tests belong to the 0.9 integration-test item and must run against a real PostgreSQL instance.

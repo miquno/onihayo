@@ -35,7 +35,7 @@ WORKDIR /app
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=3000 \
-    BODY_SIZE_LIMIT=64K
+    BODY_SIZE_LIMIT=2M
 
 # Keep only production dependencies needed by server-side auth and database
 # access. The runtime has no package manager. Files stay owned by root, so the

@@ -36,7 +36,7 @@
     const value = Number(input.value);
     try {
       const result = updateProgress(
-        window.localStorage,
+        progressContext.storage ?? window.localStorage,
         (latest) => setProgressSettings(latest, { ...latest.settings, [setting]: value }),
         progress
       );
@@ -54,7 +54,7 @@
 
   function exportFile() {
     try {
-      const latest = readProgress(window.localStorage).progress;
+      const latest = readProgress(progressContext.storage ?? window.localStorage).progress;
       progressContext.progress = latest;
       const content = exportProgress(latest);
       const url = URL.createObjectURL(new Blob([content], { type: 'application/json' }));
@@ -88,7 +88,7 @@
       return;
     }
     try {
-      const result = importProgress(window.localStorage, raw);
+      const result = importProgress(progressContext.storage ?? window.localStorage, raw);
       if (result.imported) {
         progressContext.progress = result.progress;
         message = 'Progress imported.';
@@ -105,9 +105,16 @@
   }
 
   function reset() {
-    if (!window.confirm('Delete all saved Onihayo progress from this browser?')) return;
+    if (
+      !window.confirm(
+        progressContext.signedIn
+          ? 'Delete all synced Onihayo progress from this account?'
+          : 'Delete all saved Onihayo progress from this browser?'
+      )
+    )
+      return;
     try {
-      if (!resetProgress(window.localStorage)) {
+      if (!resetProgress(progressContext.storage ?? window.localStorage)) {
         message = 'Browser storage is unavailable. Progress was not reset.';
         return;
       }
@@ -187,7 +194,11 @@
 
 <section aria-labelledby="import-heading">
   <h2 id="import-heading">Import progress</h2>
-  <p>Importing replaces the progress currently saved in this browser.</p>
+  <p>
+    Importing replaces the progress currently saved {progressContext.signedIn
+      ? 'in your account'
+      : 'in this browser'}.
+  </p>
   <label for="progress-file">Progress JSON file</label>
   <input
     id="progress-file"
@@ -200,7 +211,11 @@
 
 <section aria-labelledby="reset-heading">
   <h2 id="reset-heading">Reset progress</h2>
-  <p>This deletes saved progress and its local recovery copy from this browser.</p>
+  <p>
+    {progressContext.signedIn
+      ? 'This deletes synced progress from your account.'
+      : 'This deletes saved progress and its local recovery copy from this browser.'}
+  </p>
   <Button variant="secondary" onclick={reset} disabled={!ready}>Reset progress</Button>
 </section>
 

@@ -41,7 +41,7 @@
   onMount(() => {
     let loaded: ProgressLoad;
     try {
-      loaded = readProgress(window.localStorage);
+      loaded = readProgress(progressContext.storage ?? window.localStorage);
     } catch {
       progressContext.progress = emptyProgress();
       notice = 'unavailable';

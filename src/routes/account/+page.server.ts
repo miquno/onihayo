@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getAuthRuntime, clearSessionCookie, sessionCookieName } from '$lib/server/auth/runtime';
 import { requestAccountLink, signOut } from '$lib/server/auth/service';
+import { deleteAccount } from '$lib/server/db/progress';
 
 const receipt = 'If this address can receive email, check it for an Onihayo link.';
 
@@ -37,6 +38,17 @@ export const actions: Actions = {
         new Date()
       );
     }
+    clearSessionCookie(cookies);
+    redirect(303, '/account');
+  },
+  delete: async ({ cookies, locals, request }) => {
+    const auth = getAuthRuntime();
+    if (auth === null || locals.user === null) return fail(401, { message: 'Sign in required.' });
+    const form = await request.formData();
+    if (form.get('confirmation') !== 'DELETE') {
+      return fail(400, { message: 'Type DELETE to confirm account deletion.' });
+    }
+    await deleteAccount(auth.database.db, locals.user.id);
     clearSessionCookie(cookies);
     redirect(303, '/account');
   }

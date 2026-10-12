@@ -32,7 +32,8 @@ export default defineConfig(
             'drizzle.config.ts',
             'eslint.config.js',
             'svelte.config.js',
-            'playwright.config.ts'
+            'playwright.config.ts',
+            'playwright.account.config.ts'
           ]
         },
         tsconfigRootDir: import.meta.dirname,

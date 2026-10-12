@@ -5,7 +5,7 @@ Server-only code. SvelteKit refuses to import anything under `$lib/server` into 
 ## Map
 
 - `security-headers.ts` — the response headers `hooks.server.ts` applies to every SvelteKit response. The CSP is not here: it is generated from `kit.csp` in `svelte.config.js` so SvelteKit can add nonces.
-- `db/` — schema, restricted runtime connection, account persistence, and PostgreSQL integration tests.
+- `db/` — schema, restricted runtime connection, account and learner-progress persistence, and PostgreSQL integration tests.
 - `auth/` — account input validation, cryptographic primitives, shared rate limiting, sessions, and SES delivery.
 
 ## Rules
