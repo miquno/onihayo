@@ -156,5 +156,8 @@ test('settings persist the review cap and gentle new-lesson target', async ({ pa
       })
     )
     .toEqual({ dailyReviewCap: 10, newLessonsPerDay: 3 });
+  await page.reload();
+  await expect(page.getByLabel('Daily review limit')).toHaveValue('10');
+  await expect(page.getByLabel('New-lesson target')).toHaveValue('3');
   await expect(page.getByText('Days off never add a penalty.')).toBeVisible();
 });

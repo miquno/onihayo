@@ -160,7 +160,7 @@
   <label for="daily-review-cap">Daily review limit</label>
   <select
     id="daily-review-cap"
-    value={progress.settings.dailyReviewCap}
+    value={String(progress.settings.dailyReviewCap)}
     onchange={(event) => {
       updateSetting(event, 'dailyReviewCap');
     }}
@@ -175,7 +175,7 @@
   <label for="new-lessons-per-day">New-lesson target</label>
   <select
     id="new-lessons-per-day"
-    value={progress.settings.newLessonsPerDay}
+    value={String(progress.settings.newLessonsPerDay)}
     onchange={(event) => {
       updateSetting(event, 'newLessonsPerDay');
     }}
