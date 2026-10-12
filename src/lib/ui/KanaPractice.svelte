@@ -112,7 +112,7 @@
   function saveAnswer(itemId: string, correct: boolean, answeredAt: number) {
     try {
       const result = updateProgress(
-        window.localStorage,
+        progressContext.storage ?? window.localStorage,
         (progress) =>
           reviewSession
             ? recordReview(
@@ -139,7 +139,7 @@
     const completedAt = Date.now();
     try {
       const result = updateProgress(
-        window.localStorage,
+        progressContext.storage ?? window.localStorage,
         (progress) =>
           completeLessonPractice(
             progress,

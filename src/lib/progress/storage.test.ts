@@ -11,6 +11,8 @@ import {
   exportProgress,
   importProgress,
   maxProgressDocumentLength,
+  mergeProgressDocuments,
+  parseProgress,
   progressStorageKey,
   readProgress,
   rejectedProgressStorageKey,
@@ -239,6 +241,35 @@ describe('readProgress', () => {
     const storage = new MemoryStorage();
     storage.failRead = true;
     expect(readProgress(storage)).toEqual({ progress: emptyProgress(), notice: 'unavailable' });
+  });
+});
+
+describe('account document merge', () => {
+  it('retains unknown content IDs while adding known guest progress', () => {
+    const account = JSON.stringify({
+      version: currentProgressVersion,
+      items: [
+        [
+          'future.item',
+          {
+            stage: 'learning',
+            attempts: 1,
+            correct: 1,
+            firstSeen: 10,
+            lastSeen: 10,
+            reviewSchedule: null
+          }
+        ]
+      ],
+      lessons: [['future.lesson', { completedAt: 10 }]],
+      settings: { dailyReviewCap: 20, newLessonsPerDay: 1 }
+    });
+    const merged = mergeProgressDocuments(account, exportProgress(progressWithKnownRecord()));
+    expect(merged).toContain('future.item');
+    expect(merged).toContain('future.lesson');
+    expect(merged === null ? null : parseProgress(merged)?.items.has('kana.hiragana.shi')).toBe(
+      true
+    );
   });
 });
 

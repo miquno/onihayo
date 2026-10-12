@@ -10,6 +10,8 @@ Learner progress: what one learner knows about each learning item and which less
 - `next-step.ts` — `nextLessonToLearn()` selects the first incomplete lesson in the fixed hiragana-then-katakana order; `nextLearningStep()` prioritizes due reviews that fit today's cap before selecting that lesson.
 - `context.ts` — the type and symbol key for the progress state shared by the root layout, home page, practice, and Settings; the layout owns the per-page state and initializes it with one validated storage read.
 - `storage.ts` — the `localStorage` adapter. `readProgress()` validates bounded version 1, 2, and 3 documents with Valibot; v1 gains an empty review schedule, v2 keeps schedules, and both migrate to v3 with default preferences. It converts only IDs known to current content into `Map`s, quarantines malformed data, and returns a notice instead of throwing. `updateProgress()` re-reads the latest document before applying a change and preserves unknown IDs when writing. Export/import includes local settings; import validates before replacement.
+- `merge.ts` — deterministic, non-additive merge of account and guest records after explicit learner consent.
+- `sync.ts` — an in-memory signed-in storage adapter that sends sequential writes with server revisions and asks for reload after a failed write.
 
 ## Rules
 

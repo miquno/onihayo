@@ -216,9 +216,9 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] CI integration-test job with a PostgreSQL service container.
 - [x] Sign-up, sign-in, sign-out with secure `__Host-` session cookies, session rotation, and expiry; distributed rate limiting on every authentication endpoint per IP and per account, with bounded cooldowns.
 - [x] Email verification and account recovery with single-use, hashed, short-lived tokens and enumeration-safe responses.
-- [ ] Progress sync: server as source of truth when signed in; explicit upload/merge of guest progress on sign-up.
-- [ ] Per-user authorization in every data-access function, with cross-user integration tests.
-- [ ] Account deletion (immediate, cascading, all sessions revoked) and JSON data export.
+- [x] Progress sync: server as source of truth when signed in; explicit upload/merge of guest progress on sign-up.
+- [x] Per-user authorization in every data-access function, with cross-user integration tests.
+- [x] Account deletion (immediate, cascading, all sessions revoked) and JSON data export.
 - [ ] Deployment preparation in private staging: managed PostgreSQL, migration release step, backups with point-in-time recovery; privacy page, threat model, web security table, and hosting doc updated; re-review the `cookie` audit exception. Public production launch remains in 1.0.
 
 **Acceptance criteria:** guests are unaffected; no endpoint lets one user read or change another user's data; responses do not reveal whether an email is registered; deleting an account removes all its rows.

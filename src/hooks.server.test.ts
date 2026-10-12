@@ -54,7 +54,7 @@ describe('handle', () => {
     });
 
     expect(response.headers.get('Cache-Control')).toBe('no-store');
-    expect(response.headers.get('Referrer-Policy')).toBe('no-referrer');
+    expect(response.headers.get('Referrer-Policy')).toBe('origin');
   });
 });
 

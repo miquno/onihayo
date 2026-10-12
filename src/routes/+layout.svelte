@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, setContext } from 'svelte';
+  import { setContext } from 'svelte';
   import '$lib/ui/tokens.css';
   import '../app.css';
   import { resolve } from '$app/paths';
@@ -8,23 +8,62 @@
   import { emptyProgress } from '$lib/progress/records';
   import { progressContextKey } from '$lib/progress/context';
   import { readProgress, type ProgressNotice } from '$lib/progress/storage';
+  import { syncedProgressStorage } from '$lib/progress/sync';
+  import type { ProgressStorage } from '$lib/progress/storage';
+  import type { LayoutData } from './$types';
   import type { Snippet } from 'svelte';
 
-  let { children }: { children: Snippet } = $props();
+  let { children, data }: { children: Snippet; data: LayoutData } = $props();
   let progressNotice = $state<ProgressNotice | null>(null);
   let progress = $state(emptyProgress());
+  let storage: ProgressStorage | undefined;
+  function accountStorage(account: NonNullable<LayoutData['accountProgress']>): ProgressStorage {
+    return syncedProgressStorage(
+      account.document,
+      account.revision,
+      async (document, revision) => {
+        const response = await fetch('/api/progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ document, revision })
+        });
+        if (!response.ok) throw new Error('Progress sync failed.');
+        const result: unknown = await response.json();
+        if (
+          typeof result !== 'object' ||
+          result === null ||
+          !('revision' in result) ||
+          typeof result.revision !== 'number'
+        ) {
+          throw new Error('Progress sync returned an invalid response.');
+        }
+        return result.revision;
+      },
+      () => {
+        progressNotice = 'reload';
+      }
+    );
+  }
   setContext(progressContextKey, {
     get progress() {
       return progress;
     },
     set progress(value) {
       progress = value;
+    },
+    get storage() {
+      return storage;
+    },
+    get signedIn() {
+      return data.accountProgress !== undefined;
     }
   });
 
-  onMount(() => {
+  $effect(() => {
+    const account = data.accountProgress;
     try {
-      const loaded = readProgress(window.localStorage);
+      storage = account === undefined ? window.localStorage : accountStorage(account);
+      const loaded = readProgress(storage);
       progress = loaded.progress;
       progressNotice = loaded.notice;
     } catch {

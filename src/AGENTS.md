@@ -8,21 +8,16 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.
-- `routes/` — URL structure. `+layout.svelte` (shell and progress notice), `+page.svelte` (home: one primary action, due reviews within today's cap before the first incomplete kana lesson), `about/`, `privacy/` (learner-facing privacy record), `settings/` (local progress export/import/reset and learning pace), `reviews/` (capped review sessions for due kana and words), `hiragana/` and `katakana/` (lessons, charts, and shared practice; item outcomes and completed lessons are saved locally while typed answers stay in memory), `words/` (JMdict-attributed vocabulary lessons, detail pages, and shared practice), `quiz/` (kana practice setup and sessions; item outcomes are saved locally), `licences/` (software and learning-data licences), and `healthz/` (liveness probe).
+- `routes/` — URL structure. `+layout.svelte` and `+layout.server.ts` select guest or signed-in progress; `+page.svelte` offers the next step; `account/` handles sign-in, merge, export, and deletion; `api/progress/` accepts bounded signed-in writes; `settings/` handles progress export/import/reset and learning pace; `reviews/`, `hiragana/`, `katakana/`, `words/`, and `quiz/` share the learning and practice engine; `about/`, `privacy/`, `licences/`, and `healthz/` provide site information and liveness.
 - `lib/licences.ts` — the `BundledPackage` type shared by the Licences page and its build plugin (`scripts/licences/`).
 - `bundled-licences.d.ts` — type of the `virtual:bundled-licences` module (`null` in the dev server).
 - `lib/site.ts` — site name, primary (header) and footer navigation entries, `pageTitle()`, and the `aria-current` rule for navigation links.
 - `lib/content/` — typed learning content: the content model, Onihayo-authored kana data and lessons, JMdict-derived vocabulary, authored word selection and lessons, plus lesson, chart, and row-selection helpers. See its `AGENTS.md` for licences and validation.
 - `lib/learning/` — the learning engine: answer normalization, the seeded random source, the practice item contract with kana and word adapters, question modes, distractor selection, and the practice session state machine. See its `AGENTS.md`.
-- `lib/progress/` — learner progress as immutable values: per-item records and lesson completions keyed by stable ID, stage and next-step rules, a per-page context owned by the root layout, and the versioned, validated browser storage adapter with import/export/reset. See its `AGENTS.md`.
+- `lib/progress/` — learner progress as immutable values: per-item records and lesson completions keyed by stable ID, stage and next-step rules, a per-page context owned by the root layout, validated guest storage, explicit guest merge, and revisioned account sync. See its `AGENTS.md`.
 - `lib/ui/` — design system: tokens and shared presentational components. See its `AGENTS.md`.
-- `lib/server/` — server-only code, including database access and optional account authentication. See its `AGENTS.md`.
+- `lib/server/` — server-only code, including database access, optional account authentication, and learner-owned progress. See its `AGENTS.md`.
 - `lib/testing/` — helpers for unit tests only: `withoutHydrationMarkers()` strips Svelte's hydration comments from server-rendered markup (repeating until nothing changes, so no comment can survive a removal).
-
-## Planned layout (create a folder only when its roadmap item needs it)
-
-- `lib/srs/` — review scheduling (0.8).
-- Synced progress data access (0.9).
 
 ## Rules
 

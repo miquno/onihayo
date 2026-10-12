@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Signed-in learners can explicitly merge guest progress into their account and sync later practice across devices. Account settings now offer JSON data export and confirmed account deletion; all live sessions and synced progress are removed on deletion.
 - Optional accounts can be created and accessed through a one-time email link, with sign-out and recovery. Account sessions expire automatically, and guests can continue learning without an account. The account feature stays disabled until the email provider and production data controls are configured; signing in does not yet sync progress.
 - The home page now puts reviews available within today's limit before the next kana lesson.
 - Reviews: lesson practice now schedules its items, and a Reviews page mixes due kana and vocabulary through the shared practice engine. Correct answers advance the schedule; misses bring an item back the next local day.

@@ -14,6 +14,7 @@ Browser tests. Unit tests do not live here; they sit next to the code in `src/` 
 - `e2e/progress-storage.spec.ts` — corrupt stored progress is quarantined and shown as a learner-facing notice; a newer document is left untouched and asks the learner to reload.
 - `e2e/progress.spec.ts` — lesson outcomes and completion persist, home continues to the next lesson, Settings exports and imports into a fresh browser, rejects invalid/oversized files, and resets after confirmation.
 - `e2e/reviews.spec.ts` — the home page puts actionable due reviews before the next lesson; scheduled kana and vocabulary use the shared review session and persist scheduler ratings; Settings persists the daily cap and new-lesson target.
+- `e2e/account.spec.ts` — with a migrated PostgreSQL service and accounts enabled, confirms a new account link, explicitly merges guest progress, checks a second browser session, downloads account data, and deletes the account with an axe scan.
 
 ## Rules
 

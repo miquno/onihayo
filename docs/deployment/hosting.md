@@ -31,7 +31,7 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 ```
 
 - **Base image:** `node:24.<minor>.<patch>-trixie-slim`, pinned by tag and digest in the `Dockerfile`'s `NODE_IMAGE` argument. Updating it follows [dependencies.md](../security/dependencies.md).
-- **Defaults baked in:** `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=3000`, `BODY_SIZE_LIMIT=64K`. `ORIGIN` is not baked in; the platform must set it (see below).
+- **Defaults baked in:** `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=3000`, `BODY_SIZE_LIMIT=2M`. `ORIGIN` is not baked in; the platform must set it (see below).
 - **Health:** a Docker `HEALTHCHECK` requests `/healthz` every 30 s with the image's own Node, so platforms that honour Docker health status need no extra configuration.
 - **Hardening:** the application writes nothing to disk, so run it with a read-only root filesystem, no Linux capabilities, and `no-new-privileges`, as above. The CI smoke test runs it this way.
 - **Shutdown:** the server stops cleanly on `SIGTERM`, so platform restarts and deploys do not cut requests off mid-response.
@@ -43,7 +43,7 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 | ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ORIGIN`                      | Yes                         | The public `https://` origin, e.g. `https://onihayo.example`. Needed for the CSRF origin check and correct URLs behind the proxy.                   |
 | `PORT`, `HOST`                | Platform-dependent          | Bind address inside the container (`HOST=0.0.0.0` in containers).                                                                                   |
-| `BODY_SIZE_LIMIT`             | Recommended                 | Keep small (e.g. `64K`); Onihayo accepts no uploads.                                                                                                |
+| `BODY_SIZE_LIMIT`             | Recommended                 | Set to `2M` for the bounded progress document API; the endpoint checks its own size limit.                                                          |
 | `ADDRESS_HEADER`, `XFF_DEPTH` | Only behind a trusted proxy | Needed for per-IP rate limiting (0.9). Never trust these headers when clients can set them.                                                         |
 | `DATABASE_URL`                | From 0.9                    | Application role credentials only; stored in the platform's secret store.                                                                           |
 | `MIGRATION_DATABASE_URL`      | Migration job only (0.9)    | Separate migration role credential; remote URLs must use `sslmode=verify-full`; available only to the protected migration job, not the app process. |
@@ -54,7 +54,7 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 
 - Configuration comes from environment variables set in the hosting platform. Secrets live only in its secret store — never in the repository, image, or logs.
 - Separate environments (production, optional staging) use separate databases and secrets.
-- Account links carry a single-use bearer in the URL. Proxy and platform access logs must redact query strings on `/account/confirm`; keep access logs short-lived. Account responses use `Cache-Control: no-store` and `Referrer-Policy: no-referrer`.
+- Account links carry a single-use bearer in the URL. Proxy and platform access logs must redact query strings on `/account/confirm`; keep access logs short-lived. Account responses use `Cache-Control: no-store` and `Referrer-Policy: origin`, which omits the bearer URL while allowing same-origin form POSTs to pass SvelteKit's Origin check.
 - Expired link rows and rate-limit buckets are removed on subsequent authentication requests. Until account deletion and retention controls are implemented, keep `AUTH_ENABLED=false` in public deployments. Before enabling it, define periodic cleanup and retention for inactive accounts and database backups, and complete the SES DPA/retention/transfer review in ADR 0011.
 
 ## Reverse proxy / edge requirements

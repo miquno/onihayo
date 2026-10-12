@@ -14,14 +14,18 @@
 </svelte:head>
 
 <h1>Privacy</h1>
-<p class="lead">Onihayo keeps your learning progress in your browser.</p>
-<p class="updated">Last updated: <time datetime="2026-10-08">8 October 2026</time></p>
+<p class="lead">
+  Guest progress stays in your browser; optional accounts sync progress across devices.
+</p>
+<p class="updated">Last updated: <time datetime="2026-10-12">12 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 {#if data.accountsEnabled}
   <p>
     Accounts are optional. Your email address and the time it was verified are stored in PostgreSQL
-    when you confirm a sign-in link. Signing in does not yet upload or sync your learning progress.
+    when you confirm a sign-in link. Signing in does not upload browser progress automatically. You
+    can choose to merge it on the Account page. After that, progress is saved to your account so it
+    can appear on another device.
   </p>
   <p>
     An account session uses a Secure, HTTP-only, SameSite=Lax cookie. The server keeps only a hash
@@ -35,13 +39,16 @@
 {/if}
 <p>
   Onihayo saves each item's learning stage, answer counts and dates, review schedule, completed
-  lessons, and your daily review and lesson pace settings in your browser's local storage. It does
-  not save the answers you type. Progress stays on your device; clearing this site's browser data
-  deletes it.
+  lessons, and your daily review and lesson pace settings. For guests these stay in your browser's
+  local storage; clearing browser data deletes them. For signed-in learners they are stored in the
+  account database. Onihayo does not save the answers you type.
 </p>
 <p>
   Settings lets you export progress to a JSON file, import a validated file, or reset saved
-  progress.
+  progress. Signed-in learners can also download their account data as JSON, including their email,
+  progress, session dates, and email-link dates, or delete the account on the Account page. Deletion
+  immediately removes the account, synced progress, and sessions from the live database. Backup
+  retention will be documented before accounts are publicly enabled.
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed

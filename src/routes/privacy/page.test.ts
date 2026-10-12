@@ -25,7 +25,9 @@ describe('privacy page', () => {
   });
 
   it('explains account data, session cookies, abuse counters, and SES when enabled', () => {
-    expect(enabled).toContain('Signing in does not yet upload or sync');
+    expect(enabled).toContain('Signing in does not upload browser progress automatically');
+    expect(enabled).toContain('choose to merge it on the Account page');
+    expect(enabled).toMatch(/Deletion\s+immediately removes the account/u);
     expect(enabled).toContain('email address and the time it was verified');
     expect(enabled).toContain('Secure, HTTP-only, SameSite=Lax cookie');
     expect(enabled).toContain('keyed digests of IP addresses and email addresses');
@@ -45,7 +47,7 @@ describe('privacy page', () => {
   });
 
   it('gives a machine-readable date for the last update', () => {
-    expect(body).toContain('<time datetime="2026-10-08">8 October 2026</time>');
+    expect(body).toContain('<time datetime="2026-10-12">12 October 2026</time>');
   });
 
   it('explains that source links only contact third parties when followed', () => {

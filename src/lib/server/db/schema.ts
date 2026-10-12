@@ -51,6 +51,15 @@ export const sessions = appSchema.table(
   ]
 );
 
+/** One bounded, versioned progress document per learner. */
+export const learnerProgress = appSchema.table('learner_progress', {
+  userId: text('user_id')
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  document: text('document').notNull(),
+  revision: integer('revision').notNull().default(1)
+});
+
 /** Single-use, short-lived email-link tokens; raw tokens never enter the database. */
 export const emailSignInTokens = appSchema.table(
   'email_sign_in_tokens',
