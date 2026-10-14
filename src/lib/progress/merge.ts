@@ -1,3 +1,4 @@
+import { pruneActivity } from './activity';
 import type { LearnerProgress, ProgressRecord } from './records';
 
 /** Merge a guest document once, without adding counters that may describe the same answers. */
@@ -25,7 +26,12 @@ export function mergeProgress(account: LearnerProgress, guest: LearnerProgress):
       lessons.set(id, completion);
     }
   }
-  return { items, lessons, settings: account.settings };
+  // Both sides may have counted the same answers, so a day keeps the larger count, never the sum.
+  const activity = new Map(account.activity);
+  for (const [day, count] of guest.activity) {
+    activity.set(day, Math.max(activity.get(day) ?? 0, count));
+  }
+  return { items, lessons, settings: account.settings, activity: pruneActivity(activity) };
 }
 
 function preferredRecord(a: ProgressRecord, b: ProgressRecord): ProgressRecord {

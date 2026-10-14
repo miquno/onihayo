@@ -49,6 +49,11 @@ export interface LearnerProgress {
   readonly lessons: ReadonlyMap<string, LessonCompletion>;
   /** Local review and new-lesson pacing preferences. */
   readonly settings: ProgressSettings;
+  /**
+   * Answers per learner-local calendar day, keyed by day ordinal, for a bounded
+   * window of recent days only (`activity.ts`, ADR 0012).
+   */
+  readonly activity: ReadonlyMap<number, number>;
 }
 
 export const dailyReviewCapOptions = [5, 10, 20, 50, 100] as const;
@@ -71,7 +76,12 @@ export type AnsweredItem = Pick<AnswerRecord, 'itemId' | 'correct' | 'answeredAt
 
 /** The progress of a learner who has not answered or completed anything. */
 export function emptyProgress(): LearnerProgress {
-  return { items: new Map(), lessons: new Map(), settings: defaultProgressSettings };
+  return {
+    items: new Map(),
+    lessons: new Map(),
+    settings: defaultProgressSettings,
+    activity: new Map()
+  };
 }
 
 /** Replace validated learner preferences without changing progress records. */

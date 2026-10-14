@@ -20,10 +20,11 @@ import {
 } from './records';
 import { stages } from './stages';
 import { mergeProgress } from './merge';
+import { activityRetentionDays, maxDailyAnswers, pruneActivity } from './activity';
 
 export const progressStorageKey = 'onihayo:progress';
 export const rejectedProgressStorageKey = 'onihayo:progress.rejected';
-export const currentProgressVersion = 3;
+export const currentProgressVersion = 4;
 /** ADR 0008 budgets under 1 MB for the full N5 progress document. */
 export const maxProgressDocumentLength = 1_000_000;
 
@@ -103,14 +104,27 @@ const progressDocumentV2Schema = v.strictObject({
   lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
   settings: legacySettingsSchema
 });
-const progressDocumentSchema = v.strictObject({
-  version: v.literal(currentProgressVersion),
+const progressDocumentV3Schema = v.strictObject({
+  version: v.literal(3),
   items: v.pipe(v.array(v.tuple([id, progressRecordSchema])), v.maxLength(10_000)),
   lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
   settings: settingsSchema
 });
+/** Answers on one learner-local day: the day ordinal and a positive count. */
+const dailyActivitySchema = v.tuple([
+  v.pipe(v.number(), v.safeInteger()),
+  v.pipe(v.number(), v.safeInteger(), v.minValue(1), v.maxValue(maxDailyAnswers))
+]);
+const progressDocumentSchema = v.strictObject({
+  version: v.literal(currentProgressVersion),
+  items: v.pipe(v.array(v.tuple([id, progressRecordSchema])), v.maxLength(10_000)),
+  lessons: v.pipe(v.array(v.tuple([id, lessonCompletionSchema])), v.maxLength(2_000)),
+  settings: settingsSchema,
+  activity: v.pipe(v.array(dailyActivitySchema), v.maxLength(activityRetentionDays))
+});
 type ProgressDocumentV1 = v.InferOutput<typeof progressDocumentV1Schema>;
 type ProgressDocumentV2 = v.InferOutput<typeof progressDocumentV2Schema>;
+type ProgressDocumentV3 = v.InferOutput<typeof progressDocumentV3Schema>;
 type ProgressDocument = v.InferOutput<typeof progressDocumentSchema>;
 
 const knownItemIds = new Set<string>(
@@ -187,7 +201,8 @@ export function exportProgress(progress: LearnerProgress): string {
     version: currentProgressVersion,
     items: [...progress.items].map(([itemId, record]) => [itemId, record]),
     lessons: [...progress.lessons].map(([lessonId, completion]) => [lessonId, completion]),
-    settings: progress.settings
+    settings: progress.settings,
+    activity: [...progress.activity]
   };
   const serialized = JSON.stringify(document);
   if (serialized.length > maxProgressDocumentLength) {
@@ -222,7 +237,8 @@ export function mergeProgressDocuments(accountRaw: string, guestRaw: string): st
     version: currentProgressVersion,
     items: [...unknownItems, ...merged.items],
     lessons: [...unknownLessons, ...merged.lessons],
-    settings: merged.settings
+    settings: merged.settings,
+    activity: [...merged.activity]
   };
   const serialized = JSON.stringify(document);
   if (serialized.length > maxProgressDocumentLength)
@@ -286,7 +302,8 @@ function writeDocument(
         ([lessonId, completion]): ProgressDocument['lessons'][number] => [lessonId, completion]
       )
     ],
-    settings: progress.settings
+    settings: progress.settings,
+    activity: [...progress.activity]
   };
   const serialized = JSON.stringify(document);
   if (serialized.length > maxProgressDocumentLength) {
@@ -323,7 +340,7 @@ function parseDocument(
     if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
     return {
       kind: 'valid',
-      value: migrateV2ToV3(migrateV1ToV2(result.output)),
+      value: migrateV3ToV4(migrateV2ToV3(migrateV1ToV2(result.output))),
       migrated: true
     };
   }
@@ -331,7 +348,13 @@ function parseDocument(
   if (isVersion(input, 2)) {
     const result = v.safeParse(progressDocumentV2Schema, input);
     if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
-    return { kind: 'valid', value: migrateV2ToV3(result.output), migrated: true };
+    return { kind: 'valid', value: migrateV3ToV4(migrateV2ToV3(result.output)), migrated: true };
+  }
+
+  if (isVersion(input, 3)) {
+    const result = v.safeParse(progressDocumentV3Schema, input);
+    if (!result.success || !hasValidRecords(result.output)) return { kind: 'invalid' };
+    return { kind: 'valid', value: migrateV3ToV4(result.output), migrated: true };
   }
 
   const result = v.safeParse(progressDocumentSchema, input);
@@ -357,7 +380,7 @@ function isVersion(input: unknown, version: number): boolean {
 }
 
 function hasValidRecords(
-  document: ProgressDocument | ProgressDocumentV2 | ProgressDocumentV1
+  document: ProgressDocument | ProgressDocumentV3 | ProgressDocumentV2 | ProgressDocumentV1
 ): boolean {
   const itemIds = new Set<string>();
   for (const [itemId, record] of document.items) {
@@ -376,6 +399,14 @@ function hasValidRecords(
     if (lessonIds.has(lessonId)) return false;
     lessonIds.add(lessonId);
   }
+
+  if ('activity' in document) {
+    const days = new Set<number>();
+    for (const [day] of document.activity) {
+      if (days.has(day)) return false;
+      days.add(day);
+    }
+  }
   return true;
 }
 
@@ -389,7 +420,12 @@ function toLearnerProgress(document: ProgressDocument): LearnerProgress {
   for (const [lessonId, completion] of document.lessons) {
     if (knownLessonIds.has(lessonId)) lessons.set(lessonId, completion);
   }
-  return { items, lessons, settings: document.settings };
+  return {
+    items,
+    lessons,
+    settings: document.settings,
+    activity: pruneActivity(new Map(document.activity))
+  };
 }
 
 /** Version 1 had no scheduler state; preserve all existing progress and start unscheduled. */
@@ -402,12 +438,23 @@ function migrateV1ToV2(document: ProgressDocumentV1): ProgressDocumentV2 {
   };
 }
 
-function migrateV2ToV3(document: ProgressDocumentV2): ProgressDocument {
+function migrateV2ToV3(document: ProgressDocumentV2): ProgressDocumentV3 {
+  return {
+    version: 3,
+    items: document.items,
+    lessons: document.lessons,
+    settings: defaultProgressSettings
+  };
+}
+
+/** Earlier versions kept no daily counts, and none can be reconstructed: activity starts empty. */
+function migrateV3ToV4(document: ProgressDocumentV3): ProgressDocument {
   return {
     version: currentProgressVersion,
     items: document.items,
     lessons: document.lessons,
-    settings: defaultProgressSettings
+    settings: document.settings,
+    activity: []
   };
 }
 
@@ -416,7 +463,8 @@ function emptyDocument(): ProgressDocument {
     version: currentProgressVersion,
     items: [],
     lessons: [],
-    settings: defaultProgressSettings
+    settings: defaultProgressSettings,
+    activity: []
   };
 }
 

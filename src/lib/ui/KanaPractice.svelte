@@ -28,6 +28,7 @@
     recordReview,
     type LearnerProgress
   } from '$lib/progress/records';
+  import { recordActivity } from '$lib/progress/activity';
   import { progressContextKey, type ProgressContext } from '$lib/progress/context';
   import { browserSchedulerClock } from '$lib/ui/scheduler-clock';
   import { updateProgress, type ProgressNotice } from '$lib/progress/storage';
@@ -114,21 +115,29 @@
       const result = updateProgress(
         progressContext.storage ?? window.localStorage,
         (progress) =>
-          reviewSession
-            ? recordReview(
-                progress,
-                { itemId, correct, answeredAt },
-                correct ? 'good' : 'again',
-                browserSchedulerClock(answeredAt)
-              )
-            : recordAnswer(progress, { itemId, correct, answeredAt }),
+          recordActivity(
+            reviewSession
+              ? recordReview(
+                  progress,
+                  { itemId, correct, answeredAt },
+                  correct ? 'good' : 'again',
+                  browserSchedulerClock(answeredAt)
+                )
+              : recordAnswer(progress, { itemId, correct, answeredAt }),
+            answeredAt,
+            browserSchedulerClock(answeredAt)
+          ),
         currentProgress
       );
       currentProgress = result.progress;
       progressContext.progress = result.progress;
       if (result.notice !== null) progressNotice = result.notice;
     } catch {
-      currentProgress = recordAnswer(currentProgress, { itemId, correct, answeredAt });
+      currentProgress = recordActivity(
+        recordAnswer(currentProgress, { itemId, correct, answeredAt }),
+        answeredAt,
+        browserSchedulerClock(answeredAt)
+      );
       progressContext.progress = currentProgress;
       progressNotice = 'unavailable';
     }

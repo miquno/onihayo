@@ -349,12 +349,13 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 **User-visible result:** a Progress page with items per stage, accuracy over time, a review forecast, an optional streak, and an N5 readiness indicator.
 **Prerequisites:** 0.15.
 
-- [ ] Statistics derived from recorded progress only (no duplicate counters).
+- [x] Statistics derived from recorded progress only (no duplicate counters).
 - [ ] Items per stage per content type; accuracy over time.
-- [ ] Review forecast for the next 7 days.
+- [x] Review forecast for the next 7 days.
+- [x] Activity heatmap of answers per local day for the last 26 weeks, from bounded daily counts (ADR 0012), with a table as its accessible form.
 - [ ] Optional, calm streak (days practised) that can be hidden; no loss-aversion messaging.
 - [ ] N5 readiness indicator per category with a clear explanation of how it is computed.
-- [ ] Every chart has an equivalent data table.
+- [x] Every chart has an equivalent data table.
 
 **Acceptance criteria:** statistics are consistent with recorded progress; charts are accessible without seeing them.
 **Required tests:** U (all statistics calculations, streaks across time zones), E + A (progress page, table alternatives).

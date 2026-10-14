@@ -61,7 +61,21 @@ const pairs: [foreground: string, background: string, minimum: number][] = [
   ['color-accent', 'color-bg', 3],
   ['color-accent', 'color-surface', 3],
   ['color-accent-hover', 'color-bg', 3],
-  ['color-accent-hover', 'color-surface', 3]
+  ['color-accent-hover', 'color-surface', 3],
+  ['color-stage-learning', 'color-bg', 3],
+  ['color-stage-learning', 'color-surface', 3],
+  ['color-stage-reviewing', 'color-bg', 3],
+  ['color-stage-reviewing', 'color-surface', 3],
+  ['color-stage-mastered', 'color-bg', 3],
+  ['color-stage-mastered', 'color-surface', 3],
+  ['color-heat-1', 'color-bg', 3],
+  ['color-heat-1', 'color-surface', 3],
+  ['color-heat-2', 'color-bg', 3],
+  ['color-heat-2', 'color-surface', 3],
+  ['color-heat-3', 'color-bg', 3],
+  ['color-heat-3', 'color-surface', 3],
+  ['color-heat-4', 'color-bg', 3],
+  ['color-heat-4', 'color-surface', 3]
 ];
 
 describe('contrast', () => {

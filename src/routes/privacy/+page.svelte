@@ -39,9 +39,10 @@
 {/if}
 <p>
   Onihayo saves each item's learning stage, answer counts and dates, review schedule, completed
-  lessons, and your daily review and lesson pace settings. For guests these stay in your browser's
-  local storage; clearing browser data deletes them. For signed-in learners they are stored in the
-  account database. Onihayo does not save the answers you type.
+  lessons, your daily review and lesson pace settings, and how many answers you gave on each of the
+  last 26 weeks' days (for the activity chart on the Progress page; no times of day). For guests
+  these stay in your browser's local storage; clearing browser data deletes them. For signed-in
+  learners they are stored in the account database. Onihayo does not save the answers you type.
 </p>
 <p>
   Settings lets you export progress to a JSON file, import a validated file, or reset saved

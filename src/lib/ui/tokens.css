@@ -15,6 +15,15 @@
   --color-accent-hover: #173d6b;
   --color-on-accent: #ffffff;
   --color-focus: #1f4f8a;
+  /* Learning stages in charts (learning, reviewing, mastered); new items show the empty track. */
+  --color-stage-learning: #a8570c;
+  --color-stage-reviewing: #2d62a8;
+  --color-stage-mastered: #1e7846;
+  /* Activity heatmap levels, few to many answers; days without answers show the empty surface. */
+  --color-heat-1: #6f8fc0;
+  --color-heat-2: #4a72ad;
+  --color-heat-3: #2a5797;
+  --color-heat-4: #163a66;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -45,6 +54,8 @@
   --line-height-heading: 1.2;
   --line-height-kana: 1;
   --font-weight-semibold: 600;
+  /* Small capital labels, e.g. above a statistic. */
+  --letter-spacing-caps: 0.08em;
 
   /* Borders and radius */
   --border-width: 1px;
@@ -62,6 +73,8 @@
   /* Motion */
   --duration-fast: 150ms;
   --duration-base: 250ms;
+  /* Charts that draw themselves in. */
+  --duration-slow: 700ms;
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -77,6 +90,13 @@
     --color-accent-hover: #c2daff;
     --color-on-accent: #15161a;
     --color-focus: #9cc3ff;
+    --color-stage-learning: #f0b35a;
+    --color-stage-reviewing: #8fb8f5;
+    --color-stage-mastered: #7fd3a0;
+    --color-heat-1: #56739e;
+    --color-heat-2: #6d93cc;
+    --color-heat-3: #9cc3ff;
+    --color-heat-4: #d6e6ff;
   }
 }
 
@@ -84,5 +104,6 @@
   :root {
     --duration-fast: 0ms;
     --duration-base: 0ms;
+    --duration-slow: 0ms;
   }
 }

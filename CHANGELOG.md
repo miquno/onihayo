@@ -4,6 +4,8 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Progress: an activity heatmap shows how many answers you gave on each day of the last 26 weeks, with today marked, a summary of the days you practised and your busiest day, and a fixed legend. It is a table underneath, so screen readers read every day. Onihayo now stores one answer count per day for those 26 weeks (progress version 4); earlier progress is kept and its activity starts empty.
+- Progress: a new Progress page in the main navigation shows how many kana and words you have started and mastered, your accuracy per content type, completed lessons, and how many reviews fall due on each of the next seven days. Every chart has a table with the same numbers. An "Up next" card at the top offers the same next step as the home page. The charts draw themselves in gently, and stay still when your system asks for reduced motion. The statistics are worked out from the progress already saved; nothing new is stored.
 - Signed-in learners can explicitly merge guest progress into their account and sync later practice across devices. Account settings now offer JSON data export and confirmed account deletion; all live sessions and synced progress are removed on deletion.
 - Optional accounts can be created and accessed through a one-time email link, with sign-out and recovery. Account sessions expire automatically, and guests can continue learning without an account. The account feature stays disabled until the email provider and production data controls are configured; signing in does not yet sync progress.
 - The home page now puts reviews available within today's limit before the next kana lesson.

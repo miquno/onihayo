@@ -39,4 +39,19 @@ describe('guest progress merge', () => {
       lastSeen: 20
     });
   });
+
+  it('keeps the larger daily answer count, since both sides may have counted the same answers', () => {
+    const account = { ...emptyProgress(), activity: new Map([[100, 4]]) };
+    const guest = {
+      ...emptyProgress(),
+      activity: new Map([
+        [100, 2],
+        [101, 6]
+      ])
+    };
+    expect([...mergeProgress(account, guest).activity]).toEqual([
+      [100, 4],
+      [101, 6]
+    ]);
+  });
 });

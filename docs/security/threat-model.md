@@ -9,16 +9,16 @@ A single SvelteKit server (Node, `adapter-node`) behind a TLS-terminating revers
 
 ## Assets
 
-| Asset                                                        | Today                                                | Later |
-| ------------------------------------------------------------ | ---------------------------------------------------- | ----- |
-| Integrity of the served application (HTML/JS/CSS)            | ✅                                                   | ✅    |
-| Integrity of learning content (wrong content harms learners) | ✅                                                   | ✅    |
-| Availability of the site                                     | ✅                                                   | ✅    |
-| Guest progress in the browser                                | Active; item outcomes and completions stored locally | 0.6   |
-| Account sessions and email addresses                         | Available when accounts are enabled                  | 0.9   |
-| Synced learner progress                                      | Available when accounts are enabled                  | 0.9   |
-| Build and deploy pipeline, repository, secrets               | ✅                                                   | ✅    |
-| Maintainer and learner privacy                               | ✅                                                   | ✅    |
+| Asset                                                        | Today                                                                                  | Later |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----- |
+| Integrity of the served application (HTML/JS/CSS)            | ✅                                                                                     | ✅    |
+| Integrity of learning content (wrong content harms learners) | ✅                                                                                     | ✅    |
+| Availability of the site                                     | ✅                                                                                     | ✅    |
+| Guest progress in the browser                                | Active; item outcomes, completions, and 26 weeks of daily answer counts stored locally | 0.6   |
+| Account sessions and email addresses                         | Available when accounts are enabled                                                    | 0.9   |
+| Synced learner progress                                      | Available when accounts are enabled                                                    | 0.9   |
+| Build and deploy pipeline, repository, secrets               | ✅                                                                                     | ✅    |
+| Maintainer and learner privacy                               | ✅                                                                                     | ✅    |
 
 ## Actors
 
