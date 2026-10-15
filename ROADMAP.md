@@ -1,19 +1,20 @@
 # Onihayo Roadmap
 
-Onihayo's first product goal: **learn Japanese from absolute zero to JLPT N5 in one structured place**, so that a learner never has to wonder what to learn next.
+Onihayo's first release goal is a complete **N5-oriented learning core**: kana, vocabulary, kanji, grammar, reading, practice, and reviews. Listening follows in a later release; the core release does not claim full JLPT exam readiness without it.
 
 ```
-Zero → Kana → Vocabulary → Kanji → Grammar → Reading / Listening → JLPT N5 readiness
+Zero → Kana → Vocabulary → Kanji → Grammar → Reading → N5 learning core
 ```
 
 ## How this roadmap works
 
 - Milestones are delivered in order. Each one leaves a working, deployable application and builds on the previous one.
-- The first public production launch is the 1.0 zero-to-N5 release. Earlier milestones are developed and checked locally or in private staging; being deployable does not mean going live.
+- Finish and verify the learning core locally first. Hosting decisions, paid resources, private staging, and public deployment come last in 1.0; they do not block content development. Listening is deferred beyond 1.0.
 - Every checklist item is one pull request (or a small, named series) that can be implemented and reviewed on its own. Items are ordered: the first unchecked item of the current milestone is the next task.
 - An item is ticked only when its code, tests, and docs are merged and its acceptance criteria hold.
 - Scope is JLPT N5. The data model may leave room for later levels, but no N4–N1 features are built.
 - Changing the order or scope of a milestone is itself a reviewed change to this file.
+- Owner reprioritization (2026-10-15): proceed with N5 vocabulary after the implemented 0.9 account foundation; defer hosting to 1.0 and listening beyond 1.0. The outstanding 0.3 speaker review is deferred, not completed. Keep content review as a pre-release requirement.
 
 Legend for "Required tests": **U** unit (Vitest), **I** integration (real PostgreSQL, from 0.9), **E** end-to-end/browser (Playwright), **A** accessibility (axe + keyboard), **D** dataset validation.
 
@@ -219,7 +220,8 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [x] Progress sync: server as source of truth when signed in; explicit upload/merge of guest progress on sign-up.
 - [x] Per-user authorization in every data-access function, with cross-user integration tests.
 - [x] Account deletion (immediate, cascading, all sessions revoked) and JSON data export.
-- [ ] Deployment preparation in private staging: managed PostgreSQL, migration release step, backups with point-in-time recovery; privacy page, threat model, web security table, and hosting doc updated; re-review the `cookie` audit exception. Public production launch remains in 1.0.
+
+Operational activation is deferred to 1.0. The implemented account foundation is sufficient for subsequent content milestones; accounts remain disabled until deployment controls are verified.
 
 **Acceptance criteria:** guests are unaffected; no endpoint lets one user read or change another user's data; responses do not reveal whether an email is registered; deleting an account removes all its rows.
 **Required tests:** U (validation, merge logic), I (auth flows, session expiry/rotation, rate limits, cross-user isolation, deletion cascade, migrations apply cleanly to an empty database), E + A (sign up → sync → sign in elsewhere → delete).
@@ -230,11 +232,11 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 ## 0.10 — JLPT N5 vocabulary
 
-**Goal:** the full N5 vocabulary, taught in small themed lessons and reviewed through the SRS.
+**Goal:** the complete Onihayo-curated N5-oriented vocabulary inventory, taught in small themed lessons and reviewed through the SRS. This is a versioned curriculum selection, not an official or exhaustive JLPT word list.
 **User-visible result:** complete N5 vocabulary lessons, a searchable word list, and word pages.
-**Prerequisites:** 0.9 (so progress on hundreds of items is protected), 0.7.
+**Prerequisites:** implemented 0.9 account foundation and 0.7. Guest progress with JSON export/import supports local development; hosted sync is not a prerequisite.
 
-- [ ] ADR: source and licence of the N5 word list (verified community list or Onihayo-curated list), recorded in the source register.
+- [ ] ADR: source and licence of the N5 word list (Onihayo-curated selection with JMdict lexical data; ADR 0013 prepared, pending merge), recorded in the source register.
 - [ ] N5 word dataset imported/selected with the 0.7 pipeline; every word tagged with its N5 list source.
 - [ ] Themed lessons of at most 10 words, ordered by usefulness; kanji forms shown as optional until kanji are taught.
 - [ ] Word search by kana, romaji, and English meaning (server-rendered results, works without JavaScript).
@@ -323,31 +325,11 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 
 ---
 
-## 0.15 — Listening exercises
-
-**Goal:** listening practice from single kana to short dialogues.
-**User-visible result:** kana listening, word listening, and short dialogues with transcripts.
-**Prerequisites:** 0.14.
-
-- [ ] ADR: audio source and licence (recordings, Commons, TTS, or browser speech synthesis); register entry.
-- [ ] Audio files self-hosted and served with long cache lifetimes; CSP `media-src 'self'` unchanged.
-- [ ] Kana listening mode (hear a sound → choose the kana).
-- [ ] Word listening mode.
-- [ ] Short dialogues with always-available transcripts and comprehension questions.
-- [ ] Keyboard-accessible playback controls; no autoplay.
-
-**Acceptance criteria:** every audio exercise has a transcript alternative; no third-party audio origins.
-**Required tests:** D (every audio file exists and is referenced), U (listening mode), E + A (listening journey without autoplay).
-**Security/privacy:** no new origins; if TTS is generated at build time, the engine's terms are recorded.
-**Content/licensing:** audio licence and attribution documented.
-
----
-
 ## 0.16 — Progress and statistics
 
 **Goal:** calm, honest insight into progress and readiness.
 **User-visible result:** a Progress page with items per stage, accuracy over time, a review forecast, an optional streak, and an N5 readiness indicator.
-**Prerequisites:** 0.15.
+**Prerequisites:** 0.14. Listening (reserved milestone 0.15) is deferred beyond 1.0.
 
 - [x] Statistics derived from recorded progress only (no duplicate counters).
 - [ ] Items per stage per content type; accuracy over time.
@@ -374,30 +356,53 @@ Legend for "Required tests": **U** unit (Vitest), **I** integration (real Postgr
 - [ ] Manual screen-reader audit (NVDA + Firefox, VoiceOver + Safari) of every journey; findings fixed.
 - [ ] Performance budgets (JavaScript per route, Largest Contentful Paint on a mid-range phone) measured and enforced in CI.
 - [ ] Cross-browser E2E for critical journeys in Firefox and WebKit.
-- [ ] Backup restore drill performed and documented.
 - [ ] Evaluate Trusted Types (`require-trusted-types-for 'script'`) and CSP violation reporting; adopt or record why not.
 - [ ] Dependency review: remove unused packages, update deliberately.
 
-**Acceptance criteria:** no open high-severity findings; all budgets met; restore drill succeeded.
+**Acceptance criteria:** no open high-severity findings; all application performance budgets met. Environment-specific checks and the backup restore drill are completed during 1.0 hosting preparation.
 **Required tests:** E (multi-browser), A (full route coverage), performance checks in CI.
 **Security/privacy:** full threat-model review.
 **Content/licensing:** full attribution audit of the Licences page against `NOTICE` and the source register.
 
 ---
 
-## 1.0 — Zero-to-N5 release
+## 1.0 — Hosting and N5 core release
 
-**Goal:** a complete, reviewed path from zero to JLPT N5.
-**User-visible result:** the public 1.0 release.
+**Goal:** publish the completed, reviewed N5 learning core after local feature development and hardening. Listening remains future work.
+**User-visible result:** the public 1.0 core release, clearly describing its coverage and the absence of listening exercises.
 **Prerequisites:** 0.17.
 
 - [ ] All N5 content complete and reviewed by a fluent speaker.
+- [ ] Deployment preparation in private staging: managed PostgreSQL, migration release step, backups with point-in-time recovery; privacy page, threat model, web security table, and hosting doc updated; re-review the `cookie` audit exception. Use the existing private-staging runbook; provision only after owner approval.
+- [ ] Backup restore drill performed and documented, including deletion reconciliation.
 - [ ] Hosting ADR chooses the provider and region; first deployment to a public HTTPS domain follows `docs/deployment/hosting.md` and the first-deployment runbook (**owner approval required**).
 - [ ] Release process: version tags, changelog release section, deploy and rollback runbook.
 - [ ] Final privacy notice and Licences page.
 - [ ] Launch checklist executed (headers, backups, monitoring, rate limits, error pages).
 
-**Acceptance criteria:** a new learner can follow the path from the home page to N5 readiness without leaving Onihayo; the public site uses HTTPS, redirects HTTP to HTTPS, and serves the documented security headers on HTML and static files.
+**Acceptance criteria:** a new learner can follow the complete core path from the home page through kana, selected vocabulary, kanji, grammar, and reading without leaving Onihayo; coverage limitations and deferred listening are explicit; the public site uses HTTPS, redirects HTTP to HTTPS, and serves the documented security headers on HTML and static files.
 **Required tests:** full suite green; manual release checklist.
 **Security/privacy:** final threat-model sign-off.
 **Content/licensing:** every source attributed; licences verified.
+
+---
+
+## Future — Listening (reserved milestone 0.15; after 1.0)
+
+Deferred by the owner on 2026-10-15. None of these tasks block the learning core, statistics, hardening, or hosting. Reassess sequencing before implementation.
+
+**Goal:** listening practice from single kana to short dialogues.
+**User-visible result:** kana listening, word listening, and short dialogues with transcripts.
+**Prerequisites:** 1.0 core release; revisit audio sourcing and scope then.
+
+- [ ] ADR: audio source and licence (recordings, Commons, TTS, or browser speech synthesis); register entry.
+- [ ] Audio files self-hosted and served with long cache lifetimes; CSP `media-src 'self'` unchanged.
+- [ ] Kana listening mode (hear a sound → choose the kana).
+- [ ] Word listening mode.
+- [ ] Short dialogues with always-available transcripts and comprehension questions.
+- [ ] Keyboard-accessible playback controls; no autoplay.
+
+**Acceptance criteria:** every audio exercise has a transcript alternative; no third-party audio origins.
+**Required tests:** D (every audio file exists and is referenced), U (listening mode), E + A (listening journey without autoplay).
+**Security/privacy:** no new origins; if TTS is generated at build time, the engine's terms are recorded.
+**Content/licensing:** audio licence and attribution documented.

@@ -4,7 +4,8 @@
 
 Private account staging follows [the staging preparation runbook](private-staging.md).
 Its infrastructure, provider review, backup retention and activation checks remain pending;
-repository preparation alone does not complete the 0.9 item.
+repository preparation alone does not complete deployment preparation. This operational work
+is deferred to 1.0, after the learning core; it does not block N5 content development.
 
 ## Target architecture
 

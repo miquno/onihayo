@@ -18,6 +18,7 @@ Write an ADR when a change adds a runtime dependency with lasting impact, change
 | [0010](0010-review-scheduling.md)                  | Review scheduling algorithm and rating model               | Accepted                                |
 | [0011](0011-authentication-and-accounts.md)        | Optional accounts and authentication design                | Accepted — implementation begins in 0.9 |
 | [0012](0012-bounded-daily-activity.md)             | Bounded daily answer counts for the activity heatmap       | Accepted                                |
+| [0013](0013-n5-vocabulary-selection.md)            | Onihayo-curated N5 vocabulary with JMdict lexical data     | Accepted                                |
 
 ## Template
 
