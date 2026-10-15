@@ -17,6 +17,7 @@ Write an ADR when a change adds a runtime dependency with lasting impact, change
 | [0009](0009-validation-library.md)                 | Valibot as the single validation library                   | Accepted                                |
 | [0010](0010-review-scheduling.md)                  | Review scheduling algorithm and rating model               | Accepted                                |
 | [0011](0011-authentication-and-accounts.md)        | Optional accounts and authentication design                | Accepted — implementation begins in 0.9 |
+| [0012](0012-bounded-daily-activity.md)             | Bounded daily answer counts for the activity heatmap       | Accepted                                |
 
 ## Template
 

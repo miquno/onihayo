@@ -15,6 +15,7 @@ export const primaryNavigation = [
   { route: '/katakana', label: 'Katakana' },
   { route: '/words', label: 'Vocabulary' },
   { route: '/reviews', label: 'Reviews' },
+  { route: '/progress', label: 'Progress' },
   { route: '/quiz', label: 'Kana quiz' },
   { route: '/about', label: 'About' }
 ] as const satisfies readonly NavigationEntry[];

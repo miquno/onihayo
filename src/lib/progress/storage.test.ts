@@ -140,7 +140,7 @@ describe('readProgress', () => {
     });
   });
 
-  it('migrates version 2 schedules and lessons to version 3 defaults', () => {
+  it('migrates version 2 schedules and lessons to the current version with default settings', () => {
     const storage = new MemoryStorage();
     storage.values.set(
       progressStorageKey,
@@ -181,7 +181,7 @@ describe('readProgress', () => {
     });
     expect(result.progress.settings).toEqual({ dailyReviewCap: 20, newLessonsPerDay: 1 });
     const migrated: unknown = JSON.parse(storage.values.get(progressStorageKey) ?? 'null');
-    expect(migrated).toMatchObject({ version: 3 });
+    expect(migrated).toMatchObject({ version: currentProgressVersion, activity: [] });
   });
 
   it('keeps migrated progress in memory when writing the migration fails', () => {
@@ -262,7 +262,8 @@ describe('account document merge', () => {
         ]
       ],
       lessons: [['future.lesson', { completedAt: 10 }]],
-      settings: { dailyReviewCap: 20, newLessonsPerDay: 1 }
+      settings: { dailyReviewCap: 20, newLessonsPerDay: 1 },
+      activity: []
     });
     const merged = mergeProgressDocuments(account, exportProgress(progressWithKnownRecord()));
     expect(merged).toContain('future.item');
@@ -426,5 +427,89 @@ describe('progress export, import, and reset', () => {
     storage.values.set(rejectedProgressStorageKey, '{damaged');
     expect(resetProgress(storage)).toBe(true);
     expect(storage.values.size).toBe(0);
+  });
+});
+
+describe('daily activity (version 4)', () => {
+  const settings = { dailyReviewCap: 10, newLessonsPerDay: 2 };
+  const document = (activity: unknown) =>
+    JSON.stringify({ version: currentProgressVersion, items: [], lessons: [], settings, activity });
+
+  it('migrates a version 3 document with its settings and an empty activity', () => {
+    const storage = new MemoryStorage();
+    storage.values.set(
+      progressStorageKey,
+      JSON.stringify({ version: 3, items: [], lessons: [], settings })
+    );
+    const result = readProgress(storage);
+    expect(result.notice).toBeNull();
+    expect(result.progress.settings).toEqual(settings);
+    expect(result.progress.activity.size).toBe(0);
+    expect(JSON.parse(storage.values.get(progressStorageKey) ?? 'null')).toEqual({
+      version: currentProgressVersion,
+      items: [],
+      lessons: [],
+      settings,
+      activity: []
+    });
+  });
+
+  it('round-trips daily counts through export and import', () => {
+    const progress = {
+      ...emptyProgress(),
+      activity: new Map([
+        [20_000, 3],
+        [20_002, 41]
+      ])
+    };
+    const storage = new MemoryStorage();
+    const result = importProgress(storage, exportProgress(progress));
+    expect(result.imported && [...result.progress.activity]).toEqual([
+      [20_000, 3],
+      [20_002, 41]
+    ]);
+  });
+
+  it.each([
+    [
+      'a day listed twice',
+      [
+        [20_000, 1],
+        [20_000, 2]
+      ]
+    ],
+    ['a zero count', [[20_000, 0]]],
+    ['a fractional day', [[20_000.5, 1]]],
+    ['an implausible count', [[20_000, 100_001]]],
+    ['more days than are kept', Array.from({ length: 183 }, (_, day) => [day, 1])]
+  ])('rejects %s', (_, activity) => {
+    expect(parseProgress(document(activity))).toBeNull();
+  });
+
+  it('drops days that lie further back than the kept window', () => {
+    const progress = parseProgress(
+      document([
+        [20_000, 5],
+        [20_181, 1],
+        [20_182, 2]
+      ])
+    );
+    expect(progress === null ? null : [...progress.activity]).toEqual([
+      [20_181, 1],
+      [20_182, 2]
+    ]);
+  });
+
+  it('keeps the larger count of a day when merging guest and account progress', () => {
+    const account = document([[20_000, 5]]);
+    const guest = document([
+      [20_000, 3],
+      [20_001, 7]
+    ]);
+    const merged = mergeProgressDocuments(account, guest);
+    expect(merged === null ? null : [...(parseProgress(merged)?.activity ?? [])]).toEqual([
+      [20_000, 5],
+      [20_001, 7]
+    ]);
   });
 });
