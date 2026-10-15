@@ -2,6 +2,10 @@
 
 **Status: nothing is deployed yet.** This document describes how Onihayo is meant to be hosted safely. The first public deployment is a roadmap item in the 1.0 zero-to-N5 release and needs the owner's approval, a chosen provider, and a domain. The provider options and a proposal are in [ADR 0007](../decisions/0007-hosting-provider-and-region.md) (Proposed); the steps are in the [first deployment runbook](first-deployment.md). It also updates the Privacy page (`src/routes/privacy/+page.svelte`) to name the provider and say what its infrastructure logs and for how long, replacing the "not publicly hosted yet" paragraph.
 
+Private account staging follows [the staging preparation runbook](private-staging.md).
+Its infrastructure, provider review, backup retention and activation checks remain pending;
+repository preparation alone does not complete the 0.9 item.
+
 ## Target architecture
 
 ```
