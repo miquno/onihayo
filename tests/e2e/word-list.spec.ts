@@ -84,7 +84,8 @@ test.describe('word list', () => {
 });
 
 test.describe('word list without JavaScript', () => {
-  test.use({ javaScriptEnabled: false });
+  // Playwright cannot tell when the page's settle animation ends without JavaScript.
+  test.use({ javaScriptEnabled: false, reducedMotion: 'reduce' });
 
   test('lists all words and explains that the learned filters need JavaScript', async ({
     page

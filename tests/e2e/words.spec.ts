@@ -94,7 +94,8 @@ test.describe('word search', () => {
 });
 
 test.describe('word search without JavaScript', () => {
-  test.use({ javaScriptEnabled: false });
+  // Playwright cannot tell when the page's settle animation ends without JavaScript.
+  test.use({ javaScriptEnabled: false, reducedMotion: 'reduce' });
 
   test('renders results on the server', async ({ page }) => {
     await page.goto('/words/search');

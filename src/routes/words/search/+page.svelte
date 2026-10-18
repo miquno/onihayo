@@ -4,6 +4,7 @@
   import { pageTitle } from '$lib/site';
   import Button from '$lib/ui/Button.svelte';
   import Card from '$lib/ui/Card.svelte';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -28,6 +29,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="検索" label="Search" />
 <h1>Word search</h1>
 <p class="lead">Find a word by its kana, its romaji, its kanji, or its English meaning.</p>
 
