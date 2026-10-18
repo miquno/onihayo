@@ -3,6 +3,7 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import ActivityHeatmap from './ActivityHeatmap.svelte';
 import Button from './Button.svelte';
+import BrushArt from './BrushArt.svelte';
 import Card from './Card.svelte';
 import ForecastChart from './ForecastChart.svelte';
 import { kanaChart } from '$lib/content/chart';
@@ -14,6 +15,7 @@ import { withoutHydrationMarkers } from '$lib/testing/html';
 import KanaCharts from './KanaCharts.svelte';
 import KanaLesson from './KanaLesson.svelte';
 import KanaPractice from './KanaPractice.svelte';
+import Kicker from './Kicker.svelte';
 import LessonList from './LessonList.svelte';
 import LessonPractice from './LessonPractice.svelte';
 import LinkButton from './LinkButton.svelte';
@@ -207,6 +209,22 @@ describe('ActivityHeatmap', () => {
   });
 });
 
+describe('BrushArt', () => {
+  it('is decoration hidden from assistive technology', () => {
+    const { body } = render(BrushArt);
+    expect(attributes(body, 'div').get('aria-hidden')).toBe('true');
+    expect(attributes(body, 'svg').get('focusable')).toBe('false');
+  });
+});
+
+describe('Kicker', () => {
+  it('shows a Japanese word and an English label as an ornament hidden from assistive technology', () => {
+    const { body } = render(Kicker, { props: { japanese: '復習', label: 'Review' } });
+    expect(attributes(body, 'div').get('aria-hidden')).toBe('true');
+    expect(body).toMatch(/<span lang="ja"[^>]*>復習<\/span>Review/u);
+  });
+});
+
 describe('VisuallyHidden', () => {
   it('keeps its content in the markup for screen readers', () => {
     const { body } = render(VisuallyHidden, { props: { children: text('(opens a new page)') } });
@@ -252,6 +270,8 @@ describe('all components', () => {
       render(Card, { props: { children: text('c') } }).body,
       render(ProgressBar, { props: { label: 'd', value: 30 } }).body,
       render(VisuallyHidden, { props: { children: text('e') } }).body,
+      render(Kicker, { props: { japanese: 'ことば', label: 'Words' } }).body,
+      render(BrushArt).body,
       render(KanaPractice, {
         props: {
           items: [practiceItem('f', 'ア', 'a')],

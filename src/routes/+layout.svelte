@@ -2,7 +2,7 @@
   import { setContext } from 'svelte';
   import '$lib/ui/tokens.css';
   import '../app.css';
-  import { resolve } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import { footerNavigation, navigationCurrent, primaryNavigation, siteName } from '$lib/site';
   import { emptyProgress } from '$lib/progress/records';
@@ -85,7 +85,9 @@
 <header class="site-header">
   <div class="container header-inner">
     <!-- Not a heading: every page has exactly one h1 of its own. -->
-    <a class="site-name" href={resolve('/')}>{siteName}</a>
+    <a class="site-name" href={resolve('/')}
+      ><img src={asset('/favicon.svg')} alt="" width="32" height="32" />{siteName}</a
+    >
     <nav aria-label="Primary">
       <ul>
         {#each primaryNavigation as item (item.route)}
@@ -109,6 +111,22 @@
 <main id="main" class="container" tabindex="-1">
   {@render children()}
 </main>
+
+<!-- Seigaiha waves: decoration only. -->
+<svg class="waves" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="seigaiha-fan">
+      <circle r="24" /><circle r="19" /><circle r="14" /><circle r="9" /><circle r="4" />
+    </g>
+    <pattern id="seigaiha" width="48" height="24" patternUnits="userSpaceOnUse">
+      <use href="#seigaiha-fan" x="0" y="0" /><use href="#seigaiha-fan" x="48" y="0" />
+      <use href="#seigaiha-fan" x="24" y="12" />
+      <use href="#seigaiha-fan" x="0" y="24" /><use href="#seigaiha-fan" x="48" y="24" />
+      <use href="#seigaiha-fan" x="24" y="36" />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#seigaiha)" />
+</svg>
 
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -157,7 +175,7 @@
   }
 
   .site-header {
-    border-bottom: var(--border-width) solid var(--color-border);
+    border-bottom: var(--border-width) solid var(--color-line);
   }
 
   .header-inner {
@@ -170,10 +188,25 @@
   }
 
   .site-name {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
     color: var(--color-text);
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.02em;
     text-decoration: none;
+  }
+
+  .site-name img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-md);
+    transition: transform var(--duration-base) var(--easing-gentle);
+  }
+
+  .site-name:hover img {
+    transform: rotate(-8deg) scale(1.06);
   }
 
   nav ul {
@@ -185,15 +218,59 @@
     list-style: none;
   }
 
+  nav a {
+    color: var(--color-text-muted);
+    text-decoration-color: transparent;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: var(--space-2);
+    transition:
+      color var(--duration-fast) var(--easing-standard),
+      text-decoration-color var(--duration-base) var(--easing-gentle);
+  }
+
+  nav a:hover {
+    color: var(--color-text);
+    text-decoration-color: currentColor;
+  }
+
+  /* The current page keeps a thick accent underline, so it never relies on color alone. */
   nav a[aria-current] {
     color: var(--color-text);
     font-weight: var(--font-weight-semibold);
+    text-decoration-color: var(--color-accent);
     text-decoration-thickness: var(--focus-ring-width);
-    text-underline-offset: var(--space-1);
   }
 
   main {
     padding-block: var(--space-7);
+  }
+
+  /* Each page settles in gently. Transforms only, so text never loses contrast. */
+  main > :global(*) {
+    animation: settle var(--duration-base) var(--easing-gentle) both;
+  }
+
+  @keyframes settle {
+    from {
+      transform: translateY(var(--space-3));
+    }
+  }
+
+  .waves {
+    display: block;
+    width: 100%;
+    height: var(--space-8);
+    margin-top: var(--space-6);
+    color: var(--color-line);
+    /* Only the alpha of a mask counts; any opaque color fades the waves in. */
+    mask-image: linear-gradient(to bottom, transparent, var(--color-text) 75%);
+  }
+
+  /* The fans are drawn through <use> inside a pattern, so they take these values by inheritance. */
+  .waves use {
+    fill: var(--color-bg);
+    stroke: currentColor;
+    stroke-width: var(--border-width);
   }
 
   .progress-notice {
@@ -205,7 +282,6 @@
   }
 
   .site-footer {
-    border-top: var(--border-width) solid var(--color-border);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
   }

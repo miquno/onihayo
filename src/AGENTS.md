@@ -4,7 +4,7 @@ The SvelteKit application. Read `ARCHITECTURE.md` for the full layer map; this f
 
 ## Map
 
-- `app.html` — HTML shell. `lang="en"`; no inline scripts or styles (CSP forbids them).
+- `app.html` — HTML shell. `lang="en"`; no inline scripts or styles (CSP forbids them). It loads one same-origin script, `static/appearance.js`, which applies the saved color scheme and accent (`lib/ui/appearance.ts`) before the first paint.
 - `app.css` — base element styles imported by the root layout after the design tokens. Uses tokens only; no raw colors or sizes.
 - `app.d.ts` — SvelteKit `App` namespace types.
 - `hooks.server.ts` — applies `securityHeaders` to every response SvelteKit renders and turns unexpected errors into privacy-safe error IDs. Owned by `CODEOWNERS`.

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import LinkButton from '$lib/ui/LinkButton.svelte';
   import type { PageProps } from './$types';
 
@@ -15,6 +16,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="ことば" label="Words" />
 <h1>Vocabulary</h1>
 <p class="lead">
   Learn a first set of 40 everyday words in kana. Each lesson includes a short note, word details,

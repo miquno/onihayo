@@ -2,6 +2,8 @@
   import { getContext, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
+  import BrushArt from '$lib/ui/BrushArt.svelte';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import LinkButton from '$lib/ui/LinkButton.svelte';
   import { progressContextKey, type ProgressContext } from '$lib/progress/context';
   import { nextLearningStep, nextLessonToLearn } from '$lib/progress/next-step';
@@ -35,8 +37,12 @@
   />
 </svelte:head>
 
-<h1>Onihayo</h1>
-<p class="lead">Learn Japanese from absolute zero to JLPT N5 in one structured place.</p>
+<div class="hero">
+  <BrushArt />
+  <Kicker japanese="ようこそ" label="Welcome" />
+  <h1>Onihayo</h1>
+  <p class="lead">Learn Japanese from absolute zero to JLPT N5 in one structured place.</p>
+</div>
 <p>
   New to Japanese? Start with <span lang="ja">ひらがな</span> (hiragana), the first Japanese script: short
   lessons, one row of characters at a time, each followed by its own practice.
@@ -74,9 +80,16 @@
 </p>
 
 <style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    padding-block: var(--space-5) var(--space-3);
+  }
+
   h1 {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-display);
     line-height: var(--line-height-heading);
+    letter-spacing: -0.02em;
     margin: 0 0 var(--space-4);
   }
 

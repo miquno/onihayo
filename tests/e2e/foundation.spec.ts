@@ -15,7 +15,7 @@ test.describe('home page', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.getByRole('main')).toBeVisible();
     await expect(page.getByRole('heading', { level: 1, name: 'Onihayo' })).toBeVisible();
-    await expect(page.locator('[lang="ja"]')).toHaveText('ひらがな');
+    await expect(page.locator('[lang="ja"]', { hasText: 'ひらがな' })).toBeVisible();
 
     // CSP violations surface as console errors, so this also guards the policy.
     expect(errors).toEqual([]);

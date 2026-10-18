@@ -17,7 +17,8 @@
   .card {
     padding: var(--space-5);
     background: var(--color-surface);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
+    /* A hairline is enough: a card groups content and is not a control (WCAG 1.4.11). */
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-lg);
   }
 </style>

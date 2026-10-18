@@ -6,6 +6,7 @@
   import type { PracticeLength } from '$lib/learning/length';
   import type { QuestionModeId } from '$lib/learning/modes';
   import { pageTitle } from '$lib/site';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import Button from '$lib/ui/Button.svelte';
   import VisuallyHidden from '$lib/ui/VisuallyHidden.svelte';
   import type { PageProps } from './$types';
@@ -81,6 +82,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="練習" label="Practice" />
 <h1>Kana quiz</h1>
 <p class="lead">Pick how you want to practise and which rows, from hiragana, katakana, or both.</p>
 <p>

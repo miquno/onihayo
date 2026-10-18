@@ -46,8 +46,15 @@ describe('privacy page', () => {
     expect(body).toMatch(/your\s+raw IP address/u);
   });
 
+  it('says the appearance choice stays in the browser, apart from progress', () => {
+    expect(body).toMatch(
+      /color scheme or accent color in Settings, that choice is kept in this\s+browser's\s+local storage, separate from your progress/u
+    );
+    expect(body).toMatch(/not synced to an account,\s+and not part of a progress export/u);
+  });
+
   it('gives a machine-readable date for the last update', () => {
-    expect(body).toContain('<time datetime="2026-10-12">12 October 2026</time>');
+    expect(body).toContain('<time datetime="2026-10-18">18 October 2026</time>');
   });
 
   it('explains that source links only contact third parties when followed', () => {

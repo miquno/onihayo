@@ -1,29 +1,29 @@
 /*
  * Design tokens. Every color, spacing, type, radius, focus, and motion value
- * used in the application comes from here. Colors are 6-digit hex so that
- * `tokens.test.ts` can check their contrast pairs against WCAG AA.
+ * used in the application comes from here. Colors are 6-digit hex pairs in
+ * `light-dark(light, dark)` so that `tokens.test.ts` can check their contrast
+ * pairs against WCAG AA in both color schemes.
+ *
+ * The look is "Sakura": kinari paper and sumi ink with one accent color.
+ * The color scheme follows the system unless `data-theme` on <html> picks one;
+ * the accent is Sakura unless `data-accent` picks another (see `appearance.ts`).
  */
 :root {
-  /* Colors (light) */
-  --color-bg: #fbfaf7;
-  --color-surface: #ffffff;
-  --color-text: #1b1b1f;
-  --color-text-muted: #4a4a55;
-  --color-border: #85858f;
-  --color-link: #1f4f8a;
-  --color-accent: #1f4f8a;
-  --color-accent-hover: #173d6b;
-  --color-on-accent: #ffffff;
-  --color-focus: #1f4f8a;
+  color-scheme: light dark;
+
+  /* Colors that do not change with the accent */
+  --color-bg: light-dark(#f7f4ed, #121210);
+  --color-surface: light-dark(#fdfbf7, #1c1b18);
+  --color-text: light-dark(#1c1b18, #ece8de);
+  --color-text-muted: light-dark(#5c584f, #aaa59a);
+  --color-border: light-dark(#8a8478, #757067);
   /* Learning stages in charts (learning, reviewing, mastered); new items show the empty track. */
-  --color-stage-learning: #a8570c;
-  --color-stage-reviewing: #2d62a8;
-  --color-stage-mastered: #1e7846;
-  /* Activity heatmap levels, few to many answers; days without answers show the empty surface. */
-  --color-heat-1: #6f8fc0;
-  --color-heat-2: #4a72ad;
-  --color-heat-3: #2a5797;
-  --color-heat-4: #163a66;
+  --color-stage-learning: light-dark(#a35a00, #f0b35a);
+  --color-stage-reviewing: light-dark(#2d5c9e, #8fb8f5);
+  --color-stage-mastered: light-dark(#3d7330, #8fcf7f);
+  /* Decoration only (hairlines, ornaments, petals): never the only way to see information. */
+  --color-line: light-dark(#e3ddd0, #2c2b27);
+  --color-petal: light-dark(#efb4c4, #e597ad);
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -43,11 +43,17 @@
   --font-family-ja:
     'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Noto Sans CJK JP',
     'Yu Gothic UI', 'Yu Gothic', Meiryo, system-ui, sans-serif;
+  /* Brush-like system Mincho for ornaments only. Learning content keeps the Gothic forms above,
+     whose strokes match handwriting more closely for beginners. */
+  --font-family-mincho:
+    'Hiragino Mincho ProN', 'Yu Mincho', YuMincho, 'Noto Serif JP', 'Noto Serif CJK JP', serif;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
   --font-size-2xl: 2.25rem;
+  /* The home page title. */
+  --font-size-display: clamp(2.5rem, 1.75rem + 4vw, 4rem);
   /* A single kana or kanji shown on its own, e.g. in a lesson or practice card. */
   --font-size-kana: clamp(4rem, 3rem + 6vw, 7rem);
   --line-height-body: 1.6;
@@ -56,48 +62,116 @@
   --font-weight-semibold: 600;
   /* Small capital labels, e.g. above a statistic. */
   --letter-spacing-caps: 0.08em;
+  /* Japanese ornament labels. */
+  --letter-spacing-ornament: 0.3em;
 
   /* Borders and radius */
   --border-width: 1px;
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
   --radius-full: 9999px;
 
   /* States */
   --opacity-disabled: 0.55;
+  /* Brush ornaments behind text stay faint, so they never compete with it. */
+  --opacity-ornament: 0.2;
 
   /* Focus ring */
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
 
-  /* Motion */
+  /* Motion. Every animation finishes within five seconds and never loops (WCAG 2.2.2). */
   --duration-fast: 150ms;
   --duration-base: 250ms;
   /* Charts that draw themselves in. */
   --duration-slow: 700ms;
+  /* The ensō brush circle on the home page. */
+  --duration-ink: 1600ms;
+  /* One fall of a sakura petal on the home page. */
+  --duration-petal: 3800ms;
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-gentle: cubic-bezier(0.22, 0.8, 0.24, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #15161a;
-    --color-surface: #202127;
-    --color-text: #ececf1;
-    --color-text-muted: #b9b9c6;
-    --color-border: #7a7a88;
-    --color-link: #9cc3ff;
-    --color-accent: #9cc3ff;
-    --color-accent-hover: #c2daff;
-    --color-on-accent: #15161a;
-    --color-focus: #9cc3ff;
-    --color-stage-learning: #f0b35a;
-    --color-stage-reviewing: #8fb8f5;
-    --color-stage-mastered: #7fd3a0;
-    --color-heat-1: #56739e;
-    --color-heat-2: #6d93cc;
-    --color-heat-3: #9cc3ff;
-    --color-heat-4: #d6e6ff;
-  }
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/*
+ * Accent colors. Each block sets the same tokens. The selectors match any element,
+ * so a swatch with its own `data-accent` shows that accent wherever it is.
+ * `color-accent` is also used as text (links), so it meets 4.5:1.
+ */
+:root,
+[data-accent='sakura'] {
+  --color-accent: light-dark(#9c3d5e, #f2a9bd);
+  --color-accent-hover: light-dark(#7d2e4a, #f8cbd7);
+  --color-on-accent: light-dark(#ffffff, #121210);
+  --color-accent-soft: light-dark(#f6e1e7, #3a2530);
+  --color-link: light-dark(#9c3d5e, #f2a9bd);
+  --color-focus: light-dark(#9c3d5e, #f2a9bd);
+  /* Activity heatmap levels, few to many answers; days without answers show the empty surface. */
+  --color-heat-1: light-dark(#c4708c, #a05a70);
+  --color-heat-2: light-dark(#a8506f, #c27389);
+  --color-heat-3: light-dark(#87385a, #e597ad);
+  --color-heat-4: light-dark(#5e2238, #f8cbd7);
+}
+
+[data-accent='ai'] {
+  --color-accent: light-dark(#1f4f8a, #9cc3ff);
+  --color-accent-hover: light-dark(#173d6b, #c2daff);
+  --color-on-accent: light-dark(#ffffff, #121210);
+  --color-accent-soft: light-dark(#e1e9f4, #1f2a3a);
+  --color-link: light-dark(#1f4f8a, #9cc3ff);
+  --color-focus: light-dark(#1f4f8a, #9cc3ff);
+  --color-heat-1: light-dark(#6b8bbd, #4d6894);
+  --color-heat-2: light-dark(#4f76ad, #6d93cc);
+  --color-heat-3: light-dark(#2a5797, #9cc3ff);
+  --color-heat-4: light-dark(#163a66, #d6e6ff);
+}
+
+[data-accent='matcha'] {
+  --color-accent: light-dark(#3f6b2a, #a6d38c);
+  --color-accent-hover: light-dark(#2f5220, #c6e6b3);
+  --color-on-accent: light-dark(#ffffff, #121210);
+  --color-accent-soft: light-dark(#e4ecdc, #25301f);
+  --color-link: light-dark(#3f6b2a, #a6d38c);
+  --color-focus: light-dark(#3f6b2a, #a6d38c);
+  --color-heat-1: light-dark(#66904f, #55744a);
+  --color-heat-2: light-dark(#4f7a3a, #77a165);
+  --color-heat-3: light-dark(#3a5f29, #a6d38c);
+  --color-heat-4: light-dark(#25401a, #d3ecc4);
+}
+
+[data-accent='fuji'] {
+  --color-accent: light-dark(#6a4c9c, #c5b0f0);
+  --color-accent-hover: light-dark(#543a80, #ddd0f7);
+  --color-on-accent: light-dark(#ffffff, #121210);
+  --color-accent-soft: light-dark(#ebe4f4, #2b2538);
+  --color-link: light-dark(#6a4c9c, #c5b0f0);
+  --color-focus: light-dark(#6a4c9c, #c5b0f0);
+  --color-heat-1: light-dark(#937bbd, #7a6aa6);
+  --color-heat-2: light-dark(#7a5fae, #9a86cc);
+  --color-heat-3: light-dark(#5f4594, #c5b0f0);
+  --color-heat-4: light-dark(#3f2b66, #e6dcfa);
+}
+
+[data-accent='yamabuki'] {
+  --color-accent: light-dark(#8a5a00, #f2c14e);
+  --color-accent-hover: light-dark(#6e4700, #f7d685);
+  --color-on-accent: light-dark(#ffffff, #121210);
+  --color-accent-soft: light-dark(#f3e6cc, #352b17);
+  --color-link: light-dark(#8a5a00, #f2c14e);
+  --color-focus: light-dark(#8a5a00, #f2c14e);
+  --color-heat-1: light-dark(#b0802a, #8a6a2a);
+  --color-heat-2: light-dark(#94680f, #b98f36);
+  --color-heat-3: light-dark(#755000, #f2c14e);
+  --color-heat-4: light-dark(#4d3500, #f9e3a8);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -105,5 +179,7 @@
     --duration-fast: 0ms;
     --duration-base: 0ms;
     --duration-slow: 0ms;
+    --duration-ink: 0ms;
+    --duration-petal: 0ms;
   }
 }
