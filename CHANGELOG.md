@@ -4,6 +4,7 @@ All notable user-facing changes to Onihayo are documented here. The format is ba
 
 ## Unreleased
 
+- Vocabulary: a word list shows every word in teaching order, 50 to a page, with how far you have got with each, and filters for the words you have learned (in review or mastered) and those still ahead. Without JavaScript it lists all words and explains that the filters need the progress saved in the browser.
 - Vocabulary: a word search, on the Vocabulary page and at its own address, finds words by kana in either script, romaji (Hepburn or the spellings an input method accepts, with or without long-vowel macrons), kanji, or English meaning, best matches first. It works without JavaScript, and Onihayo does not save or log what you search for.
 - Vocabulary: all 633 N5 words are now taught in 75 themed lessons of up to ten words, ordered by usefulness: after the first five lessons come greetings, everyday phrases, pointing and question words, numbers, family, time, and then food, home, places, travel, school, verbs, the body, weather, and describing words. The Vocabulary page lists every lesson compactly. Word cards and word pages show kanji forms as optional until kanji are taught, and word pages link to their lesson.
 - Vocabulary practice now asks with up to three meanings, and words that would otherwise look the same, such as あに and おにいさん, carry a short usage note like "your own, to others". Long meanings wrap instead of running off the screen.

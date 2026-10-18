@@ -36,6 +36,11 @@
   </div>
 </form>
 
+<p>
+  <a href={resolve('/words/list')}>Browse the word list</a>: every word in teaching order, filtered
+  by what you have learned.
+</p>
+
 <ol class="lessons">
   {#each data.lessons as lesson (lesson.slug)}
     <li>

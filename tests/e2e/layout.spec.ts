@@ -73,6 +73,16 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Vocabulary' }
   },
   {
+    path: '/words/list',
+    title: 'Word list — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/list?filter=learned&page=1',
+    title: 'Word list — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
     path: '/words/search',
     title: 'Word search — Onihayo',
     current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
