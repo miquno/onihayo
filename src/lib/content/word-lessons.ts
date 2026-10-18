@@ -1,19 +1,37 @@
 import * as v from 'valibot';
 import authoredLessons from './vocabulary/lessons.json';
+import selectionManifest from './vocabulary/selection.json';
 import wordDataset from './vocabulary/words.json';
 import { hiragana } from './kana/hiragana';
+import { hiraganaLessons } from './kana/hiragana-lessons';
 import { katakana } from './kana/katakana';
+import { katakanaLessons } from './kana/katakana-lessons';
 import type { WordLesson, WordRecord } from './model';
-import { validateBeginnerWordSet } from './words';
+import { validateVocabulary, type VocabularySelection } from './words';
 
-const validated = validateBeginnerWordSet(
-  wordDataset,
-  authoredLessons,
-  [...hiragana, ...katakana].map(({ character }) => character)
-);
+/** Every kana and spelling mark (ー, っ, ッ) the kana lessons teach. */
+export const taughtKana: readonly string[] = [
+  ...[...hiragana, ...katakana].map(({ character }) => character),
+  ...[...hiraganaLessons, ...katakanaLessons].flatMap((lesson) =>
+    (lesson.marks ?? []).map(({ mark }) => mark)
+  )
+];
+
+const validated = validateVocabulary(wordDataset, authoredLessons, selectionManifest, taughtKana);
 
 export const words: readonly WordRecord[] = validated.words;
 export const wordLessons: readonly WordLesson[] = validated.lessons;
+export const vocabularySelection: VocabularySelection = validated.selection;
+/** Every word in the order the lessons teach them, most useful first. */
+export const wordsInTeachingOrder: readonly WordRecord[] = validated.lessons.flatMap((lesson) =>
+  lesson.wordIds.flatMap((id) => validated.words.filter((word) => word.id === id))
+);
+/** Authored usage hints by word ID, for the words whose meanings alone match a synonym's. */
+export const wordHints: ReadonlyMap<string, string> = new Map(
+  validated.selection.entries.flatMap(({ sequence, hint }) =>
+    hint === undefined ? [] : [[`word.jmdict.${String(sequence)}`, hint] as const]
+  )
+);
 
 export interface WordLessonDetails extends WordLesson {
   readonly slug: string;
@@ -48,6 +66,17 @@ export function findWordLesson(slug: string): WordLessonDetails | undefined {
     }),
     next: next ? { slug: wordLessonSlug(next), title: next.title } : null
   };
+}
+
+/** The lesson that teaches a word, by exact word ID. */
+export function lessonForWord(
+  id: string
+): { readonly slug: string; readonly title: string; readonly number: number } | undefined {
+  const index = wordLessons.findIndex((lesson) => lesson.wordIds.includes(id));
+  const lesson = wordLessons[index];
+  return lesson === undefined
+    ? undefined
+    : { slug: wordLessonSlug(lesson), title: lesson.title, number: index + 1 };
 }
 
 /** Slug derived from the stable lesson ID. */

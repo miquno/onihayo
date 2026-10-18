@@ -1,7 +1,8 @@
 # Private staging preparation
 
 **Status: repository preparation only; no staging resources have been provisioned or verified.**
-This is the repository portion of the 0.9 deployment-preparation item. The item
+This is the repository portion of deployment preparation, moved from 0.9 to the final
+1.0 hosting phase. It does not block learning-core development. The item
 remains open until the owner supplies the environment and records the checks below.
 Public launch stays in 1.0; this runbook does not authorize deployment or spending.
 

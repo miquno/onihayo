@@ -73,6 +73,26 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Vocabulary' }
   },
   {
+    path: '/words/list',
+    title: 'Word list — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/list?filter=learned&page=1',
+    title: 'Word list — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/search',
+    title: 'Word search — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/search?q=tea',
+    title: '“tea” — Word search — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
     path: '/reviews',
     title: 'Reviews — Onihayo',
     current: { navigation: 'Primary', link: 'Reviews' }
@@ -298,7 +318,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Kana quiz',
     'About',
     'Continue: Vowels',
-    'five short lessons',
+    '75 short lessons',
     'roadmap',
     'source code on GitHub',
     'Account',

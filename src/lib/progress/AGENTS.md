@@ -14,6 +14,7 @@ Learner progress: what one learner knows about each learning item and which less
 - `storage.ts` — the `localStorage` adapter. `readProgress()` validates bounded version 1 to 4 documents with Valibot; v1 gains an empty review schedule, v2 keeps schedules and gains default preferences, and v3 gains an empty daily activity on the way to v4. It converts only IDs known to current content into `Map`s, quarantines malformed data, and returns a notice instead of throwing. `updateProgress()` re-reads the latest document before applying a change and preserves unknown IDs when writing. Export/import includes local settings; import validates before replacement.
 - `merge.ts` — deterministic, non-additive merge of account and guest records after explicit learner consent.
 - `sync.ts` — an in-memory signed-in storage adapter that sends sequential writes with server revisions and asks for reload after a failed write.
+- `word-list.ts` — the filtered, paged word list: `wordListFilters` (all, learned, not learned yet), `isLearned()` (in review or mastered), `parseWordListQuery()` (filter and page from untrusted address values, unknown values fall back to the first), `wordListPage()` (50 words a page in the order given, each with its stage; a page beyond the last shows the last), and `stageLabels`. Tested in `word-list.test.ts`.
 
 ## Rules
 

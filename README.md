@@ -2,9 +2,9 @@
 
 Learn Japanese from absolute zero to JLPT N5 in one structured place.
 
-Onihayo is an open-source web application for complete beginners. It guides you from your first hiragana through katakana, vocabulary, kanji, grammar, and short reading and listening exercises until you are ready for the JLPT N5 — so you never have to wonder what to learn next.
+Onihayo is an open-source web application for complete beginners. Its first release focuses on a guided N5 learning core: hiragana, katakana, vocabulary, kanji, grammar, reading, and reviews. Listening exercises follow later; the first release does not cover every JLPT exam skill. Hosting comes after the learning core is complete.
 
-> **Status:** foundation stage. There are no lessons yet. Development follows the milestones in [ROADMAP.md](ROADMAP.md).
+> **Status:** kana lessons, practice, 633 N5 vocabulary words in 75 themed lessons, reviews, progress statistics, and optional account code are implemented. N5 kanji are next; hosting and account activation remain deferred. Development follows [ROADMAP.md](ROADMAP.md).
 
 ## Principles
 

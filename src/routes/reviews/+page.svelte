@@ -5,7 +5,7 @@
   import { hiraganaLessons } from '$lib/content/kana/hiragana-lessons';
   import { katakana } from '$lib/content/kana/katakana';
   import { katakanaLessons } from '$lib/content/kana/katakana-lessons';
-  import { words } from '$lib/content/word-lessons';
+  import { wordHints, words } from '$lib/content/word-lessons';
   import { kanaPracticeItems } from '$lib/learning/kana-items';
   import { wordPracticeItems } from '$lib/learning/word-items';
   import { questionModes } from '$lib/learning/modes';
@@ -30,7 +30,7 @@
   };
   const allItems: readonly PracticeItem[] = [
     ...kanaPracticeItems([...hiragana, ...katakana], [...hiraganaLessons, ...katakanaLessons]),
-    ...wordPracticeItems(words)
+    ...wordPracticeItems(words, wordHints)
   ];
   const itemsById = new Map(allItems.map((item) => [item.id, item]));
   let reviewItems = $state<readonly PracticeItem[] | null>(null);

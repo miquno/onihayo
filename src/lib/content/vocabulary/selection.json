@@ -1,0 +1,3344 @@
+{
+  "id": "onihayo.n5.v1",
+  "provenance": {
+    "source": "Onihayo contributors",
+    "licence": "CC-BY-SA-4.0"
+  },
+  "categories": [
+    {
+      "id": "people",
+      "title": "Introductions and people"
+    },
+    {
+      "id": "family",
+      "title": "Family"
+    },
+    {
+      "id": "home",
+      "title": "Home and everyday objects"
+    },
+    {
+      "id": "food",
+      "title": "Food and drink"
+    },
+    {
+      "id": "shopping",
+      "title": "Shops and money"
+    },
+    {
+      "id": "numbers",
+      "title": "Numbers and quantities"
+    },
+    {
+      "id": "time",
+      "title": "Time and dates"
+    },
+    {
+      "id": "places",
+      "title": "Places and directions"
+    },
+    {
+      "id": "transport",
+      "title": "Transport and travel"
+    },
+    {
+      "id": "school",
+      "title": "School, work, and free time"
+    },
+    {
+      "id": "actions",
+      "title": "Daily actions"
+    },
+    {
+      "id": "body",
+      "title": "Body and health"
+    },
+    {
+      "id": "weather",
+      "title": "Weather, seasons, and nature"
+    },
+    {
+      "id": "descriptions",
+      "title": "Descriptions"
+    },
+    {
+      "id": "questions",
+      "title": "Questions and pointing words"
+    }
+  ],
+  "entries": [
+    {
+      "sequence": 1311110,
+      "category": "people",
+      "rationale": "The basic polite way to say I.",
+      "hint": "polite, for anyone"
+    },
+    {
+      "sequence": 1580640,
+      "category": "people",
+      "rationale": "Needed to talk about any person."
+    },
+    {
+      "sequence": 1540170,
+      "category": "people",
+      "rationale": "Introducing and talking about friends."
+    },
+    {
+      "sequence": 1387990,
+      "category": "people",
+      "rationale": "Addressing and naming teachers."
+    },
+    {
+      "sequence": 1206900,
+      "category": "people",
+      "rationale": "Saying you are a student."
+    },
+    {
+      "sequence": 1223615,
+      "category": "people",
+      "rationale": "The basic word for you."
+    },
+    {
+      "sequence": 1521400,
+      "category": "people",
+      "rationale": "A common casual I, often used by boys and men.",
+      "hint": "casual, mostly boys and men"
+    },
+    {
+      "sequence": 1483070,
+      "category": "people",
+      "rationale": "Referring to a man who was mentioned before.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1483150,
+      "category": "people",
+      "rationale": "Referring to a woman who was mentioned before.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1419990,
+      "category": "people",
+      "rationale": "Basic word for man and male."
+    },
+    {
+      "sequence": 1344930,
+      "category": "people",
+      "rationale": "Basic word for woman and female."
+    },
+    {
+      "sequence": 1420010,
+      "category": "people",
+      "rationale": "Talking about boys."
+    },
+    {
+      "sequence": 1344970,
+      "category": "people",
+      "rationale": "Talking about girls."
+    },
+    {
+      "sequence": 1307850,
+      "category": "people",
+      "rationale": "Talking about children."
+    },
+    {
+      "sequence": 1414170,
+      "category": "people",
+      "rationale": "Contrasting adults with children."
+    },
+    {
+      "sequence": 1531710,
+      "category": "people",
+      "rationale": "Asking for and giving a name."
+    },
+    {
+      "sequence": 1202170,
+      "category": "people",
+      "rationale": "Addressing a group politely."
+    },
+    {
+      "sequence": 1202150,
+      "category": "people",
+      "rationale": "Saying everyone in casual speech.",
+      "reading": "みんな"
+    },
+    {
+      "sequence": 1516925,
+      "category": "people",
+      "rationale": "Polite word for person, as in introductions.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1203650,
+      "category": "people",
+      "rationale": "Talking about people from abroad."
+    },
+    {
+      "sequence": 1552750,
+      "category": "people",
+      "rationale": "Introducing yourself as an exchange student."
+    },
+    {
+      "sequence": 1159980,
+      "category": "people",
+      "rationale": "A common occupation; needed when ill."
+    },
+    {
+      "sequence": 1002120,
+      "category": "people",
+      "rationale": "Everyday word for a police officer."
+    },
+    {
+      "sequence": 1379380,
+      "category": "people",
+      "rationale": "Pupils at school, beside students."
+    },
+    {
+      "sequence": 1318610,
+      "category": "people",
+      "rationale": "Talking about oneself."
+    },
+    {
+      "sequence": 1612820,
+      "category": "people",
+      "rationale": "The everyday morning greeting."
+    },
+    {
+      "sequence": 1289400,
+      "category": "people",
+      "rationale": "The everyday daytime greeting."
+    },
+    {
+      "sequence": 1289480,
+      "category": "people",
+      "rationale": "The everyday evening greeting."
+    },
+    {
+      "sequence": 1291050,
+      "category": "people",
+      "rationale": "Saying goodbye."
+    },
+    {
+      "sequence": 1586820,
+      "category": "people",
+      "rationale": "Saying thank you.",
+      "hint": "the usual thanks"
+    },
+    {
+      "sequence": 1295060,
+      "category": "people",
+      "rationale": "Apologising and getting attention politely.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1270680,
+      "category": "people",
+      "rationale": "Apologising."
+    },
+    {
+      "sequence": 1625780,
+      "category": "people",
+      "rationale": "The first words of a self-introduction."
+    },
+    {
+      "sequence": 1189130,
+      "category": "people",
+      "rationale": "Offering something or inviting someone in.",
+      "senses": [1, 3]
+    },
+    {
+      "sequence": 1009000,
+      "category": "people",
+      "rationale": "A short, common thanks or greeting.",
+      "hint": "short and casual"
+    },
+    {
+      "sequence": 1410800,
+      "category": "people",
+      "rationale": "Said before eating."
+    },
+    {
+      "sequence": 1270520,
+      "category": "people",
+      "rationale": "Said after eating."
+    },
+    {
+      "sequence": 1001780,
+      "category": "people",
+      "rationale": "Saying good night."
+    },
+    {
+      "sequence": 2020140,
+      "category": "people",
+      "rationale": "Said when leaving home."
+    },
+    {
+      "sequence": 2088750,
+      "category": "people",
+      "rationale": "Said to someone leaving home."
+    },
+    {
+      "sequence": 1538960,
+      "category": "people",
+      "rationale": "Said when coming home."
+    },
+    {
+      "sequence": 1001740,
+      "category": "people",
+      "rationale": "Welcoming someone home."
+    },
+    {
+      "sequence": 1010080,
+      "category": "people",
+      "rationale": "Saying yes.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1583250,
+      "category": "people",
+      "rationale": "Saying no.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 2036870,
+      "category": "people",
+      "rationale": "Asking a favour, as in please.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1192150,
+      "category": "family",
+      "rationale": "Talking about one's family."
+    },
+    {
+      "sequence": 1002590,
+      "category": "family",
+      "rationale": "Father, and someone else's father.",
+      "hint": "polite, or speaking to him"
+    },
+    {
+      "sequence": 1002650,
+      "category": "family",
+      "rationale": "Mother, and someone else's mother.",
+      "hint": "polite, or speaking to her"
+    },
+    {
+      "sequence": 1497610,
+      "category": "family",
+      "rationale": "One's own father when speaking to others.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1514990,
+      "category": "family",
+      "rationale": "One's own mother when speaking to others.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1249900,
+      "category": "family",
+      "rationale": "One's own older brother.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1307630,
+      "category": "family",
+      "rationale": "One's own older sister.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1581930,
+      "category": "family",
+      "rationale": "Younger brother."
+    },
+    {
+      "sequence": 1524590,
+      "category": "family",
+      "rationale": "Younger sister."
+    },
+    {
+      "sequence": 1001830,
+      "category": "family",
+      "rationale": "Older brother, and someone else's.",
+      "hint": "polite, or speaking to him"
+    },
+    {
+      "sequence": 1001990,
+      "category": "family",
+      "rationale": "Older sister, and someone else's.",
+      "hint": "polite, or speaking to her"
+    },
+    {
+      "sequence": 1249960,
+      "category": "family",
+      "rationale": "Siblings in general."
+    },
+    {
+      "sequence": 1602710,
+      "category": "family",
+      "rationale": "Both parents."
+    },
+    {
+      "sequence": 1396840,
+      "category": "family",
+      "rationale": "One's own grandfather.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1396860,
+      "category": "family",
+      "rationale": "One's own grandmother.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1002320,
+      "category": "family",
+      "rationale": "Grandfather, and elderly men.",
+      "hint": "polite, or an elderly man"
+    },
+    {
+      "sequence": 1002330,
+      "category": "family",
+      "rationale": "Grandmother, and elderly women.",
+      "hint": "polite, or an elderly woman"
+    },
+    {
+      "sequence": 2261490,
+      "category": "family",
+      "rationale": "Uncle, and middle-aged men."
+    },
+    {
+      "sequence": 2261500,
+      "category": "family",
+      "rationale": "Aunt, and middle-aged women."
+    },
+    {
+      "sequence": 1496480,
+      "category": "family",
+      "rationale": "One's own husband."
+    },
+    {
+      "sequence": 1294330,
+      "category": "family",
+      "rationale": "One's own wife.",
+      "hint": "your own, to others"
+    },
+    {
+      "sequence": 1579780,
+      "category": "family",
+      "rationale": "A common word for husband.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1179330,
+      "category": "family",
+      "rationale": "Someone else's wife.",
+      "hint": "someone else's"
+    },
+    {
+      "sequence": 1404390,
+      "category": "family",
+      "rationale": "Son."
+    },
+    {
+      "sequence": 1531190,
+      "category": "family",
+      "rationale": "Daughter."
+    },
+    {
+      "sequence": 1383260,
+      "category": "family",
+      "rationale": "Baby."
+    },
+    {
+      "sequence": 1191730,
+      "category": "home",
+      "rationale": "House and home."
+    },
+    {
+      "sequence": 1499320,
+      "category": "home",
+      "rationale": "Rooms at home and in hotels."
+    },
+    {
+      "sequence": 1522150,
+      "category": "home",
+      "rationale": "Books, one of the first objects learners name."
+    },
+    {
+      "sequence": 1191740,
+      "category": "home",
+      "rationale": "Everyday word for one's home."
+    },
+    {
+      "sequence": 1412640,
+      "category": "home",
+      "rationale": "The kitchen."
+    },
+    {
+      "sequence": 1401400,
+      "category": "home",
+      "rationale": "Window."
+    },
+    {
+      "sequence": 1266970,
+      "category": "home",
+      "rationale": "Door, especially a sliding one."
+    },
+    {
+      "sequence": 1087820,
+      "category": "home",
+      "rationale": "Door, the common loanword."
+    },
+    {
+      "sequence": 1220210,
+      "category": "home",
+      "rationale": "Desk."
+    },
+    {
+      "sequence": 1157070,
+      "category": "home",
+      "rationale": "Chair."
+    },
+    {
+      "sequence": 1078630,
+      "category": "home",
+      "rationale": "Table."
+    },
+    {
+      "sequence": 1119650,
+      "category": "home",
+      "rationale": "Bed."
+    },
+    {
+      "sequence": 1443000,
+      "category": "home",
+      "rationale": "Electricity and the lights.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1080510,
+      "category": "home",
+      "rationale": "Television."
+    },
+    {
+      "sequence": 1138860,
+      "category": "home",
+      "rationale": "Radio."
+    },
+    {
+      "sequence": 1443840,
+      "category": "home",
+      "rationale": "Telephone.",
+      "senses": [2, 1]
+    },
+    {
+      "sequence": 1316140,
+      "category": "home",
+      "rationale": "Clocks and watches."
+    },
+    {
+      "sequence": 1260490,
+      "category": "home",
+      "rationale": "Key.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1301940,
+      "category": "home",
+      "rationale": "Umbrella."
+    },
+    {
+      "sequence": 1208910,
+      "category": "home",
+      "rationale": "Bag."
+    },
+    {
+      "sequence": 1585650,
+      "category": "home",
+      "rationale": "Box."
+    },
+    {
+      "sequence": 1311530,
+      "category": "home",
+      "rationale": "Paper."
+    },
+    {
+      "sequence": 1321900,
+      "category": "home",
+      "rationale": "Photograph."
+    },
+    {
+      "sequence": 1362360,
+      "category": "home",
+      "rationale": "Newspaper."
+    },
+    {
+      "sequence": 1299400,
+      "category": "home",
+      "rationale": "Magazine."
+    },
+    {
+      "sequence": 1327720,
+      "category": "home",
+      "rationale": "Letter."
+    },
+    {
+      "sequence": 1385070,
+      "category": "home",
+      "rationale": "Postage stamp."
+    },
+    {
+      "sequence": 1546590,
+      "category": "home",
+      "rationale": "Postcard."
+    },
+    {
+      "sequence": 1499690,
+      "category": "home",
+      "rationale": "Envelope."
+    },
+    {
+      "sequence": 1178590,
+      "category": "home",
+      "rationale": "Pencil."
+    },
+    {
+      "sequence": 1121380,
+      "category": "home",
+      "rationale": "Pen."
+    },
+    {
+      "sequence": 1123590,
+      "category": "home",
+      "rationale": "Ballpoint pen."
+    },
+    {
+      "sequence": 1093450,
+      "category": "home",
+      "rationale": "Notebook."
+    },
+    {
+      "sequence": 1318970,
+      "category": "home",
+      "rationale": "Dictionary."
+    },
+    {
+      "sequence": 1577670,
+      "category": "home",
+      "rationale": "Glasses.",
+      "reading": "めがね"
+    },
+    {
+      "sequence": 1500940,
+      "category": "home",
+      "rationale": "Clothes."
+    },
+    {
+      "sequence": 1546020,
+      "category": "home",
+      "rationale": "Western-style clothes."
+    },
+    {
+      "sequence": 1061520,
+      "category": "home",
+      "rationale": "Shirt."
+    },
+    {
+      "sequence": 1074260,
+      "category": "home",
+      "rationale": "Trousers."
+    },
+    {
+      "sequence": 1067470,
+      "category": "home",
+      "rationale": "Skirt."
+    },
+    {
+      "sequence": 1246700,
+      "category": "home",
+      "rationale": "Shoes."
+    },
+    {
+      "sequence": 1246740,
+      "category": "home",
+      "rationale": "Socks."
+    },
+    {
+      "sequence": 1519170,
+      "category": "home",
+      "rationale": "Hat and cap."
+    },
+    {
+      "sequence": 1580340,
+      "category": "home",
+      "rationale": "Jacket."
+    },
+    {
+      "sequence": 1049000,
+      "category": "home",
+      "rationale": "Coat."
+    },
+    {
+      "sequence": 1074270,
+      "category": "home",
+      "rationale": "Sweater."
+    },
+    {
+      "sequence": 1092820,
+      "category": "home",
+      "rationale": "Tie."
+    },
+    {
+      "sequence": 1124970,
+      "category": "home",
+      "rationale": "Pocket."
+    },
+    {
+      "sequence": 2220600,
+      "category": "home",
+      "rationale": "Bath."
+    },
+    {
+      "sequence": 1061820,
+      "category": "home",
+      "rationale": "Shower."
+    },
+    {
+      "sequence": 1084810,
+      "category": "home",
+      "rationale": "Toilet."
+    },
+    {
+      "sequence": 1436130,
+      "category": "home",
+      "rationale": "Garden."
+    },
+    {
+      "sequence": 1263400,
+      "category": "home",
+      "rationale": "Entrance hall, where shoes come off."
+    },
+    {
+      "sequence": 1203090,
+      "category": "home",
+      "rationale": "Stairs."
+    },
+    {
+      "sequence": 1557110,
+      "category": "home",
+      "rationale": "Refrigerator."
+    },
+    {
+      "sequence": 1382590,
+      "category": "home",
+      "rationale": "Soap."
+    },
+    {
+      "sequence": 1296970,
+      "category": "home",
+      "rationale": "Wallet."
+    },
+    {
+      "sequence": 1502390,
+      "category": "home",
+      "rationale": "Thing, for objects in general."
+    },
+    {
+      "sequence": 1101570,
+      "category": "home",
+      "rationale": "Personal computer."
+    },
+    {
+      "sequence": 1299680,
+      "category": "home",
+      "rationale": "Plate."
+    },
+    {
+      "sequence": 1597530,
+      "category": "home",
+      "rationale": "Rice bowl and teacup."
+    },
+    {
+      "sequence": 1050390,
+      "category": "home",
+      "rationale": "Glass for drinking."
+    },
+    {
+      "sequence": 1037670,
+      "category": "home",
+      "rationale": "Cup."
+    },
+    {
+      "sequence": 1476410,
+      "category": "home",
+      "rationale": "Chopsticks."
+    },
+    {
+      "sequence": 1072590,
+      "category": "home",
+      "rationale": "Spoon."
+    },
+    {
+      "sequence": 1089890,
+      "category": "home",
+      "rationale": "Knife."
+    },
+    {
+      "sequence": 1110110,
+      "category": "home",
+      "rationale": "Fork."
+    },
+    {
+      "sequence": 1522980,
+      "category": "home",
+      "rationale": "Bookshelf."
+    },
+    {
+      "sequence": 1509290,
+      "category": "home",
+      "rationale": "Wall."
+    },
+    {
+      "sequence": 1371260,
+      "category": "food",
+      "rationale": "Water."
+    },
+    {
+      "sequence": 1002430,
+      "category": "food",
+      "rationale": "Tea, especially green tea."
+    },
+    {
+      "sequence": 1270590,
+      "category": "food",
+      "rationale": "Cooked rice and meals.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1578010,
+      "category": "food",
+      "rationale": "Fish."
+    },
+    {
+      "sequence": 1463520,
+      "category": "food",
+      "rationale": "Meat.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1537370,
+      "category": "food",
+      "rationale": "Vegetables."
+    },
+    {
+      "sequence": 1193060,
+      "category": "food",
+      "rationale": "Fruit."
+    },
+    {
+      "sequence": 1358340,
+      "category": "food",
+      "rationale": "Food in general."
+    },
+    {
+      "sequence": 1600430,
+      "category": "food",
+      "rationale": "Drinks in general."
+    },
+    {
+      "sequence": 1586330,
+      "category": "food",
+      "rationale": "Breakfast."
+    },
+    {
+      "sequence": 1602340,
+      "category": "food",
+      "rationale": "Lunch."
+    },
+    {
+      "sequence": 1601340,
+      "category": "food",
+      "rationale": "Dinner."
+    },
+    {
+      "sequence": 1554310,
+      "category": "food",
+      "rationale": "Cooking and dishes."
+    },
+    {
+      "sequence": 1549140,
+      "category": "food",
+      "rationale": "Egg."
+    },
+    {
+      "sequence": 1231580,
+      "category": "food",
+      "rationale": "Beef."
+    },
+    {
+      "sequence": 1457440,
+      "category": "food",
+      "rationale": "Pork."
+    },
+    {
+      "sequence": 1253020,
+      "category": "food",
+      "rationale": "Chicken meat."
+    },
+    {
+      "sequence": 1103090,
+      "category": "food",
+      "rationale": "Bread."
+    },
+    {
+      "sequence": 1508750,
+      "category": "food",
+      "rationale": "Uncooked rice."
+    },
+    {
+      "sequence": 1231590,
+      "category": "food",
+      "rationale": "Milk."
+    },
+    {
+      "sequence": 1049180,
+      "category": "food",
+      "rationale": "Coffee."
+    },
+    {
+      "sequence": 1280770,
+      "category": "food",
+      "rationale": "Black tea."
+    },
+    {
+      "sequence": 1065950,
+      "category": "food",
+      "rationale": "Juice."
+    },
+    {
+      "sequence": 1329015,
+      "category": "food",
+      "rationale": "Alcohol and sake."
+    },
+    {
+      "sequence": 2796520,
+      "category": "food",
+      "rationale": "Beer."
+    },
+    {
+      "sequence": 1576630,
+      "category": "food",
+      "rationale": "Salt."
+    },
+    {
+      "sequence": 1291600,
+      "category": "food",
+      "rationale": "Sugar."
+    },
+    {
+      "sequence": 1595020,
+      "category": "food",
+      "rationale": "Soy sauce."
+    },
+    {
+      "sequence": 1001710,
+      "category": "food",
+      "rationale": "Sweets and snacks."
+    },
+    {
+      "sequence": 1047860,
+      "category": "food",
+      "rationale": "Cake."
+    },
+    {
+      "sequence": 1555480,
+      "category": "food",
+      "rationale": "Apple."
+    },
+    {
+      "sequence": 1528410,
+      "category": "food",
+      "rationale": "Mandarin orange."
+    },
+    {
+      "sequence": 1099420,
+      "category": "food",
+      "rationale": "Banana."
+    },
+    {
+      "sequence": 1513060,
+      "category": "food",
+      "rationale": "Boxed lunch."
+    },
+    {
+      "sequence": 1595650,
+      "category": "food",
+      "rationale": "Sushi."
+    },
+    {
+      "sequence": 1440590,
+      "category": "food",
+      "rationale": "Tempura."
+    },
+    {
+      "sequence": 1039140,
+      "category": "food",
+      "rationale": "Curry."
+    },
+    {
+      "sequence": 1067040,
+      "category": "food",
+      "rationale": "Soup."
+    },
+    {
+      "sequence": 1057850,
+      "category": "food",
+      "rationale": "Salad."
+    },
+    {
+      "sequence": 1013980,
+      "category": "food",
+      "rationale": "Ice cream."
+    },
+    {
+      "sequence": 1582120,
+      "category": "shopping",
+      "rationale": "Shop."
+    },
+    {
+      "sequence": 1589730,
+      "category": "shopping",
+      "rationale": "Shopping."
+    },
+    {
+      "sequence": 1001820,
+      "category": "shopping",
+      "rationale": "Money."
+    },
+    {
+      "sequence": 1175570,
+      "category": "shopping",
+      "rationale": "Yen, Japan's currency."
+    },
+    {
+      "sequence": 1600160,
+      "category": "shopping",
+      "rationale": "Price."
+    },
+    {
+      "sequence": 1083590,
+      "category": "shopping",
+      "rationale": "Department store."
+    },
+    {
+      "sequence": 1066710,
+      "category": "shopping",
+      "rationale": "Supermarket."
+    },
+    {
+      "sequence": 1145310,
+      "category": "shopping",
+      "rationale": "Restaurant."
+    },
+    {
+      "sequence": 1358550,
+      "category": "shopping",
+      "rationale": "Cafeteria and canteen."
+    },
+    {
+      "sequence": 1226440,
+      "category": "shopping",
+      "rationale": "Coffee shop."
+    },
+    {
+      "sequence": 1476960,
+      "category": "shopping",
+      "rationale": "Greengrocer."
+    },
+    {
+      "sequence": 1522240,
+      "category": "shopping",
+      "rationale": "Bookshop."
+    },
+    {
+      "sequence": 1103480,
+      "category": "shopping",
+      "rationale": "Bakery."
+    },
+    {
+      "sequence": 1160790,
+      "category": "numbers",
+      "rationale": "The number one."
+    },
+    {
+      "sequence": 1461140,
+      "category": "numbers",
+      "rationale": "The number two."
+    },
+    {
+      "sequence": 1579350,
+      "category": "numbers",
+      "rationale": "The number three."
+    },
+    {
+      "sequence": 1579470,
+      "category": "numbers",
+      "rationale": "The number four, in its common reading.",
+      "reading": "よん"
+    },
+    {
+      "sequence": 1268060,
+      "category": "numbers",
+      "rationale": "The number five."
+    },
+    {
+      "sequence": 1585310,
+      "category": "numbers",
+      "rationale": "The number six."
+    },
+    {
+      "sequence": 1319210,
+      "category": "numbers",
+      "rationale": "The number seven, in its common reading.",
+      "reading": "なな"
+    },
+    {
+      "sequence": 1583090,
+      "category": "numbers",
+      "rationale": "The number eight."
+    },
+    {
+      "sequence": 1578150,
+      "category": "numbers",
+      "rationale": "The number nine, in its common reading."
+    },
+    {
+      "sequence": 1579840,
+      "category": "numbers",
+      "rationale": "The number ten."
+    },
+    {
+      "sequence": 1488000,
+      "category": "numbers",
+      "rationale": "Hundred."
+    },
+    {
+      "sequence": 1388740,
+      "category": "numbers",
+      "rationale": "Thousand."
+    },
+    {
+      "sequence": 1584460,
+      "category": "numbers",
+      "rationale": "Ten thousand, the basis of large numbers."
+    },
+    {
+      "sequence": 2839962,
+      "category": "numbers",
+      "rationale": "Zero."
+    },
+    {
+      "sequence": 1160820,
+      "category": "numbers",
+      "rationale": "Counting things: one.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1461160,
+      "category": "numbers",
+      "rationale": "Counting things: two.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1299740,
+      "category": "numbers",
+      "rationale": "Counting things: three.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1307040,
+      "category": "numbers",
+      "rationale": "Counting things: four.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1268070,
+      "category": "numbers",
+      "rationale": "Counting things: five.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1585315,
+      "category": "numbers",
+      "rationale": "Counting things: six.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1319220,
+      "category": "numbers",
+      "rationale": "Counting things: seven.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1583095,
+      "category": "numbers",
+      "rationale": "Counting things: eight.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1243600,
+      "category": "numbers",
+      "rationale": "Counting things: nine.",
+      "hint": "counting things"
+    },
+    {
+      "sequence": 1576150,
+      "category": "numbers",
+      "rationale": "One person, and alone.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1582670,
+      "category": "numbers",
+      "rationale": "Two people."
+    },
+    {
+      "sequence": 1479890,
+      "category": "numbers",
+      "rationale": "Half."
+    },
+    {
+      "sequence": 1396130,
+      "category": "numbers",
+      "rationale": "All of something."
+    },
+    {
+      "sequence": 1415870,
+      "category": "numbers",
+      "rationale": "A lot."
+    },
+    {
+      "sequence": 1348870,
+      "category": "numbers",
+      "rationale": "A little."
+    },
+    {
+      "sequence": 1163940,
+      "category": "numbers",
+      "rationale": "A little, in everyday speech.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1482290,
+      "category": "numbers",
+      "rationale": "Number, as in a phone number."
+    },
+    {
+      "sequence": 1524610,
+      "category": "numbers",
+      "rationale": "Counter for flat things such as paper."
+    },
+    {
+      "sequence": 1298520,
+      "category": "numbers",
+      "rationale": "Counter for books."
+    },
+    {
+      "sequence": 1412560,
+      "category": "numbers",
+      "rationale": "Counter for machines and vehicles.",
+      "senses": [4]
+    },
+    {
+      "sequence": 1583370,
+      "category": "numbers",
+      "rationale": "Counter for small animals."
+    },
+    {
+      "sequence": 1199330,
+      "category": "numbers",
+      "rationale": "Counter for times something happens.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1294940,
+      "category": "numbers",
+      "rationale": "Counter for years of age."
+    },
+    {
+      "sequence": 1579110,
+      "category": "time",
+      "rationale": "Today."
+    },
+    {
+      "sequence": 1584660,
+      "category": "time",
+      "rationale": "Tomorrow."
+    },
+    {
+      "sequence": 1579260,
+      "category": "time",
+      "rationale": "Yesterday."
+    },
+    {
+      "sequence": 1428280,
+      "category": "time",
+      "rationale": "Morning.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1536350,
+      "category": "time",
+      "rationale": "Night."
+    },
+    {
+      "sequence": 1288850,
+      "category": "time",
+      "rationale": "Now."
+    },
+    {
+      "sequence": 1315920,
+      "category": "time",
+      "rationale": "Time and hours.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1315840,
+      "category": "time",
+      "rationale": "Time, as in when something happens."
+    },
+    {
+      "sequence": 1269060,
+      "category": "time",
+      "rationale": "Morning hours, a.m."
+    },
+    {
+      "sequence": 1268990,
+      "category": "time",
+      "rationale": "Afternoon hours, p.m."
+    },
+    {
+      "sequence": 1426250,
+      "category": "time",
+      "rationale": "Noon and daytime.",
+      "senses": [1, 2, 3]
+    },
+    {
+      "sequence": 1482110,
+      "category": "time",
+      "rationale": "Evening."
+    },
+    {
+      "sequence": 1542790,
+      "category": "time",
+      "rationale": "Late afternoon and early evening."
+    },
+    {
+      "sequence": 1579100,
+      "category": "time",
+      "rationale": "This morning."
+    },
+    {
+      "sequence": 1289470,
+      "category": "time",
+      "rationale": "This evening."
+    },
+    {
+      "sequence": 1524720,
+      "category": "time",
+      "rationale": "Every day."
+    },
+    {
+      "sequence": 1524700,
+      "category": "time",
+      "rationale": "Every morning."
+    },
+    {
+      "sequence": 1524730,
+      "category": "time",
+      "rationale": "Every evening."
+    },
+    {
+      "sequence": 1524690,
+      "category": "time",
+      "rationale": "Every week."
+    },
+    {
+      "sequence": 1584350,
+      "category": "time",
+      "rationale": "Every month."
+    },
+    {
+      "sequence": 1584360,
+      "category": "time",
+      "rationale": "Every year."
+    },
+    {
+      "sequence": 1289220,
+      "category": "time",
+      "rationale": "This week."
+    },
+    {
+      "sequence": 1548010,
+      "category": "time",
+      "rationale": "Next week."
+    },
+    {
+      "sequence": 1387870,
+      "category": "time",
+      "rationale": "Last week."
+    },
+    {
+      "sequence": 1289100,
+      "category": "time",
+      "rationale": "This month."
+    },
+    {
+      "sequence": 1547900,
+      "category": "time",
+      "rationale": "Next month."
+    },
+    {
+      "sequence": 1387500,
+      "category": "time",
+      "rationale": "Last month."
+    },
+    {
+      "sequence": 1579130,
+      "category": "time",
+      "rationale": "This year."
+    },
+    {
+      "sequence": 1548220,
+      "category": "time",
+      "rationale": "Next year."
+    },
+    {
+      "sequence": 1231690,
+      "category": "time",
+      "rationale": "Last year."
+    },
+    {
+      "sequence": 1576050,
+      "category": "time",
+      "rationale": "The day before yesterday."
+    },
+    {
+      "sequence": 1584640,
+      "category": "time",
+      "rationale": "The day after tomorrow."
+    },
+    {
+      "sequence": 1419110,
+      "category": "time",
+      "rationale": "Birthday."
+    },
+    {
+      "sequence": 1227500,
+      "category": "time",
+      "rationale": "Holiday and day off.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1191420,
+      "category": "time",
+      "rationale": "Summer holidays."
+    },
+    {
+      "sequence": 1255890,
+      "category": "time",
+      "rationale": "Monday."
+    },
+    {
+      "sequence": 1194290,
+      "category": "time",
+      "rationale": "Tuesday."
+    },
+    {
+      "sequence": 1372190,
+      "category": "time",
+      "rationale": "Wednesday."
+    },
+    {
+      "sequence": 1534890,
+      "category": "time",
+      "rationale": "Thursday."
+    },
+    {
+      "sequence": 1243320,
+      "category": "time",
+      "rationale": "Friday."
+    },
+    {
+      "sequence": 1445590,
+      "category": "time",
+      "rationale": "Saturday."
+    },
+    {
+      "sequence": 1464900,
+      "category": "time",
+      "rationale": "Sunday."
+    },
+    {
+      "sequence": 1162120,
+      "category": "time",
+      "rationale": "January."
+    },
+    {
+      "sequence": 1461560,
+      "category": "time",
+      "rationale": "February."
+    },
+    {
+      "sequence": 1300250,
+      "category": "time",
+      "rationale": "March."
+    },
+    {
+      "sequence": 1307180,
+      "category": "time",
+      "rationale": "April."
+    },
+    {
+      "sequence": 1268170,
+      "category": "time",
+      "rationale": "May."
+    },
+    {
+      "sequence": 1561330,
+      "category": "time",
+      "rationale": "June."
+    },
+    {
+      "sequence": 1319280,
+      "category": "time",
+      "rationale": "July."
+    },
+    {
+      "sequence": 1476730,
+      "category": "time",
+      "rationale": "August."
+    },
+    {
+      "sequence": 1243660,
+      "category": "time",
+      "rationale": "September."
+    },
+    {
+      "sequence": 1334570,
+      "category": "time",
+      "rationale": "October."
+    },
+    {
+      "sequence": 1334480,
+      "category": "time",
+      "rationale": "November."
+    },
+    {
+      "sequence": 1334910,
+      "category": "time",
+      "rationale": "December."
+    },
+    {
+      "sequence": 2225040,
+      "category": "time",
+      "rationale": "The first day of the month."
+    },
+    {
+      "sequence": 1462900,
+      "category": "time",
+      "rationale": "The second day of the month, and two days."
+    },
+    {
+      "sequence": 1301330,
+      "category": "time",
+      "rationale": "The third day, and three days."
+    },
+    {
+      "sequence": 1307320,
+      "category": "time",
+      "rationale": "The fourth day, and four days."
+    },
+    {
+      "sequence": 1268570,
+      "category": "time",
+      "rationale": "The fifth day, and five days."
+    },
+    {
+      "sequence": 1561470,
+      "category": "time",
+      "rationale": "The sixth day, and six days."
+    },
+    {
+      "sequence": 1579630,
+      "category": "time",
+      "rationale": "The seventh day, and seven days."
+    },
+    {
+      "sequence": 1476920,
+      "category": "time",
+      "rationale": "The eighth day, and eight days."
+    },
+    {
+      "sequence": 1243850,
+      "category": "time",
+      "rationale": "The ninth day, and nine days."
+    },
+    {
+      "sequence": 1335000,
+      "category": "time",
+      "rationale": "The tenth day, and ten days."
+    },
+    {
+      "sequence": 1600850,
+      "category": "time",
+      "rationale": "The twentieth day, and twenty days."
+    },
+    {
+      "sequence": 1576260,
+      "category": "time",
+      "rationale": "One day, and all day.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1269320,
+      "category": "time",
+      "rationale": "After and later.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1392580,
+      "category": "time",
+      "rationale": "Before, and in front.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1478750,
+      "category": "time",
+      "rationale": "Half past, as in telling the time.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1502840,
+      "category": "time",
+      "rationale": "Minutes."
+    },
+    {
+      "sequence": 1468060,
+      "category": "time",
+      "rationale": "Year, and age.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1255430,
+      "category": "time",
+      "rationale": "Moon and month.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1463770,
+      "category": "time",
+      "rationale": "Day and sun.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1333500,
+      "category": "time",
+      "rationale": "A period of weeks."
+    },
+    {
+      "sequence": 1188890,
+      "category": "time",
+      "rationale": "Always."
+    },
+    {
+      "sequence": 1598680,
+      "category": "time",
+      "rationale": "Sometimes."
+    },
+    {
+      "sequence": 1273270,
+      "category": "places",
+      "rationale": "Park."
+    },
+    {
+      "sequence": 1582710,
+      "category": "places",
+      "rationale": "Japan."
+    },
+    {
+      "sequence": 1592250,
+      "category": "places",
+      "rationale": "Country."
+    },
+    {
+      "sequence": 1603990,
+      "category": "places",
+      "rationale": "Town."
+    },
+    {
+      "sequence": 1175140,
+      "category": "places",
+      "rationale": "Station."
+    },
+    {
+      "sequence": 1243490,
+      "category": "places",
+      "rationale": "Bank."
+    },
+    {
+      "sequence": 1542430,
+      "category": "places",
+      "rationale": "Post office."
+    },
+    {
+      "sequence": 1490220,
+      "category": "places",
+      "rationale": "Hospital."
+    },
+    {
+      "sequence": 1370420,
+      "category": "places",
+      "rationale": "Library."
+    },
+    {
+      "sequence": 1173750,
+      "category": "places",
+      "rationale": "Cinema."
+    },
+    {
+      "sequence": 1272500,
+      "category": "places",
+      "rationale": "Police box."
+    },
+    {
+      "sequence": 1413890,
+      "category": "places",
+      "rationale": "Embassy."
+    },
+    {
+      "sequence": 1122650,
+      "category": "places",
+      "rationale": "Hotel."
+    },
+    {
+      "sequence": 1257540,
+      "category": "places",
+      "rationale": "Building."
+    },
+    {
+      "sequence": 1454080,
+      "category": "places",
+      "rationale": "Road and way.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1206110,
+      "category": "places",
+      "rationale": "Street corner.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1592970,
+      "category": "places",
+      "rationale": "Intersection."
+    },
+    {
+      "sequence": 1237410,
+      "category": "places",
+      "rationale": "Bridge."
+    },
+    {
+      "sequence": 1421700,
+      "category": "places",
+      "rationale": "Pond."
+    },
+    {
+      "sequence": 1343100,
+      "category": "places",
+      "rationale": "Place."
+    },
+    {
+      "sequence": 1203620,
+      "category": "places",
+      "rationale": "Foreign country."
+    },
+    {
+      "sequence": 1352130,
+      "category": "places",
+      "rationale": "Above and on top."
+    },
+    {
+      "sequence": 1184140,
+      "category": "places",
+      "rationale": "Below and under."
+    },
+    {
+      "sequence": 1423310,
+      "category": "places",
+      "rationale": "Inside and middle.",
+      "senses": [1, 3]
+    },
+    {
+      "sequence": 1203250,
+      "category": "places",
+      "rationale": "Outside."
+    },
+    {
+      "sequence": 1269410,
+      "category": "places",
+      "rationale": "Behind."
+    },
+    {
+      "sequence": 1180570,
+      "category": "places",
+      "rationale": "Beside, and sideways.",
+      "senses": [4]
+    },
+    {
+      "sequence": 1555830,
+      "category": "places",
+      "rationale": "Next door, next to."
+    },
+    {
+      "sequence": 1403830,
+      "category": "places",
+      "rationale": "Near, by the side of."
+    },
+    {
+      "sequence": 1242160,
+      "category": "places",
+      "rationale": "Nearby."
+    },
+    {
+      "sequence": 1171010,
+      "category": "places",
+      "rationale": "Right."
+    },
+    {
+      "sequence": 1290800,
+      "category": "places",
+      "rationale": "Left."
+    },
+    {
+      "sequence": 1447440,
+      "category": "places",
+      "rationale": "East."
+    },
+    {
+      "sequence": 1380840,
+      "category": "places",
+      "rationale": "West."
+    },
+    {
+      "sequence": 1459870,
+      "category": "places",
+      "rationale": "South."
+    },
+    {
+      "sequence": 1520670,
+      "category": "places",
+      "rationale": "North."
+    },
+    {
+      "sequence": 1215230,
+      "category": "places",
+      "rationale": "Between.",
+      "senses": [3]
+    },
+    {
+      "sequence": 1277140,
+      "category": "places",
+      "rationale": "Over there, the other side.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1582820,
+      "category": "places",
+      "rationale": "Entrance."
+    },
+    {
+      "sequence": 1338850,
+      "category": "places",
+      "rationale": "Exit."
+    },
+    {
+      "sequence": 1323080,
+      "category": "transport",
+      "rationale": "Car."
+    },
+    {
+      "sequence": 1443530,
+      "category": "transport",
+      "rationale": "Train."
+    },
+    {
+      "sequence": 1420900,
+      "category": "transport",
+      "rationale": "Underground railway."
+    },
+    {
+      "sequence": 1098390,
+      "category": "transport",
+      "rationale": "Bus."
+    },
+    {
+      "sequence": 1076190,
+      "category": "transport",
+      "rationale": "Taxi."
+    },
+    {
+      "sequence": 1318290,
+      "category": "transport",
+      "rationale": "Bicycle."
+    },
+    {
+      "sequence": 1485470,
+      "category": "transport",
+      "rationale": "Aeroplane."
+    },
+    {
+      "sequence": 1602800,
+      "category": "transport",
+      "rationale": "Ship and boat."
+    },
+    {
+      "sequence": 1318400,
+      "category": "transport",
+      "rationale": "Automobile."
+    },
+    {
+      "sequence": 1385170,
+      "category": "transport",
+      "rationale": "Ticket."
+    },
+    {
+      "sequence": 1245570,
+      "category": "transport",
+      "rationale": "Airport."
+    },
+    {
+      "sequence": 1553170,
+      "category": "transport",
+      "rationale": "Travel."
+    },
+    {
+      "sequence": 1030630,
+      "category": "transport",
+      "rationale": "Lift."
+    },
+    {
+      "sequence": 1355120,
+      "category": "transport",
+      "rationale": "To get on and ride."
+    },
+    {
+      "sequence": 1589500,
+      "category": "transport",
+      "rationale": "To get off.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1444680,
+      "category": "transport",
+      "rationale": "To cross a road or bridge."
+    },
+    {
+      "sequence": 1239730,
+      "category": "transport",
+      "rationale": "To turn a corner.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1206730,
+      "category": "school",
+      "rationale": "School."
+    },
+    {
+      "sequence": 1413240,
+      "category": "school",
+      "rationale": "University."
+    },
+    {
+      "sequence": 1237150,
+      "category": "school",
+      "rationale": "Classroom."
+    },
+    {
+      "sequence": 1330290,
+      "category": "school",
+      "rationale": "Lesson and class."
+    },
+    {
+      "sequence": 1337270,
+      "category": "school",
+      "rationale": "Homework."
+    },
+    {
+      "sequence": 1312350,
+      "category": "school",
+      "rationale": "Examination."
+    },
+    {
+      "sequence": 1079760,
+      "category": "school",
+      "rationale": "Test."
+    },
+    {
+      "sequence": 1512670,
+      "category": "school",
+      "rationale": "Study."
+    },
+    {
+      "sequence": 1320760,
+      "category": "school",
+      "rationale": "Question."
+    },
+    {
+      "sequence": 1536010,
+      "category": "school",
+      "rationale": "Problem and exercise."
+    },
+    {
+      "sequence": 1449530,
+      "category": "school",
+      "rationale": "Answer."
+    },
+    {
+      "sequence": 1264540,
+      "category": "school",
+      "rationale": "Word and language.",
+      "senses": [2, 1]
+    },
+    {
+      "sequence": 1464530,
+      "category": "school",
+      "rationale": "The Japanese language."
+    },
+    {
+      "sequence": 1174420,
+      "category": "school",
+      "rationale": "The English language."
+    },
+    {
+      "sequence": 1213170,
+      "category": "school",
+      "rationale": "Kanji."
+    },
+    {
+      "sequence": 1507090,
+      "category": "school",
+      "rationale": "Hiragana."
+    },
+    {
+      "sequence": 1511600,
+      "category": "school",
+      "rationale": "Katakana.",
+      "reading": "かたかな"
+    },
+    {
+      "sequence": 1156800,
+      "category": "school",
+      "rationale": "Meaning."
+    },
+    {
+      "sequence": 1297960,
+      "category": "school",
+      "rationale": "Composition and essay."
+    },
+    {
+      "sequence": 1559160,
+      "category": "school",
+      "rationale": "Practice."
+    },
+    {
+      "sequence": 1044070,
+      "category": "school",
+      "rationale": "Class."
+    },
+    {
+      "sequence": 1198550,
+      "category": "school",
+      "rationale": "Company."
+    },
+    {
+      "sequence": 1198560,
+      "category": "school",
+      "rationale": "Company employee."
+    },
+    {
+      "sequence": 1304970,
+      "category": "school",
+      "rationale": "Work and job."
+    },
+    {
+      "sequence": 1173720,
+      "category": "school",
+      "rationale": "Films, a common topic of conversation."
+    },
+    {
+      "sequence": 1183720,
+      "category": "school",
+      "rationale": "Music, a common topic of conversation."
+    },
+    {
+      "sequence": 1193180,
+      "category": "school",
+      "rationale": "Song."
+    },
+    {
+      "sequence": 1073210,
+      "category": "school",
+      "rationale": "Sport."
+    },
+    {
+      "sequence": 1042820,
+      "category": "school",
+      "rationale": "Guitar."
+    },
+    {
+      "sequence": 1106400,
+      "category": "school",
+      "rationale": "Piano."
+    },
+    {
+      "sequence": 1358280,
+      "category": "actions",
+      "rationale": "To eat."
+    },
+    {
+      "sequence": 1169870,
+      "category": "actions",
+      "rationale": "To drink."
+    },
+    {
+      "sequence": 1578850,
+      "category": "actions",
+      "rationale": "To go."
+    },
+    {
+      "sequence": 1547720,
+      "category": "actions",
+      "rationale": "To come."
+    },
+    {
+      "sequence": 1259290,
+      "category": "actions",
+      "rationale": "To see and watch."
+    },
+    {
+      "sequence": 1591110,
+      "category": "actions",
+      "rationale": "To hear, listen, and ask.",
+      "senses": [1, 2, 3]
+    },
+    {
+      "sequence": 1456360,
+      "category": "actions",
+      "rationale": "To read."
+    },
+    {
+      "sequence": 1473740,
+      "category": "actions",
+      "rationale": "To buy."
+    },
+    {
+      "sequence": 1157170,
+      "category": "actions",
+      "rationale": "To do."
+    },
+    {
+      "sequence": 1343950,
+      "category": "actions",
+      "rationale": "To write.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1562350,
+      "category": "actions",
+      "rationale": "To speak."
+    },
+    {
+      "sequence": 1587040,
+      "category": "actions",
+      "rationale": "To say."
+    },
+    {
+      "sequence": 1221270,
+      "category": "actions",
+      "rationale": "To go home and return."
+    },
+    {
+      "sequence": 1223640,
+      "category": "actions",
+      "rationale": "To get up.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1360010,
+      "category": "actions",
+      "rationale": "To sleep and go to bed.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1198180,
+      "category": "actions",
+      "rationale": "To meet."
+    },
+    {
+      "sequence": 1410590,
+      "category": "actions",
+      "rationale": "To wait."
+    },
+    {
+      "sequence": 1315720,
+      "category": "actions",
+      "rationale": "To hold and have.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1514320,
+      "category": "actions",
+      "rationale": "To walk."
+    },
+    {
+      "sequence": 1402540,
+      "category": "actions",
+      "rationale": "To run."
+    },
+    {
+      "sequence": 1174340,
+      "category": "actions",
+      "rationale": "To swim."
+    },
+    {
+      "sequence": 1542160,
+      "category": "actions",
+      "rationale": "To play."
+    },
+    {
+      "sequence": 1227560,
+      "category": "actions",
+      "rationale": "To rest and take a day off.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1451150,
+      "category": "actions",
+      "rationale": "To work."
+    },
+    {
+      "sequence": 1333070,
+      "category": "actions",
+      "rationale": "To learn from someone."
+    },
+    {
+      "sequence": 1236900,
+      "category": "actions",
+      "rationale": "To teach and tell.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1206050,
+      "category": "actions",
+      "rationale": "To memorise."
+    },
+    {
+      "sequence": 1519210,
+      "category": "actions",
+      "rationale": "To forget."
+    },
+    {
+      "sequence": 1606560,
+      "category": "actions",
+      "rationale": "To understand."
+    },
+    {
+      "sequence": 1420470,
+      "category": "actions",
+      "rationale": "To know."
+    },
+    {
+      "sequence": 1597890,
+      "category": "actions",
+      "rationale": "To make."
+    },
+    {
+      "sequence": 1305990,
+      "category": "actions",
+      "rationale": "To use."
+    },
+    {
+      "sequence": 1390930,
+      "category": "actions",
+      "rationale": "To wash."
+    },
+    {
+      "sequence": 1390980,
+      "category": "actions",
+      "rationale": "Laundry."
+    },
+    {
+      "sequence": 1399790,
+      "category": "actions",
+      "rationale": "Cleaning."
+    },
+    {
+      "sequence": 1465590,
+      "category": "actions",
+      "rationale": "To enter."
+    },
+    {
+      "sequence": 1338240,
+      "category": "actions",
+      "rationale": "To leave and go out."
+    },
+    {
+      "sequence": 1598550,
+      "category": "actions",
+      "rationale": "To go out."
+    },
+    {
+      "sequence": 1202450,
+      "category": "actions",
+      "rationale": "To open."
+    },
+    {
+      "sequence": 1508590,
+      "category": "actions",
+      "rationale": "To close."
+    },
+    {
+      "sequence": 1423000,
+      "category": "actions",
+      "rationale": "To put on clothes."
+    },
+    {
+      "sequence": 1416400,
+      "category": "actions",
+      "rationale": "To take off clothes and shoes."
+    },
+    {
+      "sequence": 1607260,
+      "category": "actions",
+      "rationale": "To put on shoes and trousers."
+    },
+    {
+      "sequence": 1291800,
+      "category": "actions",
+      "rationale": "To sit."
+    },
+    {
+      "sequence": 1597040,
+      "category": "actions",
+      "rationale": "To stand."
+    },
+    {
+      "sequence": 1334040,
+      "category": "actions",
+      "rationale": "To live somewhere."
+    },
+    {
+      "sequence": 1473950,
+      "category": "actions",
+      "rationale": "To sell."
+    },
+    {
+      "sequence": 1411160,
+      "category": "actions",
+      "rationale": "To lend."
+    },
+    {
+      "sequence": 1323560,
+      "category": "actions",
+      "rationale": "To borrow."
+    },
+    {
+      "sequence": 1512130,
+      "category": "actions",
+      "rationale": "To give back."
+    },
+    {
+      "sequence": 1266440,
+      "category": "actions",
+      "rationale": "To call."
+    },
+    {
+      "sequence": 1588120,
+      "category": "actions",
+      "rationale": "To sing."
+    },
+    {
+      "sequence": 1419370,
+      "category": "actions",
+      "rationale": "To play an instrument."
+    },
+    {
+      "sequence": 1298790,
+      "category": "actions",
+      "rationale": "To take a photo."
+    },
+    {
+      "sequence": 1326980,
+      "category": "actions",
+      "rationale": "To take."
+    },
+    {
+      "sequence": 1421850,
+      "category": "actions",
+      "rationale": "To put."
+    },
+    {
+      "sequence": 1307500,
+      "category": "actions",
+      "rationale": "To begin."
+    },
+    {
+      "sequence": 1589600,
+      "category": "actions",
+      "rationale": "To end."
+    },
+    {
+      "sequence": 1508380,
+      "category": "actions",
+      "rationale": "To line up."
+    },
+    {
+      "sequence": 1350110,
+      "category": "actions",
+      "rationale": "To switch off.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1547450,
+      "category": "actions",
+      "rationale": "To take a shower."
+    },
+    {
+      "sequence": 1523940,
+      "category": "actions",
+      "rationale": "To brush teeth."
+    },
+    {
+      "sequence": 1548370,
+      "category": "actions",
+      "rationale": "To ask a favour and to order.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1378690,
+      "category": "actions",
+      "rationale": "To be born."
+    },
+    {
+      "sequence": 1254790,
+      "category": "actions",
+      "rationale": "Marriage."
+    },
+    {
+      "sequence": 1303620,
+      "category": "actions",
+      "rationale": "A walk."
+    },
+    {
+      "sequence": 1296400,
+      "category": "actions",
+      "rationale": "To exist, for things.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1577980,
+      "category": "actions",
+      "rationale": "To exist, for people and animals."
+    },
+    {
+      "sequence": 1259210,
+      "category": "actions",
+      "rationale": "To show."
+    },
+    {
+      "sequence": 1449540,
+      "category": "actions",
+      "rationale": "To answer."
+    },
+    {
+      "sequence": 1429700,
+      "category": "actions",
+      "rationale": "To fly."
+    },
+    {
+      "sequence": 1483740,
+      "category": "actions",
+      "rationale": "To get tired."
+    },
+    {
+      "sequence": 1289590,
+      "category": "actions",
+      "rationale": "To be in trouble."
+    },
+    {
+      "sequence": 1338180,
+      "category": "actions",
+      "rationale": "To take out and hand in.",
+      "senses": [1, 3]
+    },
+    {
+      "sequence": 1180470,
+      "category": "actions",
+      "rationale": "To push.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1169250,
+      "category": "actions",
+      "rationale": "To pull."
+    },
+    {
+      "sequence": 1384830,
+      "category": "actions",
+      "rationale": "To cut."
+    },
+    {
+      "sequence": 1352570,
+      "category": "actions",
+      "rationale": "To climb."
+    },
+    {
+      "sequence": 1240825,
+      "category": "actions",
+      "rationale": "To be employed at."
+    },
+    {
+      "sequence": 1228260,
+      "category": "actions",
+      "rationale": "To breathe in, and to smoke."
+    },
+    {
+      "sequence": 1409140,
+      "category": "body",
+      "rationale": "Body."
+    },
+    {
+      "sequence": 1582310,
+      "category": "body",
+      "rationale": "Head."
+    },
+    {
+      "sequence": 1217730,
+      "category": "body",
+      "rationale": "Face."
+    },
+    {
+      "sequence": 1604890,
+      "category": "body",
+      "rationale": "Eye."
+    },
+    {
+      "sequence": 1317170,
+      "category": "body",
+      "rationale": "Ear."
+    },
+    {
+      "sequence": 1486720,
+      "category": "body",
+      "rationale": "Nose."
+    },
+    {
+      "sequence": 1275640,
+      "category": "body",
+      "rationale": "Mouth."
+    },
+    {
+      "sequence": 1313000,
+      "category": "body",
+      "rationale": "Tooth."
+    },
+    {
+      "sequence": 1327190,
+      "category": "body",
+      "rationale": "Hand."
+    },
+    {
+      "sequence": 1404630,
+      "category": "body",
+      "rationale": "Foot and leg.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1002610,
+      "category": "body",
+      "rationale": "Stomach."
+    },
+    {
+      "sequence": 2147990,
+      "category": "body",
+      "rationale": "Height and back.",
+      "senses": [1, 3]
+    },
+    {
+      "sequence": 1477950,
+      "category": "body",
+      "rationale": "Hair on the head."
+    },
+    {
+      "sequence": 1380440,
+      "category": "body",
+      "rationale": "Voice."
+    },
+    {
+      "sequence": 1490230,
+      "category": "body",
+      "rationale": "Illness."
+    },
+    {
+      "sequence": 1538160,
+      "category": "body",
+      "rationale": "Medicine."
+    },
+    {
+      "sequence": 1583720,
+      "category": "body",
+      "rationale": "A cold."
+    },
+    {
+      "sequence": 1432680,
+      "category": "body",
+      "rationale": "Painful."
+    },
+    {
+      "sequence": 1260720,
+      "category": "body",
+      "rationale": "Healthy and lively.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1580480,
+      "category": "body",
+      "rationale": "Strong and healthy."
+    },
+    {
+      "sequence": 1438690,
+      "category": "weather",
+      "rationale": "Weather."
+    },
+    {
+      "sequence": 1171900,
+      "category": "weather",
+      "rationale": "Rain."
+    },
+    {
+      "sequence": 1386500,
+      "category": "weather",
+      "rationale": "Snow."
+    },
+    {
+      "sequence": 1499720,
+      "category": "weather",
+      "rationale": "Wind."
+    },
+    {
+      "sequence": 1245290,
+      "category": "weather",
+      "rationale": "Sky."
+    },
+    {
+      "sequence": 1173100,
+      "category": "weather",
+      "rationale": "Cloud."
+    },
+    {
+      "sequence": 1376460,
+      "category": "weather",
+      "rationale": "Clear weather."
+    },
+    {
+      "sequence": 1592340,
+      "category": "weather",
+      "rationale": "Cloudy weather."
+    },
+    {
+      "sequence": 1341000,
+      "category": "weather",
+      "rationale": "Spring."
+    },
+    {
+      "sequence": 1191320,
+      "category": "weather",
+      "rationale": "Summer."
+    },
+    {
+      "sequence": 1332650,
+      "category": "weather",
+      "rationale": "Autumn."
+    },
+    {
+      "sequence": 1446070,
+      "category": "weather",
+      "rationale": "Winter."
+    },
+    {
+      "sequence": 1343460,
+      "category": "weather",
+      "rationale": "Hot weather."
+    },
+    {
+      "sequence": 1210360,
+      "category": "weather",
+      "rationale": "Cold weather."
+    },
+    {
+      "sequence": 1586420,
+      "category": "weather",
+      "rationale": "Warm."
+    },
+    {
+      "sequence": 1554370,
+      "category": "weather",
+      "rationale": "Cool."
+    },
+    {
+      "sequence": 1282790,
+      "category": "weather",
+      "rationale": "To fall, of rain and snow."
+    },
+    {
+      "sequence": 1370760,
+      "category": "weather",
+      "rationale": "To blow, of wind."
+    },
+    {
+      "sequence": 1302680,
+      "category": "weather",
+      "rationale": "Mountain."
+    },
+    {
+      "sequence": 1390020,
+      "category": "weather",
+      "rationale": "River."
+    },
+    {
+      "sequence": 1201190,
+      "category": "weather",
+      "rationale": "Sea."
+    },
+    {
+      "sequence": 1534520,
+      "category": "weather",
+      "rationale": "Tree."
+    },
+    {
+      "sequence": 1194500,
+      "category": "weather",
+      "rationale": "Flower."
+    },
+    {
+      "sequence": 1297210,
+      "category": "weather",
+      "rationale": "To bloom."
+    },
+    {
+      "sequence": 1258330,
+      "category": "weather",
+      "rationale": "Dog."
+    },
+    {
+      "sequence": 1467640,
+      "category": "weather",
+      "rationale": "Cat."
+    },
+    {
+      "sequence": 1430250,
+      "category": "weather",
+      "rationale": "Bird."
+    },
+    {
+      "sequence": 1451470,
+      "category": "weather",
+      "rationale": "Animal."
+    },
+    {
+      "sequence": 1376310,
+      "category": "weather",
+      "rationale": "Star."
+    },
+    {
+      "sequence": 1588880,
+      "category": "descriptions",
+      "rationale": "Big."
+    },
+    {
+      "sequence": 1347750,
+      "category": "descriptions",
+      "rationale": "Small."
+    },
+    {
+      "sequence": 1486650,
+      "category": "descriptions",
+      "rationale": "Tasty."
+    },
+    {
+      "sequence": 1361490,
+      "category": "descriptions",
+      "rationale": "New."
+    },
+    {
+      "sequence": 1265070,
+      "category": "descriptions",
+      "rationale": "Old, of things."
+    },
+    {
+      "sequence": 2820690,
+      "category": "descriptions",
+      "rationale": "Good."
+    },
+    {
+      "sequence": 1151260,
+      "category": "descriptions",
+      "rationale": "Bad."
+    },
+    {
+      "sequence": 1283190,
+      "category": "descriptions",
+      "rationale": "Tall and expensive.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1153670,
+      "category": "descriptions",
+      "rationale": "Cheap."
+    },
+    {
+      "sequence": 1434180,
+      "category": "descriptions",
+      "rationale": "Low and short."
+    },
+    {
+      "sequence": 1429750,
+      "category": "descriptions",
+      "rationale": "Long.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1418620,
+      "category": "descriptions",
+      "rationale": "Short."
+    },
+    {
+      "sequence": 1278410,
+      "category": "descriptions",
+      "rationale": "Wide and spacious."
+    },
+    {
+      "sequence": 1237680,
+      "category": "descriptions",
+      "rationale": "Narrow and cramped."
+    },
+    {
+      "sequence": 1335750,
+      "category": "descriptions",
+      "rationale": "Heavy."
+    },
+    {
+      "sequence": 1252560,
+      "category": "descriptions",
+      "rationale": "Light."
+    },
+    {
+      "sequence": 1404975,
+      "category": "descriptions",
+      "rationale": "Early and fast.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1421970,
+      "category": "descriptions",
+      "rationale": "Late and slow.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1242130,
+      "category": "descriptions",
+      "rationale": "Near."
+    },
+    {
+      "sequence": 1177800,
+      "category": "descriptions",
+      "rationale": "Far."
+    },
+    {
+      "sequence": 1407460,
+      "category": "descriptions",
+      "rationale": "Many."
+    },
+    {
+      "sequence": 1348910,
+      "category": "descriptions",
+      "rationale": "Few."
+    },
+    {
+      "sequence": 1157000,
+      "category": "descriptions",
+      "rationale": "Easy."
+    },
+    {
+      "sequence": 1460850,
+      "category": "descriptions",
+      "rationale": "Difficult."
+    },
+    {
+      "sequence": 1533580,
+      "category": "descriptions",
+      "rationale": "Interesting and funny.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1008190,
+      "category": "descriptions",
+      "rationale": "Boring."
+    },
+    {
+      "sequence": 1207240,
+      "category": "descriptions",
+      "rationale": "Fun."
+    },
+    {
+      "sequence": 1519290,
+      "category": "descriptions",
+      "rationale": "Busy."
+    },
+    {
+      "sequence": 1577280,
+      "category": "descriptions",
+      "rationale": "Free time.",
+      "senses": [1, 5]
+    },
+    {
+      "sequence": 1381820,
+      "category": "descriptions",
+      "rationale": "Quiet."
+    },
+    {
+      "sequence": 1463480,
+      "category": "descriptions",
+      "rationale": "Lively."
+    },
+    {
+      "sequence": 1591900,
+      "category": "descriptions",
+      "rationale": "Pretty and clean.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1178940,
+      "category": "descriptions",
+      "rationale": "Dirty."
+    },
+    {
+      "sequence": 1541620,
+      "category": "descriptions",
+      "rationale": "Famous."
+    },
+    {
+      "sequence": 1512610,
+      "category": "descriptions",
+      "rationale": "Convenient."
+    },
+    {
+      "sequence": 1365250,
+      "category": "descriptions",
+      "rationale": "Kind."
+    },
+    {
+      "sequence": 1277450,
+      "category": "descriptions",
+      "rationale": "Liked."
+    },
+    {
+      "sequence": 1257240,
+      "category": "descriptions",
+      "rationale": "Disliked."
+    },
+    {
+      "sequence": 1413660,
+      "category": "descriptions",
+      "rationale": "Loved."
+    },
+    {
+      "sequence": 1353320,
+      "category": "descriptions",
+      "rationale": "Skilful."
+    },
+    {
+      "sequence": 1185200,
+      "category": "descriptions",
+      "rationale": "Unskilful."
+    },
+    {
+      "sequence": 1414340,
+      "category": "descriptions",
+      "rationale": "Important and precious.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1414150,
+      "category": "descriptions",
+      "rationale": "All right."
+    },
+    {
+      "sequence": 1467720,
+      "category": "descriptions",
+      "rationale": "Hot to the touch."
+    },
+    {
+      "sequence": 1556730,
+      "category": "descriptions",
+      "rationale": "Cold to the touch."
+    },
+    {
+      "sequence": 1213400,
+      "category": "descriptions",
+      "rationale": "Sweet."
+    },
+    {
+      "sequence": 1365850,
+      "category": "descriptions",
+      "rationale": "Spicy."
+    },
+    {
+      "sequence": 1324300,
+      "category": "descriptions",
+      "rationale": "Young."
+    },
+    {
+      "sequence": 1532350,
+      "category": "descriptions",
+      "rationale": "Bright."
+    },
+    {
+      "sequence": 1154330,
+      "category": "descriptions",
+      "rationale": "Dark."
+    },
+    {
+      "sequence": 1236070,
+      "category": "descriptions",
+      "rationale": "Strong."
+    },
+    {
+      "sequence": 1324520,
+      "category": "descriptions",
+      "rationale": "Weak."
+    },
+    {
+      "sequence": 1408180,
+      "category": "descriptions",
+      "rationale": "Thick."
+    },
+    {
+      "sequence": 1295510,
+      "category": "descriptions",
+      "rationale": "Thin."
+    },
+    {
+      "sequence": 1577200,
+      "category": "descriptions",
+      "rationale": "Cute."
+    },
+    {
+      "sequence": 1219510,
+      "category": "descriptions",
+      "rationale": "Glad."
+    },
+    {
+      "sequence": 1547330,
+      "category": "descriptions",
+      "rationale": "Wanted."
+    },
+    {
+      "sequence": 1357600,
+      "category": "descriptions",
+      "rationale": "Colour."
+    },
+    {
+      "sequence": 1383240,
+      "category": "descriptions",
+      "rationale": "Red."
+    },
+    {
+      "sequence": 1381390,
+      "category": "descriptions",
+      "rationale": "Blue.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1474910,
+      "category": "descriptions",
+      "rationale": "White."
+    },
+    {
+      "sequence": 1287420,
+      "category": "descriptions",
+      "rationale": "Black."
+    },
+    {
+      "sequence": 1182030,
+      "category": "descriptions",
+      "rationale": "Yellow."
+    },
+    {
+      "sequence": 1422720,
+      "category": "descriptions",
+      "rationale": "Brown."
+    },
+    {
+      "sequence": 1555300,
+      "category": "descriptions",
+      "rationale": "Green."
+    },
+    {
+      "sequence": 1451750,
+      "category": "descriptions",
+      "rationale": "Same."
+    },
+    {
+      "sequence": 1587850,
+      "category": "descriptions",
+      "rationale": "Various."
+    },
+    {
+      "sequence": 1523060,
+      "category": "descriptions",
+      "rationale": "True and real."
+    },
+    {
+      "sequence": 1165970,
+      "category": "descriptions",
+      "rationale": "Number one, and most.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1008630,
+      "category": "descriptions",
+      "rationale": "Very."
+    },
+    {
+      "sequence": 1605870,
+      "category": "descriptions",
+      "rationale": "Often and well.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1012620,
+      "category": "descriptions",
+      "rationale": "More."
+    },
+    {
+      "sequence": 1527110,
+      "category": "descriptions",
+      "rationale": "Still and not yet.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1012480,
+      "category": "descriptions",
+      "rationale": "Already, and more.",
+      "senses": [1, 3]
+    },
+    {
+      "sequence": 1524930,
+      "category": "descriptions",
+      "rationale": "Again."
+    },
+    {
+      "sequence": 1430610,
+      "category": "descriptions",
+      "rationale": "Immediately."
+    },
+    {
+      "sequence": 1013050,
+      "category": "descriptions",
+      "rationale": "Slowly."
+    },
+    {
+      "sequence": 1163400,
+      "category": "descriptions",
+      "rationale": "Together."
+    },
+    {
+      "sequence": 1414580,
+      "category": "descriptions",
+      "rationale": "Usually."
+    },
+    {
+      "sequence": 1584930,
+      "category": "descriptions",
+      "rationale": "Not very, with a negative.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1395620,
+      "category": "descriptions",
+      "rationale": "Not at all, with a negative."
+    },
+    {
+      "sequence": 1342550,
+      "category": "descriptions",
+      "rationale": "For the first time."
+    },
+    {
+      "sequence": 1577100,
+      "category": "questions",
+      "rationale": "What."
+    },
+    {
+      "sequence": 1416830,
+      "category": "questions",
+      "rationale": "Who."
+    },
+    {
+      "sequence": 1577140,
+      "category": "questions",
+      "rationale": "Where."
+    },
+    {
+      "sequence": 1188760,
+      "category": "questions",
+      "rationale": "When."
+    },
+    {
+      "sequence": 1009290,
+      "category": "questions",
+      "rationale": "Which one."
+    },
+    {
+      "sequence": 1920240,
+      "category": "questions",
+      "rationale": "Which, before a noun."
+    },
+    {
+      "sequence": 1009330,
+      "category": "questions",
+      "rationale": "What kind of."
+    },
+    {
+      "sequence": 1008910,
+      "category": "questions",
+      "rationale": "How."
+    },
+    {
+      "sequence": 1466940,
+      "category": "questions",
+      "rationale": "Why.",
+      "senses": [2]
+    },
+    {
+      "sequence": 1577120,
+      "category": "questions",
+      "rationale": "Why, more formally."
+    },
+    {
+      "sequence": 1219960,
+      "category": "questions",
+      "rationale": "How many, and how old.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1219980,
+      "category": "questions",
+      "rationale": "How much."
+    },
+    {
+      "sequence": 1189360,
+      "category": "questions",
+      "rationale": "Which way, which of two.",
+      "senses": [1, 2]
+    },
+    {
+      "sequence": 1628530,
+      "category": "questions",
+      "rationale": "This one, near me.",
+      "hint": "on its own"
+    },
+    {
+      "sequence": 1006970,
+      "category": "questions",
+      "rationale": "That one, near you.",
+      "hint": "on its own"
+    },
+    {
+      "sequence": 1000580,
+      "category": "questions",
+      "rationale": "That one over there.",
+      "hint": "on its own"
+    },
+    {
+      "sequence": 1582920,
+      "category": "questions",
+      "rationale": "This, before a noun.",
+      "hint": "before a noun"
+    },
+    {
+      "sequence": 1006830,
+      "category": "questions",
+      "rationale": "That, before a noun.",
+      "hint": "before a noun"
+    },
+    {
+      "sequence": 1000420,
+      "category": "questions",
+      "rationale": "That over there, before a noun.",
+      "hint": "before a noun"
+    },
+    {
+      "sequence": 1288810,
+      "category": "questions",
+      "rationale": "Here."
+    },
+    {
+      "sequence": 1006670,
+      "category": "questions",
+      "rationale": "There, near you."
+    },
+    {
+      "sequence": 1000320,
+      "category": "questions",
+      "rationale": "Over there."
+    },
+    {
+      "sequence": 1004500,
+      "category": "questions",
+      "rationale": "This way, politely."
+    },
+    {
+      "sequence": 1006780,
+      "category": "questions",
+      "rationale": "That way, politely."
+    },
+    {
+      "sequence": 1483185,
+      "category": "questions",
+      "rationale": "That way over there, politely."
+    },
+    {
+      "sequence": 1004880,
+      "category": "questions",
+      "rationale": "This kind of."
+    },
+    {
+      "sequence": 1007130,
+      "category": "questions",
+      "rationale": "That kind of."
+    },
+    {
+      "sequence": 1188770,
+      "category": "questions",
+      "rationale": "What time."
+    },
+    {
+      "sequence": 1189400,
+      "category": "questions",
+      "rationale": "What day of the week."
+    }
+  ]
+}

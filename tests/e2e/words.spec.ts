@@ -1,24 +1,30 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('first vocabulary set', () => {
+test.describe('N5 vocabulary', () => {
   test('opens a lesson, views a word, practises both directions, and saves completion', async ({
     page
   }) => {
     await page.goto('/words');
     await expect(page.getByRole('heading', { level: 1, name: 'Vocabulary' })).toBeVisible();
-    await expect(
-      page.getByRole('link', { name: 'Lesson 1: People and introductions' })
-    ).toBeVisible();
-    await page.getByRole('link', { name: 'Lesson 1: People and introductions' }).click();
+    await expect(page.getByRole('link', { name: 'People and introductions' })).toBeVisible();
+    await expect(page.getByRole('main').getByRole('listitem')).toHaveCount(75);
+    await page.getByRole('link', { name: 'People and introductions' }).click();
     await expect(
       page.getByRole('heading', { level: 1, name: 'People and introductions' })
     ).toBeVisible();
     await expect(page.getByText('8 words')).toBeVisible();
+    await expect(page.getByText('Kanji, optional for now: 私')).toBeVisible();
     await page.getByRole('link', { name: /わたし/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'わたし' })).toBeVisible();
     await expect(page.getByText('I', { exact: true })).toBeVisible();
+    await expect(page.getByText('Usage: polite, for anyone')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Written with kanji' })).toBeVisible();
+    await expect(page.getByRole('listitem').filter({ hasText: '私' })).toHaveAttribute(
+      'lang',
+      'ja'
+    );
     await page.getByRole('link', { name: 'All vocabulary lessons' }).click();
-    await page.getByRole('link', { name: 'Lesson 1: People and introductions' }).click();
+    await page.getByRole('link', { name: 'People and introductions' }).click();
     await page.getByRole('link', { name: 'Practise this lesson' }).click();
     await expect(page.getByText('Type the reading for each meaning')).toBeVisible();
     await page.getByRole('button', { name: 'Reading to meaning' }).click();
@@ -30,14 +36,14 @@ test.describe('first vocabulary set', () => {
     page
   }) => {
     const expected = new Map([
-      ['I', 'わたし'],
-      ['person', 'ひと'],
-      ['friend', 'ともだち'],
-      ['teacher', 'せんせい'],
+      ['I; me (polite, for anyone)', 'わたし'],
+      ['person; someone; somebody', 'ひと'],
+      ['friend; companion', 'ともだち'],
+      ['teacher; instructor; master', 'せんせい'],
       ['student (esp. a university student)', 'がくせい'],
       ['family', 'かぞく'],
-      ['father', 'おとうさん'],
-      ['mother', 'おかあさん']
+      ['father; dad; papa (polite, or speaking to him)', 'おとうさん'],
+      ['mother; mom; mum (polite, or speaking to her)', 'おかあさん']
     ]);
     await page.goto('/words/practice/people?mode=word-meaning-to-reading&seed=1');
     for (let count = 0; count < 16; count += 1) {
@@ -57,5 +63,44 @@ test.describe('first vocabulary set', () => {
     await expect
       .poll(() => page.evaluate(() => localStorage.getItem('onihayo:progress')))
       .toContain('word.jmdict.1311110');
+  });
+});
+
+test.describe('word search', () => {
+  test('finds words by romaji from the vocabulary page and opens one', async ({ page }) => {
+    await page.goto('/words');
+    await page.getByLabel('Search words by kana, romaji, kanji, or meaning').fill('neko');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/words\/search\?q=neko$/u);
+    await expect(page.getByRole('heading', { level: 1, name: 'Word search' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2 })).toHaveText('1 word matches “neko”.');
+    await expect(page.getByLabel('Search words', { exact: true })).toHaveValue('neko');
+    await page.getByRole('link', { name: /ねこ/u }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'ねこ' })).toBeVisible();
+  });
+
+  test('searches by English and kana, and explains long and unmatched queries', async ({
+    page
+  }) => {
+    await page.goto('/words/search?q=eat');
+    await expect(page.getByRole('main').getByRole('listitem').first()).toContainText('たべる');
+    await page.goto(`/words/search?q=${encodeURIComponent('コーヒー')}`);
+    await expect(page.getByRole('main').getByRole('listitem').first()).toContainText('コーヒー');
+    await page.goto('/words/search?q=zzzz');
+    await expect(page.getByRole('heading', { level: 2 })).toHaveText('No words match “zzzz”.');
+    await page.goto(`/words/search?q=${'a'.repeat(51)}`);
+    await expect(page.getByText('Search for at most 50 characters.')).toBeVisible();
+  });
+});
+
+test.describe('word search without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('renders results on the server', async ({ page }) => {
+    await page.goto('/words/search');
+    await page.getByLabel('Search words', { exact: true }).fill('taberu');
+    await page.getByRole('button', { name: 'Search' }).click();
+    await expect(page).toHaveURL(/q=taberu/u);
+    await expect(page.getByRole('main').getByRole('listitem').first()).toContainText('たべる');
   });
 });

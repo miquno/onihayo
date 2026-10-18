@@ -1,8 +1,9 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import { maxQueryLength } from '$lib/content/word-search';
   import { pageTitle } from '$lib/site';
+  import Button from '$lib/ui/Button.svelte';
   import Kicker from '$lib/ui/Kicker.svelte';
-  import LinkButton from '$lib/ui/LinkButton.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -12,33 +13,42 @@
   <title>{pageTitle('Vocabulary')}</title>
   <meta
     name="description"
-    content="Learn a first set of 40 beginner Japanese words, grouped into short lessons."
+    content="Learn {String(data.wordCount)} beginner Japanese words for JLPT N5 in {String(
+      data.lessons.length
+    )} short themed lessons, written in kana."
   />
 </svelte:head>
 
 <Kicker japanese="ことば" label="Words" />
 <h1>Vocabulary</h1>
 <p class="lead">
-  Learn a first set of 40 everyday words in kana. Each lesson includes a short note, word details,
-  and practice in both directions.
+  {data.wordCount} everyday words for JLPT N5, written in kana, in {data.lessons.length} short lessons
+  of up to ten words. Each lesson has a short note, word pages, and practice in both directions.
+</p>
+<p>
+  The words are Onihayo's own N5-oriented selection: the words beginners need most, not an official
+  list. Start at the top; each lesson builds on the kana you already know.
+</p>
+
+<form class="search" method="GET" action={resolve('/words/search')} role="search">
+  <label for="word-search">Search words by kana, romaji, kanji, or meaning</label>
+  <div class="field">
+    <input id="word-search" type="search" name="q" maxlength={maxQueryLength} autocomplete="off" />
+    <Button type="submit" variant="secondary">Search</Button>
+  </div>
+</form>
+
+<p>
+  <a href={resolve('/words/list')}>Browse the word list</a>: every word in teaching order, filtered
+  by what you have learned.
 </p>
 
 <ol class="lessons">
-  {#each data.lessons as lesson, index (lesson.slug)}
+  {#each data.lessons as lesson (lesson.slug)}
     <li>
-      <h2>
-        <a href={resolve('/words/lessons/[lesson]', { lesson: lesson.slug })}>
-          Lesson {index + 1}: {lesson.title}
-        </a>
-      </h2>
+      <a href={resolve('/words/lessons/[lesson]', { lesson: lesson.slug })}>{lesson.title}</a>
+      <span class="count">{lesson.count} words</span>
       <p>{lesson.note}</p>
-      <p>{lesson.count} words</p>
-      <LinkButton
-        variant="secondary"
-        href={resolve('/words/lessons/[lesson]', { lesson: lesson.slug })}
-      >
-        Open lesson
-      </LinkButton>
     </li>
   {/each}
 </ol>
@@ -56,12 +66,6 @@
     margin: 0 0 var(--space-4);
   }
 
-  h2 {
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-heading);
-    margin: 0 0 var(--space-2);
-  }
-
   p {
     color: var(--color-text-muted);
   }
@@ -71,16 +75,56 @@
     color: var(--color-text);
   }
 
+  .search {
+    margin: var(--space-6) 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  input {
+    flex: 1 1 12rem;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+  }
+
   .lessons {
+    margin: var(--space-6) 0 0;
     padding-inline-start: var(--space-6);
   }
 
-  .lessons li + li {
-    margin-top: var(--space-6);
+  .lessons li {
+    padding-block: var(--space-3);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .lessons a {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .count {
+    margin-inline-start: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
   }
 
   .lessons li > p {
-    margin: 0 0 var(--space-2);
+    margin: var(--space-1) 0 0;
+    font-size: var(--font-size-sm);
   }
 
   .licence-note {

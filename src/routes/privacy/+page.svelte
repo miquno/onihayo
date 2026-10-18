@@ -58,8 +58,9 @@
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed
-  answers are never sent to Onihayo or saved. Kana quiz settings and vocabulary practice direction
-  are part of the page address, like any link, so you can bookmark a practice session.
+  answers are never sent to Onihayo or saved. Kana quiz settings, vocabulary practice direction, and
+  word searches are part of the page address, like any link, so you can bookmark them. Onihayo does
+  not save or log what you search for.
 </p>
 {#if data.accountsEnabled}
   <p>Guests receive no account cookie. Signing in sets only the session cookie described above.</p>

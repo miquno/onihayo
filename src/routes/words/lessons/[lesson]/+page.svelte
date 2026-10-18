@@ -6,6 +6,10 @@
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
+  const meaningText = (id: string, meaning = '') => {
+    const hint = data.hints[id];
+    return hint === undefined ? meaning : `${meaning} (${hint})`;
+  };
 </script>
 
 <svelte:head>
@@ -22,8 +26,11 @@
       <Card>
         <a class="word-link" href={resolve('/words/[id]', { id: word.id })}>
           <span class="kana" lang="ja">{word.kana}</span>
-          <span class="meaning">{word.meanings[0]}</span>
+          <span class="meaning">{meaningText(word.id, word.meanings[0])}</span>
         </a>
+        {#if word.kanji && word.kanji.length > 0}
+          <p class="kanji">Kanji, optional for now: <span lang="ja">{word.kanji[0]}</span></p>
+        {/if}
       </Card>
     </li>
   {/each}
@@ -73,6 +80,12 @@
     display: grid;
     gap: var(--space-2);
     text-decoration: none;
+  }
+
+  .kanji {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
   }
 
   .word-link:hover .meaning {

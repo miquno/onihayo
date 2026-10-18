@@ -1,4 +1,5 @@
 import type { WordRecord } from '$lib/content/model';
+import { wordPrompt } from '$lib/content/words';
 import { normalizeAnswer } from './normalize';
 import type { PracticeItem } from './practice-item';
 import type { QuestionMode } from './modes';
@@ -21,14 +22,19 @@ export const wordQuestionModes = [
   }
 ] as const satisfies readonly QuestionMode[];
 
-/** Adapt words into the shared practice contract; sessions remain content-agnostic. */
-export function wordPracticeItems(records: readonly WordRecord[]): PracticeItem[] {
+/**
+ * Adapt words into the shared practice contract; sessions remain content-agnostic. The prompt
+ * is `wordPrompt()`: the first meanings and the word's usage hint, if `hints` has one.
+ */
+export function wordPracticeItems(
+  records: readonly WordRecord[],
+  hints: ReadonlyMap<string, string> = new Map()
+): PracticeItem[] {
   return records.map((record) => {
-    const [meaning] = record.meanings;
-    if (meaning === undefined) throw new Error(`Word ${record.id} has no meaning.`);
+    if (record.meanings.length === 0) throw new Error(`Word ${record.id} has no meaning.`);
     return {
       id: record.id,
-      prompt: meaning,
+      prompt: wordPrompt(record.meanings, hints.get(record.id)),
       promptLang: null,
       promptName: 'meaning',
       answer: record.kana,
