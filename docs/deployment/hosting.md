@@ -59,6 +59,7 @@ docker run --read-only --cap-drop ALL --security-opt no-new-privileges \
 
 - Configuration comes from environment variables set in the hosting platform. Secrets live only in its secret store — never in the repository, image, or logs.
 - Separate environments (production, optional staging) use separate databases and secrets.
+- Word search puts what a learner searched for in the query string of `/words/search`. The application never logs it; redact query strings on that path in access logs too.
 - Account links carry a single-use bearer in the URL. Proxy and platform access logs must redact query strings on `/account/confirm`; keep access logs short-lived. Account responses use `Cache-Control: no-store` and `Referrer-Policy: origin`, which omits the bearer URL while allowing same-origin form POSTs to pass SvelteKit's Origin check.
 - Expired link rows and rate-limit buckets are removed on subsequent authentication requests. Until account deletion and retention controls are implemented, keep `AUTH_ENABLED=false` in public deployments. Before enabling it, define periodic cleanup and retention for inactive accounts and database backups, and complete the SES DPA/retention/transfer review in ADR 0011.
 

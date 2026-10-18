@@ -65,3 +65,42 @@ test.describe('N5 vocabulary', () => {
       .toContain('word.jmdict.1311110');
   });
 });
+
+test.describe('word search', () => {
+  test('finds words by romaji from the vocabulary page and opens one', async ({ page }) => {
+    await page.goto('/words');
+    await page.getByLabel('Search words by kana, romaji, kanji, or meaning').fill('neko');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/words\/search\?q=neko$/u);
+    await expect(page.getByRole('heading', { level: 1, name: 'Word search' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2 })).toHaveText('1 word matches “neko”.');
+    await expect(page.getByLabel('Search words', { exact: true })).toHaveValue('neko');
+    await page.getByRole('link', { name: /ねこ/u }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'ねこ' })).toBeVisible();
+  });
+
+  test('searches by English and kana, and explains long and unmatched queries', async ({
+    page
+  }) => {
+    await page.goto('/words/search?q=eat');
+    await expect(page.getByRole('main').getByRole('listitem').first()).toContainText('たべる');
+    await page.goto(`/words/search?q=${encodeURIComponent('コーヒー')}`);
+    await expect(page.getByRole('main').getByRole('listitem').first()).toContainText('コーヒー');
+    await page.goto('/words/search?q=zzzz');
+    await expect(page.getByRole('heading', { level: 2 })).toHaveText('No words match “zzzz”.');
+    await page.goto(`/words/search?q=${'a'.repeat(51)}`);
+    await expect(page.getByText('Search for at most 50 characters.')).toBeVisible();
+  });
+});
+
+test.describe('word search without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('renders results on the server', async ({ page }) => {
+    await page.goto('/words/search');
+    await page.getByLabel('Search words', { exact: true }).fill('taberu');
+    await page.getByRole('button', { name: 'Search' }).click();
+    await expect(page).toHaveURL(/q=taberu/u);
+    await expect(page.getByRole('main').getByRole('listitem').first()).toContainText('たべる');
+  });
+});
