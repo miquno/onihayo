@@ -25,6 +25,22 @@ Every third-party source Onihayo uses or has evaluated. Licence information mark
   and [level summary](https://www.jlpt.jp/e/about/levelsummary.html) inform the
   scope only; their text and exam questions are not copied as learning content.
 
+## Selected for the N5 expansion (inventory not yet imported)
+
+- **Selection:** Onihayo-authored N5-oriented inventory, source ID `onihayo.n5.v1`,
+  decided in [ADR 0013](../decisions/0013-n5-vocabulary-selection.md). Independently
+  curated selection, coverage rationales and lesson ordering are CC BY-SA 4.0,
+  attributed to "Onihayo contributors" (ADR 0006). The expanded manifest is the
+  next dataset item; the current application still contains the first 40 words.
+- **Lexical source:** reuse the pinned JMdict Japanese/English import above, with
+  EDRDG credit and CC BY-SA 4.0 on adaptations. Publisher terms rechecked on
+  2026-10-15. Preserve the existing licence, NOTICE and displayed attribution.
+  No community word list is imported or needs attribution by this decision.
+- **Meaning of N5:** a curriculum target, not an official exhaustive list or a
+  guarantee of exam coverage. The [JLPT FAQ](https://jlpt.jp/sp/e/faq/index.html)
+  and [level summary](https://www.jlpt.jp/e/about/levelsummary.html) inform the
+  scope only; their text and exam questions are not copied as learning content.
+
 ## Candidates
 
 | Source                                                                     | Would provide                                         | Licence (status)                                                                                                                                                                                                                                                                 | Attribution / obligations                                             | Milestone            | Notes                                                                                     |
