@@ -5,8 +5,9 @@ import { wordPracticeItems, wordQuestionModes } from './word-items';
 
 describe('word practice adapter', () => {
   it('asks for a reading from a meaning and accepts the kana answer', () => {
-    const [item] = wordPracticeItems(words);
-    if (item === undefined) throw new Error('Expected the word dataset to contain an item.');
+    const tea = words.filter(({ id }) => id === 'word.jmdict.1002430');
+    const [item] = wordPracticeItems(tea);
+    if (item === undefined) throw new Error('Expected the tea entry in the imported vocabulary.');
     expect(item).toMatchObject({
       id: 'word.jmdict.1002430',
       prompt: 'tea (esp. green or barley)',
@@ -22,7 +23,7 @@ describe('word practice adapter', () => {
     ]);
   });
 
-  it('asks for a meaning from the reading and accepts the source glosses', () => {
+  it('asks for a meaning from the reading and accepts the selected glosses', () => {
     const word = words.find(({ id }) => id === 'word.jmdict.1002430');
     if (word === undefined) throw new Error('Expected the tea entry in the imported vocabulary.');
     const item = wordPracticeItems([word])[0];
@@ -30,7 +31,7 @@ describe('word practice adapter', () => {
     expect(question(wordQuestionModes[1], item)).toMatchObject({
       shown: { text: 'おちゃ', lang: 'ja', name: 'reading' },
       solution: { text: 'tea (esp. green or barley)', lang: null, name: 'meaning' },
-      accepted: ['tea (esp. green or barley)', 'tea break', 'teatime', 'tea ceremony']
+      accepted: ['tea (esp. green or barley)']
     });
     expect(wordQuestionModes.map(({ id }) => id)).toEqual([
       'word-meaning-to-reading',

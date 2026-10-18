@@ -1,19 +1,27 @@
 import * as v from 'valibot';
 import authoredLessons from './vocabulary/lessons.json';
+import selectionManifest from './vocabulary/selection.json';
 import wordDataset from './vocabulary/words.json';
 import { hiragana } from './kana/hiragana';
+import { hiraganaLessons } from './kana/hiragana-lessons';
 import { katakana } from './kana/katakana';
+import { katakanaLessons } from './kana/katakana-lessons';
 import type { WordLesson, WordRecord } from './model';
-import { validateBeginnerWordSet } from './words';
+import { validateVocabulary, type VocabularySelection } from './words';
 
-const validated = validateBeginnerWordSet(
-  wordDataset,
-  authoredLessons,
-  [...hiragana, ...katakana].map(({ character }) => character)
-);
+/** Every kana and spelling mark (ー, っ, ッ) the kana lessons teach. */
+export const taughtKana: readonly string[] = [
+  ...[...hiragana, ...katakana].map(({ character }) => character),
+  ...[...hiraganaLessons, ...katakanaLessons].flatMap((lesson) =>
+    (lesson.marks ?? []).map(({ mark }) => mark)
+  )
+];
+
+const validated = validateVocabulary(wordDataset, authoredLessons, selectionManifest, taughtKana);
 
 export const words: readonly WordRecord[] = validated.words;
 export const wordLessons: readonly WordLesson[] = validated.lessons;
+export const vocabularySelection: VocabularySelection = validated.selection;
 
 export interface WordLessonDetails extends WordLesson {
   readonly slug: string;

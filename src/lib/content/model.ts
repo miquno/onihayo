@@ -160,6 +160,8 @@ export type WordRecord =
       readonly meanings: readonly string[];
       readonly partOfSpeech: readonly string[];
       readonly sourceEntry: { readonly source: 'JMdict'; readonly sequence: number };
+      /** The curriculum selection this word was chosen for, e.g. `onihayo.n5.v1`. */
+      readonly selection: string;
       readonly origin: 'imported';
     }
   | {
@@ -169,6 +171,7 @@ export type WordRecord =
       readonly meanings: readonly string[];
       readonly partOfSpeech: readonly string[];
       readonly sourceEntry?: never;
+      readonly selection?: never;
       readonly origin: 'authored';
     };
 

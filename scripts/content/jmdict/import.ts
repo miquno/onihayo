@@ -1,11 +1,10 @@
 import { createHash } from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
 import { XMLParser } from 'fast-xml-parser';
-import * as v from 'valibot';
 import type { WordRecord } from '../../../src/lib/content/model.ts';
+import type { SelectionEntry } from '../../../src/lib/content/words.ts';
 import { jmdictSource } from './source.ts';
 
-const sequenceSchema = v.pipe(v.number(), v.integer(), v.minValue(1));
 const parser = new XMLParser({
   attributeNamePrefix: '@_',
   ignoreAttributes: false,
@@ -18,15 +17,6 @@ const parser = new XMLParser({
     maxEntityCount: 1_000
   }
 });
-
-/** Validate a selection list before it is used to filter the publisher's data. */
-export function parseSelection(input: unknown): readonly number[] {
-  const selection = v.parse(v.array(sequenceSchema), input);
-  if (new Set(selection).size !== selection.length) {
-    throw new Error('JMdict selection contains duplicate entry sequence numbers.');
-  }
-  return selection;
-}
 
 /** Verify the compressed source and its embedded release metadata before parsing any entries. */
 export function readPinnedJmdictArchive(archive: Uint8Array): string {
@@ -83,33 +73,70 @@ function entrySequence(entry: Record<string, unknown>): number {
   return value;
 }
 
-function recordFromEntry(entry: Record<string, unknown>, sequence: number): WordRecord {
-  const readings = asArray(entry.r_ele).flatMap((value) =>
-    directTextValues(asRecordOrEmpty(value), 'reb')
-  );
-  const [kana] = readings;
-  const kanji = [
-    ...new Set(
-      asArray(entry.k_ele).flatMap((value) => directTextValues(asRecordOrEmpty(value), 'keb'))
-    )
-  ];
-  const senses = asArray(entry.sense).map(asRecordOrEmpty);
-  const meanings = [
-    ...new Set(
-      senses.flatMap((sense) =>
-        asArray(sense.gloss)
-          .filter((value) => {
-            if (typeof value !== 'object' || value === null || Array.isArray(value)) return true;
-            const language = asRecord(value)['@_xml:lang'];
-            return language === undefined || language === 'eng';
-          })
-          .map(textContent)
-          .filter(Boolean)
-      )
-    )
-  ];
-  const partOfSpeech = [...new Set(senses.flatMap((sense) => directTextValues(sense, 'pos')))];
-  if (!kana || meanings.length === 0) {
+// JMdict states a sense's parts of speech once; later senses without their own inherit them.
+function sensesWithPartsOfSpeech(entry: Record<string, unknown>) {
+  let inherited: string[] = [];
+  return asArray(entry.sense).map((value) => {
+    const sense = asRecordOrEmpty(value);
+    const own = directTextValues(sense, 'pos');
+    if (own.length > 0) inherited = own;
+    return { sense, partOfSpeech: inherited };
+  });
+}
+
+function englishGlosses(sense: Record<string, unknown>): string[] {
+  return asArray(sense.gloss)
+    .filter((value) => {
+      if (typeof value !== 'object' || value === null || Array.isArray(value)) return true;
+      const language = asRecord(value)['@_xml:lang'];
+      return language === undefined || language === 'eng';
+    })
+    .map(textContent)
+    .filter(Boolean);
+}
+
+function recordFromEntry(
+  entry: Record<string, unknown>,
+  selected: SelectionEntry,
+  selection: string
+): WordRecord {
+  const { sequence } = selected;
+  const readings = asArray(entry.r_ele).map(asRecordOrEmpty);
+  const reading =
+    selected.reading === undefined
+      ? readings[0]
+      : readings.find((element) => directTextValues(element, 'reb')[0] === selected.reading);
+  const kana = reading === undefined ? undefined : directTextValues(reading, 'reb')[0];
+  if (!kana) {
+    throw new Error(
+      selected.reading === undefined
+        ? `JMdict entry ${String(sequence)} has no reading or English meaning.`
+        : `JMdict entry ${String(sequence)} has no reading ${selected.reading}.`
+    );
+  }
+  // A reading restricted to some written forms (re_restr), or to none (re_nokanji), keeps only those.
+  const restrictions = reading === undefined ? [] : directTextValues(reading, 're_restr');
+  const noKanji = reading !== undefined && 're_nokanji' in reading;
+  const kanji = noKanji
+    ? []
+    : [
+        ...new Set(
+          asArray(entry.k_ele)
+            .flatMap((value) => directTextValues(asRecordOrEmpty(value), 'keb'))
+            .filter((form) => restrictions.length === 0 || restrictions.includes(form))
+        )
+      ];
+
+  const senses = sensesWithPartsOfSpeech(entry);
+  const chosen = (selected.senses ?? [1]).map((number) => {
+    const sense = senses[number - 1];
+    if (sense === undefined)
+      throw new Error(`JMdict entry ${String(sequence)} has no sense ${String(number)}.`);
+    return sense;
+  });
+  const meanings = [...new Set(chosen.flatMap(({ sense }) => englishGlosses(sense)))];
+  const partOfSpeech = [...new Set(chosen.flatMap((sense) => sense.partOfSpeech))];
+  if (meanings.length === 0) {
     throw new Error(`JMdict entry ${String(sequence)} has no reading or English meaning.`);
   }
 
@@ -120,31 +147,40 @@ function recordFromEntry(entry: Record<string, unknown>, sequence: number): Word
     meanings,
     partOfSpeech,
     sourceEntry: { source: 'JMdict', sequence },
+    selection,
     origin: 'imported'
   };
 }
 
-/** Extract only selected JMdict sequence numbers, preserving source-defined order. */
+/**
+ * Extract only the selected JMdict entries, preserving source-defined order. Each entry
+ * keeps the selection's reading (its first one by default) and only the selected senses
+ * (the first by default), so a beginner is not taught every dictionary sense.
+ */
 export function importSelectedWords(
   xml: string,
-  selection: readonly number[]
+  entries: readonly SelectionEntry[],
+  selection: string
 ): readonly WordRecord[] {
-  const selected = new Set(selection);
+  const selected = new Map(entries.map((entry) => [entry.sequence, entry]));
   const found = new Map<number, WordRecord>();
   const document = asRecord(parser.parse(xml));
   const root = asRecord(document.JMdict);
   for (const value of asArray(root.entry)) {
     const entry = asRecord(value);
     const sequence = entrySequence(entry);
-    if (!selected.has(sequence)) continue;
+    const choice = selected.get(sequence);
+    if (choice === undefined) continue;
     if (found.has(sequence))
       throw new Error(`JMdict entry ${String(sequence)} occurs more than once.`);
-    found.set(sequence, recordFromEntry(entry, sequence));
+    found.set(sequence, recordFromEntry(entry, choice, selection));
   }
 
-  const missing = selection.filter((sequence) => !found.has(sequence));
+  const missing = entries.filter(({ sequence }) => !found.has(sequence));
   if (missing.length > 0)
-    throw new Error(`Selected JMdict entries not found: ${missing.join(', ')}.`);
+    throw new Error(
+      `Selected JMdict entries not found: ${missing.map(({ sequence }) => sequence).join(', ')}.`
+    );
   return [...found.values()];
 }
 
@@ -152,15 +188,20 @@ export interface ImportedWordDataset {
   readonly provenance: { readonly source: string; readonly licence: string };
   readonly release: string;
   readonly sha256: string;
+  readonly selection: string;
   readonly entries: readonly WordRecord[];
 }
 
 /** The compact, deterministic dataset shape written by the CLI. */
-export function createDataset(entries: readonly WordRecord[]): ImportedWordDataset {
+export function createDataset(
+  entries: readonly WordRecord[],
+  selection: string
+): ImportedWordDataset {
   return {
     provenance: { source: jmdictSource.source, licence: jmdictSource.licence },
     release: jmdictSource.release,
     sha256: jmdictSource.sha256,
+    selection,
     entries
   };
 }
