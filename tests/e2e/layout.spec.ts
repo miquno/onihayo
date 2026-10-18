@@ -298,7 +298,7 @@ test('keyboard reaches every link on the home page in order', async ({ page }) =
     'Kana quiz',
     'About',
     'Continue: Vowels',
-    'five short lessons',
+    '75 short lessons',
     'roadmap',
     'source code on GitHub',
     'Account',

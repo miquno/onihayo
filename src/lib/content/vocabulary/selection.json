@@ -70,7 +70,8 @@
     {
       "sequence": 1311110,
       "category": "people",
-      "rationale": "The basic polite way to say I."
+      "rationale": "The basic polite way to say I.",
+      "hint": "polite, for anyone"
     },
     {
       "sequence": 1580640,
@@ -100,7 +101,8 @@
     {
       "sequence": 1521400,
       "category": "people",
-      "rationale": "A common casual I, often used by boys and men."
+      "rationale": "A common casual I, often used by boys and men.",
+      "hint": "casual, mostly boys and men"
     },
     {
       "sequence": 1483070,
@@ -219,7 +221,8 @@
     {
       "sequence": 1586820,
       "category": "people",
-      "rationale": "Saying thank you."
+      "rationale": "Saying thank you.",
+      "hint": "the usual thanks"
     },
     {
       "sequence": 1295060,
@@ -246,7 +249,8 @@
     {
       "sequence": 1009000,
       "category": "people",
-      "rationale": "A short, common thanks or greeting."
+      "rationale": "A short, common thanks or greeting.",
+      "hint": "short and casual"
     },
     {
       "sequence": 1410800,
@@ -309,32 +313,38 @@
     {
       "sequence": 1002590,
       "category": "family",
-      "rationale": "Father, and someone else's father."
+      "rationale": "Father, and someone else's father.",
+      "hint": "polite, or speaking to him"
     },
     {
       "sequence": 1002650,
       "category": "family",
-      "rationale": "Mother, and someone else's mother."
+      "rationale": "Mother, and someone else's mother.",
+      "hint": "polite, or speaking to her"
     },
     {
       "sequence": 1497610,
       "category": "family",
-      "rationale": "One's own father when speaking to others."
+      "rationale": "One's own father when speaking to others.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1514990,
       "category": "family",
-      "rationale": "One's own mother when speaking to others."
+      "rationale": "One's own mother when speaking to others.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1249900,
       "category": "family",
-      "rationale": "One's own older brother."
+      "rationale": "One's own older brother.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1307630,
       "category": "family",
-      "rationale": "One's own older sister."
+      "rationale": "One's own older sister.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1581930,
@@ -349,12 +359,14 @@
     {
       "sequence": 1001830,
       "category": "family",
-      "rationale": "Older brother, and someone else's."
+      "rationale": "Older brother, and someone else's.",
+      "hint": "polite, or speaking to him"
     },
     {
       "sequence": 1001990,
       "category": "family",
-      "rationale": "Older sister, and someone else's."
+      "rationale": "Older sister, and someone else's.",
+      "hint": "polite, or speaking to her"
     },
     {
       "sequence": 1249960,
@@ -369,22 +381,26 @@
     {
       "sequence": 1396840,
       "category": "family",
-      "rationale": "One's own grandfather."
+      "rationale": "One's own grandfather.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1396860,
       "category": "family",
-      "rationale": "One's own grandmother."
+      "rationale": "One's own grandmother.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1002320,
       "category": "family",
-      "rationale": "Grandfather, and elderly men."
+      "rationale": "Grandfather, and elderly men.",
+      "hint": "polite, or an elderly man"
     },
     {
       "sequence": 1002330,
       "category": "family",
-      "rationale": "Grandmother, and elderly women."
+      "rationale": "Grandmother, and elderly women.",
+      "hint": "polite, or an elderly woman"
     },
     {
       "sequence": 2261490,
@@ -404,7 +420,8 @@
     {
       "sequence": 1294330,
       "category": "family",
-      "rationale": "One's own wife."
+      "rationale": "One's own wife.",
+      "hint": "your own, to others"
     },
     {
       "sequence": 1579780,
@@ -415,7 +432,8 @@
     {
       "sequence": 1179330,
       "category": "family",
-      "rationale": "Someone else's wife."
+      "rationale": "Someone else's wife.",
+      "hint": "someone else's"
     },
     {
       "sequence": 1404390,
@@ -1123,47 +1141,56 @@
     {
       "sequence": 1160820,
       "category": "numbers",
-      "rationale": "Counting things: one."
+      "rationale": "Counting things: one.",
+      "hint": "counting things"
     },
     {
       "sequence": 1461160,
       "category": "numbers",
-      "rationale": "Counting things: two."
+      "rationale": "Counting things: two.",
+      "hint": "counting things"
     },
     {
       "sequence": 1299740,
       "category": "numbers",
-      "rationale": "Counting things: three."
+      "rationale": "Counting things: three.",
+      "hint": "counting things"
     },
     {
       "sequence": 1307040,
       "category": "numbers",
-      "rationale": "Counting things: four."
+      "rationale": "Counting things: four.",
+      "hint": "counting things"
     },
     {
       "sequence": 1268070,
       "category": "numbers",
-      "rationale": "Counting things: five."
+      "rationale": "Counting things: five.",
+      "hint": "counting things"
     },
     {
       "sequence": 1585315,
       "category": "numbers",
-      "rationale": "Counting things: six."
+      "rationale": "Counting things: six.",
+      "hint": "counting things"
     },
     {
       "sequence": 1319220,
       "category": "numbers",
-      "rationale": "Counting things: seven."
+      "rationale": "Counting things: seven.",
+      "hint": "counting things"
     },
     {
       "sequence": 1583095,
       "category": "numbers",
-      "rationale": "Counting things: eight."
+      "rationale": "Counting things: eight.",
+      "hint": "counting things"
     },
     {
       "sequence": 1243600,
       "category": "numbers",
-      "rationale": "Counting things: nine."
+      "rationale": "Counting things: nine.",
+      "hint": "counting things"
     },
     {
       "sequence": 1576150,
@@ -3230,32 +3257,38 @@
     {
       "sequence": 1628530,
       "category": "questions",
-      "rationale": "This one, near me."
+      "rationale": "This one, near me.",
+      "hint": "on its own"
     },
     {
       "sequence": 1006970,
       "category": "questions",
-      "rationale": "That one, near you."
+      "rationale": "That one, near you.",
+      "hint": "on its own"
     },
     {
       "sequence": 1000580,
       "category": "questions",
-      "rationale": "That one over there."
+      "rationale": "That one over there.",
+      "hint": "on its own"
     },
     {
       "sequence": 1582920,
       "category": "questions",
-      "rationale": "This, before a noun."
+      "rationale": "This, before a noun.",
+      "hint": "before a noun"
     },
     {
       "sequence": 1006830,
       "category": "questions",
-      "rationale": "That, before a noun."
+      "rationale": "That, before a noun.",
+      "hint": "before a noun"
     },
     {
       "sequence": 1000420,
       "category": "questions",
-      "rationale": "That over there, before a noun."
+      "rationale": "That over there, before a noun.",
+      "hint": "before a noun"
     },
     {
       "sequence": 1288810,

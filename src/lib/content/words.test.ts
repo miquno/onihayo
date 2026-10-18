@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateSelection, validateVocabulary, validateWordDataset } from './words';
+import { validateSelection, validateVocabulary, validateWordDataset, wordPrompt } from './words';
 
 const dataset = {
   provenance: { source: 'EDRDG', licence: 'CC-BY-SA-4.0' },
@@ -142,6 +142,70 @@ describe('vocabulary', () => {
         entries: [{ ...dataset.entries[0], selection: 'onihayo.n5.v2' }]
       })
     ).toThrow(/selection/);
+  });
+
+  it('rejects words without a lesson, oversized lessons, and words practice cannot tell apart', () => {
+    const second = {
+      ...dataset.entries[0],
+      id: 'word.jmdict.200',
+      sourceEntry: { source: 'JMdict', sequence: 200 }
+    };
+    const two = { ...dataset, entries: [dataset.entries[0], second] };
+    const twoSelected = {
+      ...selection,
+      entries: [...selection.entries, { sequence: 200, category: 'animals', rationale: 'x' }]
+    };
+    expect(() => validateVocabulary(two, lessons, twoSelected, taughtKana)).toThrow(
+      /exactly one vocabulary lesson/
+    );
+    const together = {
+      ...lessons,
+      lessons: [{ ...lessons.lessons[0], wordIds: ['word.jmdict.100', 'word.jmdict.200'] }]
+    };
+    expect(() => validateVocabulary(two, together, twoSelected, taughtKana)).toThrow(
+      /same reading/
+    );
+    const apart = {
+      ...lessons,
+      lessons: [
+        lessons.lessons[0],
+        { ...lessons.lessons[0], id: 'lesson.words.more', wordIds: ['word.jmdict.200'] }
+      ]
+    };
+    expect(() => validateVocabulary(two, apart, twoSelected, taughtKana)).toThrow(
+      /share the practice prompt "cat"/
+    );
+    const hinted = {
+      ...twoSelected,
+      entries: [selection.entries[0], { ...twoSelected.entries[1], hint: 'another cat' }]
+    };
+    expect(() => validateVocabulary(two, apart, hinted, taughtKana)).not.toThrow();
+    const many = Array.from({ length: 11 }, (_, index) => ({
+      ...dataset.entries[0],
+      id: `word.jmdict.${String(300 + index)}`,
+      kana: 'ね'.repeat(index + 1),
+      meanings: [`cat ${String(index)}`],
+      sourceEntry: { source: 'JMdict', sequence: 300 + index }
+    }));
+    expect(() =>
+      validateVocabulary(
+        { ...dataset, entries: many },
+        { ...lessons, lessons: [{ ...lessons.lessons[0], wordIds: many.map(({ id }) => id) }] },
+        {
+          ...selection,
+          entries: many.map(({ sourceEntry }) => ({
+            ...selection.entries[0],
+            sequence: sourceEntry.sequence
+          }))
+        },
+        taughtKana
+      )
+    ).toThrow(/more than 10 words/);
+  });
+
+  it('asks for a word by its first three meanings and its hint', () => {
+    expect(wordPrompt(['one', 'two', 'three', 'four'])).toBe('one; two; three');
+    expect(wordPrompt(['four', '4'], 'counting things')).toBe('four; 4 (counting things)');
   });
 
   it('rejects untaught kana and lessons with unknown words', () => {

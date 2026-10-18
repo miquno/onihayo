@@ -5,6 +5,17 @@ const nonEmptyText = v.pipe(v.string(), v.minLength(1));
 const positiveInteger = v.pipe(v.number(), v.integer(), v.minValue(1));
 const selectionId = v.pipe(v.string(), v.regex(/^onihayo\.n5\.v[1-9][0-9]*$/));
 const categoryId = v.pipe(v.string(), v.regex(/^[a-z][a-z-]*$/));
+/** ADR 0013: themed lessons of at most ten words. */
+export const maxLessonWords = 10;
+
+/**
+ * How practice asks for a word: its first three meanings and, if the selection gives one,
+ * its usage hint, e.g. "four; 4 (counting things)".
+ */
+export function wordPrompt(meanings: readonly string[], hint?: string): string {
+  const text = meanings.slice(0, 3).join('; ');
+  return hint === undefined ? text : `${text} (${hint})`;
+}
 
 const importedWordSchema = v.pipe(
   v.strictObject({
@@ -49,7 +60,9 @@ const selectionEntrySchema = v.strictObject({
   /** The reading to teach when it is not the entry's first. */
   reading: v.optional(nonEmptyText),
   /** The 1-based JMdict senses to teach, in order; only the first when absent. */
-  senses: v.optional(v.pipe(v.array(positiveInteger), v.minLength(1)))
+  senses: v.optional(v.pipe(v.array(positiveInteger), v.minLength(1))),
+  /** A short authored usage note that tells the word apart from a synonym, e.g. "counting things". */
+  hint: v.optional(v.pipe(nonEmptyText, v.maxLength(60)))
 });
 
 const selectionSchema = v.strictObject({
@@ -133,8 +146,8 @@ export function validateWordLessons(input: unknown): readonly WordLesson[] {
 
 /**
  * Validate the vocabulary as a whole: the dataset holds exactly the selection's entries
- * and names it, lessons only use known words and each word at most once, and every
- * reading is written with kana the kana lessons teach.
+ * and names it, every word is taught in exactly one lesson of at most ten words, and
+ * every reading is written with kana the kana lessons teach.
  */
 export function validateVocabulary(
   wordsInput: unknown,
@@ -162,9 +175,31 @@ export function validateVocabulary(
 
   const wordsById = new Map(words.map((word) => [word.id, word]));
   for (const lesson of lessons) {
-    for (const wordId of lesson.wordIds) {
-      if (!wordsById.has(wordId)) throw new Error(`Word lesson references unknown word ${wordId}.`);
-    }
+    if (lesson.wordIds.length > maxLessonWords)
+      throw new Error(`Word lesson ${lesson.id} has more than ${String(maxLessonWords)} words.`);
+    const lessonWords = lesson.wordIds.map((wordId) => {
+      const word = wordsById.get(wordId);
+      if (word === undefined) throw new Error(`Word lesson references unknown word ${wordId}.`);
+      return word;
+    });
+    // Choosing the meaning for a reading needs readings that differ within a lesson.
+    const kana = lessonWords.map((word) => word.kana);
+    if (new Set(kana).size !== kana.length)
+      throw new Error(`Word lesson ${lesson.id} has two words with the same reading.`);
+  }
+  const assigned = new Set(lessons.flatMap((lesson) => lesson.wordIds));
+  if (words.some((word) => !assigned.has(word.id)))
+    throw new Error('Every word must appear in exactly one vocabulary lesson.');
+  // Typing the reading for a prompt needs prompts that differ everywhere, since reviews mix lessons.
+  const hints = new Map(selection.entries.map(({ sequence, hint }) => [sequence, hint]));
+  const prompts = new Set<string>();
+  for (const word of words) {
+    const prompt = wordPrompt(
+      word.meanings,
+      word.origin === 'imported' ? hints.get(word.sourceEntry.sequence) : undefined
+    );
+    if (prompts.has(prompt)) throw new Error(`Two words share the practice prompt "${prompt}".`);
+    prompts.add(prompt);
   }
 
   const allowedKana = [...new Set(taughtKana)].sort((left, right) => right.length - left.length);

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
+  import { wordHints } from '$lib/content/word-lessons';
   import { wordPracticeItems, wordQuestionModes } from '$lib/learning/word-items';
   import KanaPractice from '$lib/ui/KanaPractice.svelte';
   import Button from '$lib/ui/Button.svelte';
@@ -8,7 +9,7 @@
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
-  const items = $derived(wordPracticeItems(data.lesson.words));
+  const items = $derived(wordPracticeItems(data.lesson.words, wordHints));
   const lessonHref = $derived(resolve('/words/lessons/[lesson]', { lesson: data.lesson.slug }));
 </script>
 
@@ -53,7 +54,7 @@
 <KanaPractice
   {items}
   mode={data.mode}
-  pool={wordPracticeItems(data.lesson.words)}
+  pool={wordPracticeItems(data.lesson.words, wordHints)}
   questionCount={data.questionCount}
   seed={data.seed}
   lessonId={data.lesson.id}

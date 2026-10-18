@@ -107,7 +107,7 @@ test('reviews due kana and vocabulary through the shared practice engine', async
     const prompt = (await page.locator('#prompt').textContent())?.trim();
     if (prompt === 'あ') {
       await page.getByLabel('Romaji for this hiragana').fill('a');
-    } else if (prompt === 'I') {
+    } else if (prompt === 'I; me (polite, for anyone)') {
       await page.getByLabel('Reading for this meaning').fill('わたし');
     } else {
       throw new Error(`Unexpected review prompt: ${String(prompt)}`);

@@ -1,24 +1,30 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('first vocabulary set', () => {
+test.describe('N5 vocabulary', () => {
   test('opens a lesson, views a word, practises both directions, and saves completion', async ({
     page
   }) => {
     await page.goto('/words');
     await expect(page.getByRole('heading', { level: 1, name: 'Vocabulary' })).toBeVisible();
-    await expect(
-      page.getByRole('link', { name: 'Lesson 1: People and introductions' })
-    ).toBeVisible();
-    await page.getByRole('link', { name: 'Lesson 1: People and introductions' }).click();
+    await expect(page.getByRole('link', { name: 'People and introductions' })).toBeVisible();
+    await expect(page.getByRole('main').getByRole('listitem')).toHaveCount(75);
+    await page.getByRole('link', { name: 'People and introductions' }).click();
     await expect(
       page.getByRole('heading', { level: 1, name: 'People and introductions' })
     ).toBeVisible();
     await expect(page.getByText('8 words')).toBeVisible();
+    await expect(page.getByText('Kanji, optional for now: 私')).toBeVisible();
     await page.getByRole('link', { name: /わたし/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'わたし' })).toBeVisible();
     await expect(page.getByText('I', { exact: true })).toBeVisible();
+    await expect(page.getByText('Usage: polite, for anyone')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Written with kanji' })).toBeVisible();
+    await expect(page.getByRole('listitem').filter({ hasText: '私' })).toHaveAttribute(
+      'lang',
+      'ja'
+    );
     await page.getByRole('link', { name: 'All vocabulary lessons' }).click();
-    await page.getByRole('link', { name: 'Lesson 1: People and introductions' }).click();
+    await page.getByRole('link', { name: 'People and introductions' }).click();
     await page.getByRole('link', { name: 'Practise this lesson' }).click();
     await expect(page.getByText('Type the reading for each meaning')).toBeVisible();
     await page.getByRole('button', { name: 'Reading to meaning' }).click();
@@ -30,14 +36,14 @@ test.describe('first vocabulary set', () => {
     page
   }) => {
     const expected = new Map([
-      ['I', 'わたし'],
-      ['person', 'ひと'],
-      ['friend', 'ともだち'],
-      ['teacher', 'せんせい'],
+      ['I; me (polite, for anyone)', 'わたし'],
+      ['person; someone; somebody', 'ひと'],
+      ['friend; companion', 'ともだち'],
+      ['teacher; instructor; master', 'せんせい'],
       ['student (esp. a university student)', 'がくせい'],
       ['family', 'かぞく'],
-      ['father', 'おとうさん'],
-      ['mother', 'おかあさん']
+      ['father; dad; papa (polite, or speaking to him)', 'おとうさん'],
+      ['mother; mom; mum (polite, or speaking to her)', 'おかあさん']
     ]);
     await page.goto('/words/practice/people?mode=word-meaning-to-reading&seed=1');
     for (let count = 0; count < 16; count += 1) {

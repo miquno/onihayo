@@ -1,5 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import { words } from '$lib/content/word-lessons';
   import { pageTitle } from '$lib/site';
 </script>
 
@@ -69,9 +70,9 @@
 
 <h2>Where Onihayo is today</h2>
 <p>
-  Onihayo is in early development. Hiragana, katakana, a kana quiz, and a first set of 40 vocabulary
-  words are available in the <a href={resolve('/words')}>vocabulary lessons</a>. The full N5 word
-  list and later subjects follow the public
+  Onihayo is in early development. Hiragana, katakana, a kana quiz, and {words.length} N5 vocabulary words
+  are available in the <a href={resolve('/words')}>vocabulary lessons</a>. Kanji, grammar, and later
+  subjects follow the public
   <a href="https://github.com/miquno/onihayo/blob/main/ROADMAP.md">roadmap</a>.
 </p>
 <p>Onihayo is an independent project and is not affiliated with the organisers of the JLPT.</p>

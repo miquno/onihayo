@@ -22,6 +22,12 @@ const validated = validateVocabulary(wordDataset, authoredLessons, selectionMani
 export const words: readonly WordRecord[] = validated.words;
 export const wordLessons: readonly WordLesson[] = validated.lessons;
 export const vocabularySelection: VocabularySelection = validated.selection;
+/** Authored usage hints by word ID, for the words whose meanings alone match a synonym's. */
+export const wordHints: ReadonlyMap<string, string> = new Map(
+  validated.selection.entries.flatMap(({ sequence, hint }) =>
+    hint === undefined ? [] : [[`word.jmdict.${String(sequence)}`, hint] as const]
+  )
+);
 
 export interface WordLessonDetails extends WordLesson {
   readonly slug: string;
@@ -56,6 +62,17 @@ export function findWordLesson(slug: string): WordLessonDetails | undefined {
     }),
     next: next ? { slug: wordLessonSlug(next), title: next.title } : null
   };
+}
+
+/** The lesson that teaches a word, by exact word ID. */
+export function lessonForWord(
+  id: string
+): { readonly slug: string; readonly title: string; readonly number: number } | undefined {
+  const index = wordLessons.findIndex((lesson) => lesson.wordIds.includes(id));
+  const lesson = wordLessons[index];
+  return lesson === undefined
+    ? undefined
+    : { slug: wordLessonSlug(lesson), title: lesson.title, number: index + 1 };
 }
 
 /** Slug derived from the stable lesson ID. */
