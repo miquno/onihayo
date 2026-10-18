@@ -51,7 +51,10 @@ test.beforeEach(async ({ page }) => {
 
 test('shows stages, accuracy, and the review forecast from saved progress', async ({ page }) => {
   await page.goto('/');
+  // Loading migrates the seeded version 3 document once; compare against the loaded state.
+  await expect(page.getByRole('link', { name: 'Review 2 due items' })).toBeVisible();
   const saved = await page.evaluate(() => localStorage.getItem('onihayo:progress'));
+  expect(saved).toContain('"version":4');
   await page
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'Progress' })
