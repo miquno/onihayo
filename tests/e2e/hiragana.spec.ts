@@ -199,7 +199,13 @@ test('keyboard-only learner goes from the home page through every lesson and pra
     await expect(practise).toBeVisible();
     const title = (await page.getByRole('heading', { level: 1 }).textContent()) ?? '';
     lessons.push(title);
-    const total = await page.getByRole('main').getByRole('listitem').count();
+    // The kana cards are the first list; the small っ section in the T row has its own.
+    const total = await page
+      .getByRole('main')
+      .getByRole('list')
+      .first()
+      .getByRole('listitem')
+      .count();
 
     await practise.focus();
     await page.keyboard.press('Enter');
@@ -227,4 +233,14 @@ test('keyboard-only learner goes from the home page through every lesson and pra
   await page.getByRole('link', { name: 'All hiragana lessons' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { level: 1, name: 'Hiragana' })).toBeVisible();
+});
+
+test('the T row teaches the small っ that N5 words such as きって need', async ({ page }) => {
+  await page.goto('/hiragana/ta');
+  const section = page.getByRole('region', { name: 'っ Small tsu' });
+  await expect(section.getByRole('listitem')).toHaveText([
+    'きって kitte, “postage stamp”',
+    'おっと otto, “husband”'
+  ]);
+  await expect(section.locator('[lang="ja"]').first()).toHaveText('っ');
 });

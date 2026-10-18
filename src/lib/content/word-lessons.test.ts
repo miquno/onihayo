@@ -1,45 +1,96 @@
 import { describe, expect, it } from 'vitest';
-import { hiragana } from './kana/hiragana';
-import { katakana } from './kana/katakana';
+import { jmdictSource } from '../../../scripts/content/jmdict/source';
 import lessons from './vocabulary/lessons.json';
+import selection from './vocabulary/selection.json';
 import dataset from './vocabulary/words.json';
-import { findWord, findWordLesson, isWordId, wordLessons, words } from './word-lessons';
-import { validateBeginnerWordSet } from './words';
+import {
+  findWord,
+  findWordLesson,
+  isWordId,
+  taughtKana,
+  vocabularySelection,
+  wordLessons,
+  words
+} from './word-lessons';
+import { validateVocabulary } from './words';
 
-const taughtKana = [...hiragana, ...katakana].map(({ character }) => character);
+// The first beginner set (0.7); its IDs and lessons must survive every later selection.
+const firstSet = [
+  1002430, 1002590, 1002650, 1169870, 1175140, 1191730, 1192150, 1193060, 1206900, 1259290, 1270590,
+  1273270, 1311110, 1347750, 1358280, 1371260, 1387990, 1428280, 1456360, 1463520, 1473740, 1486650,
+  1499320, 1522150, 1536350, 1537370, 1540170, 1547720, 1578010, 1578850, 1579110, 1579260, 1580640,
+  1582120, 1582710, 1584660, 1588880, 1591110, 1592250, 1603990
+].map((sequence) => `word.jmdict.${String(sequence)}`);
 
-describe('first vocabulary set', () => {
-  it('has 30–50 imported words and authored lessons cover each one once', () => {
-    expect(words).toHaveLength(40);
-    expect(wordLessons).toHaveLength(5);
-    expect(wordLessons.map(({ wordIds }) => wordIds.length)).toEqual([8, 8, 8, 8, 8]);
-    expect(wordLessons.flatMap(({ wordIds }) => wordIds)).toHaveLength(words.length);
-    expect(words.map(({ origin }) => origin)).toEqual(Array<string>(40).fill('imported'));
-    expect(wordLessons.map(({ origin }) => origin)).toEqual(Array<string>(5).fill('authored'));
+describe('N5 vocabulary dataset', () => {
+  it('holds exactly the entries of the onihayo.n5.v1 selection, each traceable to it', () => {
+    expect(vocabularySelection.id).toBe('onihayo.n5.v1');
+    expect(dataset.selection).toBe('onihayo.n5.v1');
+    expect(words.map(({ id }) => id).sort()).toEqual(
+      selection.entries.map(({ sequence }) => `word.jmdict.${String(sequence)}`).sort()
+    );
+    for (const word of words) {
+      expect(word.origin).toBe('imported');
+      expect(word.selection, word.id).toBe('onihayo.n5.v1');
+      expect(word.id).toBe(`word.jmdict.${String(word.sourceEntry?.sequence)}`);
+    }
   });
 
-  it('uses only kana taught by the existing kana lessons', () => {
-    expect(() => validateBeginnerWordSet(dataset, lessons, taughtKana)).not.toThrow();
-    expect(dataset.sha256).toMatch(/^[a-f0-9]{64}$/u);
+  it('comes from the pinned JMdict release', () => {
+    expect(dataset.release).toBe(jmdictSource.release);
+    expect(dataset.sha256).toBe(jmdictSource.sha256);
   });
 
-  it('rejects words outside the taught-kana inventory and incomplete lesson assignments', () => {
+  it('covers every category with words and a rationale for each word', () => {
+    for (const { id } of selection.categories) {
+      expect(
+        selection.entries.filter(({ category }) => category === id).length,
+        id
+      ).toBeGreaterThan(5);
+    }
+    for (const entry of selection.entries) expect(entry.rationale.trim()).not.toBe('');
+  });
+
+  it('teaches each word in its selected reading with at least one English meaning', () => {
+    const byId = new Map(words.map((word) => [word.id, word]));
+    for (const entry of vocabularySelection.entries) {
+      const word = byId.get(`word.jmdict.${String(entry.sequence)}`);
+      if (entry.reading !== undefined) expect(word?.kana).toBe(entry.reading);
+      expect(word?.meanings.length, String(entry.sequence)).toBeGreaterThan(0);
+    }
+    expect(findWord('word.jmdict.1537370')?.meanings).toEqual(['vegetable']);
+  });
+
+  it('keeps the first beginner set and its five lessons', () => {
+    const ids = new Set(words.map(({ id }) => id));
+    expect(firstSet.filter((id) => !ids.has(id))).toEqual([]);
+    expect(
+      wordLessons
+        .slice(0, 5)
+        .flatMap(({ wordIds }) => wordIds)
+        .sort()
+    ).toEqual([...firstSet].sort());
+    expect(wordLessons.slice(0, 5).map(({ id }) => id)).toEqual([
+      'lesson.words.people',
+      'lesson.words.places',
+      'lesson.words.food',
+      'lesson.words.actions',
+      'lesson.words.time'
+    ]);
+  });
+
+  it('uses only kana and marks taught by the kana lessons', () => {
+    expect(taughtKana).toEqual(expect.arrayContaining(['ー', 'っ', 'ッ']));
+    expect(() => validateVocabulary(dataset, lessons, selection, taughtKana)).not.toThrow();
     const invalidWords = {
       ...dataset,
       entries: dataset.entries.map((word, index) =>
         index === 0 ? { ...word, kana: `${word.kana}猫` } : word
       )
     };
-    expect(() => validateBeginnerWordSet(invalidWords, lessons, taughtKana)).toThrow(
+    expect(() => validateVocabulary(invalidWords, lessons, selection, taughtKana)).toThrow(
       /not been taught/u
     );
-    expect(() =>
-      validateBeginnerWordSet(
-        dataset,
-        { ...lessons, lessons: lessons.lessons.slice(1) },
-        taughtKana
-      )
-    ).toThrow(/exactly one vocabulary lesson/u);
   });
 
   it('resolves exact words and lesson slugs, and rejects untrusted unknown IDs', () => {

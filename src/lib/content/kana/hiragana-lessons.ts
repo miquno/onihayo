@@ -53,6 +53,17 @@ export const hiraganaLessons: readonly KanaLesson[] = [
       'kana.hiragana.chi': 'Pronounced chi, as in "cheese".',
       'kana.hiragana.tsu': 'Pronounced tsu: the ts at the end of "cats", followed by u.'
     },
+    marks: [
+      {
+        mark: 'っ',
+        name: 'Small tsu',
+        note: 'A small っ is not read tsu. It doubles the consonant after it: stop for one short beat, then say that consonant. Romaji writes the consonant twice.',
+        examples: [
+          { word: 'きって', romaji: 'kitte', meaning: 'postage stamp' },
+          { word: 'おっと', romaji: 'otto', meaning: 'husband' }
+        ]
+      }
+    ],
     origin: 'authored'
   },
   {

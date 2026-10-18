@@ -237,7 +237,7 @@ Operational activation is deferred to 1.0. The implemented account foundation is
 **Prerequisites:** implemented 0.9 account foundation and 0.7. Guest progress with JSON export/import supports local development; hosted sync is not a prerequisite.
 
 - [ ] ADR: source and licence of the N5 word list (Onihayo-curated selection with JMdict lexical data; ADR 0013 prepared, pending merge), recorded in the source register.
-- [ ] N5 word dataset imported/selected with the 0.7 pipeline; every word tagged with its N5 list source.
+- [x] N5 word dataset imported/selected with the 0.7 pipeline; every word tagged with its N5 list source.
 - [ ] Themed lessons of at most 10 words, ordered by usefulness; kanji forms shown as optional until kanji are taught.
 - [ ] Word search by kana, romaji, and English meaning (server-rendered results, works without JavaScript).
 - [ ] Word list page with filters (learned / not learned) and pagination.
