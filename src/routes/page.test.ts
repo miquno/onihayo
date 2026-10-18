@@ -34,7 +34,8 @@ describe('home page', () => {
   });
 
   it('links to the first vocabulary set without adding another primary action', () => {
-    expect(html).toContain('40 vocabulary words');
-    expect(html).toContain('<a href="/words">five short lessons</a>');
+    expect(html).toMatch(
+      /633 N5 vocabulary words are ready in\s+<a href="\/words">75 short lessons<\/a>/u
+    );
   });
 });

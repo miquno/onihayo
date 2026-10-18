@@ -83,6 +83,1159 @@
         "word.jmdict.1486650"
       ],
       "origin": "authored"
+    },
+    {
+      "id": "lesson.words.greetings",
+      "title": "Greetings",
+      "note": "Say hello and goodbye at different times of day, and thank someone or say sorry. はじめまして opens a first meeting.",
+      "wordIds": [
+        "word.jmdict.1612820",
+        "word.jmdict.1289400",
+        "word.jmdict.1289480",
+        "word.jmdict.1291050",
+        "word.jmdict.1001780",
+        "word.jmdict.1625780",
+        "word.jmdict.1586820",
+        "word.jmdict.1009000",
+        "word.jmdict.1295060",
+        "word.jmdict.1270680"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.phrases",
+      "title": "Everyday phrases",
+      "note": "Short set phrases said every day: yes and no, offering something, and the words said before and after meals and when leaving or coming home.",
+      "wordIds": [
+        "word.jmdict.1010080",
+        "word.jmdict.1583250",
+        "word.jmdict.1189130",
+        "word.jmdict.2036870",
+        "word.jmdict.1410800",
+        "word.jmdict.1270520",
+        "word.jmdict.2020140",
+        "word.jmdict.2088750",
+        "word.jmdict.1538960",
+        "word.jmdict.1001740"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.you-and-me",
+      "title": "You and me",
+      "note": "Words for yourself and others. Japanese often leaves these out when it is clear who is meant, and あなた can sound distant, so names are used more.",
+      "wordIds": [
+        "word.jmdict.1223615",
+        "word.jmdict.1521400",
+        "word.jmdict.1483070",
+        "word.jmdict.1483150",
+        "word.jmdict.1318610",
+        "word.jmdict.1202150",
+        "word.jmdict.1202170",
+        "word.jmdict.1531710",
+        "word.jmdict.1516925"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.people-around",
+      "title": "People around you",
+      "note": "Men and women, children and adults. A person from abroad is がいこくじん; a student from abroad is りゅうがくせい.",
+      "wordIds": [
+        "word.jmdict.1419990",
+        "word.jmdict.1344930",
+        "word.jmdict.1420010",
+        "word.jmdict.1344970",
+        "word.jmdict.1307850",
+        "word.jmdict.1414170",
+        "word.jmdict.1383260",
+        "word.jmdict.1203650",
+        "word.jmdict.1552750"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.this-and-that",
+      "title": "This and that",
+      "note": "Japanese points with three sets of words: こ for near me, そ for near you, and あ for over there, away from us both.",
+      "wordIds": [
+        "word.jmdict.1628530",
+        "word.jmdict.1006970",
+        "word.jmdict.1000580",
+        "word.jmdict.1582920",
+        "word.jmdict.1006830",
+        "word.jmdict.1000420",
+        "word.jmdict.1288810",
+        "word.jmdict.1006670",
+        "word.jmdict.1000320"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.questions",
+      "title": "Question words",
+      "note": "The words that start most questions. Many of them begin with ど, like the pointing words with こ, そ, and あ.",
+      "wordIds": [
+        "word.jmdict.1577100",
+        "word.jmdict.1416830",
+        "word.jmdict.1577140",
+        "word.jmdict.1188760",
+        "word.jmdict.1009290",
+        "word.jmdict.1920240",
+        "word.jmdict.1009330",
+        "word.jmdict.1008910",
+        "word.jmdict.1466940",
+        "word.jmdict.1577120"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.which-and-how-much",
+      "title": "Which way and how much",
+      "note": "Polite pointing words, which of two, and how many or how much. These help when shopping and asking the time.",
+      "wordIds": [
+        "word.jmdict.1004500",
+        "word.jmdict.1006780",
+        "word.jmdict.1483185",
+        "word.jmdict.1189360",
+        "word.jmdict.1004880",
+        "word.jmdict.1007130",
+        "word.jmdict.1219960",
+        "word.jmdict.1219980",
+        "word.jmdict.1188770",
+        "word.jmdict.1189400"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.numbers",
+      "title": "Numbers from one to ten",
+      "note": "Counting from one to ten. Four and seven have two readings; よん and なな are the ones heard most when counting.",
+      "wordIds": [
+        "word.jmdict.1160790",
+        "word.jmdict.1461140",
+        "word.jmdict.1579350",
+        "word.jmdict.1579470",
+        "word.jmdict.1268060",
+        "word.jmdict.1585310",
+        "word.jmdict.1319210",
+        "word.jmdict.1583090",
+        "word.jmdict.1578150",
+        "word.jmdict.1579840"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.counting-things",
+      "title": "Counting things",
+      "note": "A second set of numbers counts objects without a counter word, from one thing to nine things.",
+      "wordIds": [
+        "word.jmdict.1160820",
+        "word.jmdict.1461160",
+        "word.jmdict.1299740",
+        "word.jmdict.1307040",
+        "word.jmdict.1268070",
+        "word.jmdict.1585315",
+        "word.jmdict.1319220",
+        "word.jmdict.1583095",
+        "word.jmdict.1243600"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.large-numbers",
+      "title": "Large numbers and amounts",
+      "note": "Hundreds, thousands, and ten thousands, and words for how much of something there is.",
+      "wordIds": [
+        "word.jmdict.2839962",
+        "word.jmdict.1488000",
+        "word.jmdict.1388740",
+        "word.jmdict.1584460",
+        "word.jmdict.1482290",
+        "word.jmdict.1479890",
+        "word.jmdict.1396130",
+        "word.jmdict.1415870",
+        "word.jmdict.1348870",
+        "word.jmdict.1163940"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.counters",
+      "title": "Counting people and things",
+      "note": "Japanese counts with a counter word after the number, chosen by the kind of thing counted: flat things, books, machines, small animals, times, and years of age.",
+      "wordIds": [
+        "word.jmdict.1576150",
+        "word.jmdict.1582670",
+        "word.jmdict.1524610",
+        "word.jmdict.1298520",
+        "word.jmdict.1412560",
+        "word.jmdict.1583370",
+        "word.jmdict.1199330",
+        "word.jmdict.1294940"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.own-family",
+      "title": "Your own family",
+      "note": "When you talk about your own family to others, you use these plain words.",
+      "wordIds": [
+        "word.jmdict.1497610",
+        "word.jmdict.1514990",
+        "word.jmdict.1249900",
+        "word.jmdict.1307630",
+        "word.jmdict.1581930",
+        "word.jmdict.1524590",
+        "word.jmdict.1249960",
+        "word.jmdict.1602710"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.others-family",
+      "title": "Someone else's family",
+      "note": "These polite words name someone else's family. Many also address your own family members directly.",
+      "wordIds": [
+        "word.jmdict.1001830",
+        "word.jmdict.1001990",
+        "word.jmdict.1002320",
+        "word.jmdict.1002330",
+        "word.jmdict.2261490",
+        "word.jmdict.2261500",
+        "word.jmdict.1396840",
+        "word.jmdict.1396860"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.married-life",
+      "title": "Husbands, wives, and children",
+      "note": "Words for married life. しゅじん and おくさん are common in everyday speech.",
+      "wordIds": [
+        "word.jmdict.1496480",
+        "word.jmdict.1294330",
+        "word.jmdict.1579780",
+        "word.jmdict.1179330",
+        "word.jmdict.1404390",
+        "word.jmdict.1531190",
+        "word.jmdict.1254790"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.times-of-day",
+      "title": "Times of day",
+      "note": "Words for the hours of the day, from this morning to this evening.",
+      "wordIds": [
+        "word.jmdict.1288850",
+        "word.jmdict.1315920",
+        "word.jmdict.1315840",
+        "word.jmdict.1269060",
+        "word.jmdict.1268990",
+        "word.jmdict.1426250",
+        "word.jmdict.1482110",
+        "word.jmdict.1542790",
+        "word.jmdict.1579100",
+        "word.jmdict.1289470"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.days-around-today",
+      "title": "Before and after",
+      "note": "The days around today, and words for telling the time: half past, minutes, and before or after.",
+      "wordIds": [
+        "word.jmdict.1576050",
+        "word.jmdict.1584640",
+        "word.jmdict.1576260",
+        "word.jmdict.1269320",
+        "word.jmdict.1392580",
+        "word.jmdict.1478750",
+        "word.jmdict.1502840",
+        "word.jmdict.1468060",
+        "word.jmdict.1255430",
+        "word.jmdict.1463770"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.days-of-the-week",
+      "title": "Days of the week",
+      "note": "Each day of the week ends in ようび. Birthdays and holidays fit here too.",
+      "wordIds": [
+        "word.jmdict.1255890",
+        "word.jmdict.1194290",
+        "word.jmdict.1372190",
+        "word.jmdict.1534890",
+        "word.jmdict.1243320",
+        "word.jmdict.1445590",
+        "word.jmdict.1464900",
+        "word.jmdict.1419110",
+        "word.jmdict.1227500",
+        "word.jmdict.1191420"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.how-often",
+      "title": "How often",
+      "note": "まい means every: every day, every week, every year. いつも, ときどき, and たいてい say how often.",
+      "wordIds": [
+        "word.jmdict.1524720",
+        "word.jmdict.1524700",
+        "word.jmdict.1524730",
+        "word.jmdict.1524690",
+        "word.jmdict.1584350",
+        "word.jmdict.1584360",
+        "word.jmdict.1188890",
+        "word.jmdict.1598680",
+        "word.jmdict.1414580"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.weeks-and-years",
+      "title": "Weeks, months, and years",
+      "note": "こん is this, らい is next, and せん is last, for weeks and months. Years use different words.",
+      "wordIds": [
+        "word.jmdict.1289220",
+        "word.jmdict.1548010",
+        "word.jmdict.1387870",
+        "word.jmdict.1289100",
+        "word.jmdict.1547900",
+        "word.jmdict.1387500",
+        "word.jmdict.1579130",
+        "word.jmdict.1548220",
+        "word.jmdict.1231690",
+        "word.jmdict.1333500"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.months-1",
+      "title": "January to June",
+      "note": "Months are numbered: the number followed by がつ. April is しがつ, never よんがつ.",
+      "wordIds": [
+        "word.jmdict.1162120",
+        "word.jmdict.1461560",
+        "word.jmdict.1300250",
+        "word.jmdict.1307180",
+        "word.jmdict.1268170",
+        "word.jmdict.1561330"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.months-2",
+      "title": "July to December",
+      "note": "July is しちがつ and September is くがつ, with older readings of seven and nine.",
+      "wordIds": [
+        "word.jmdict.1319280",
+        "word.jmdict.1476730",
+        "word.jmdict.1243660",
+        "word.jmdict.1334570",
+        "word.jmdict.1334480",
+        "word.jmdict.1334910"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.dates-1",
+      "title": "The first days of the month",
+      "note": "The first ten days of a month and the twentieth have their own readings. The same words, except ついたち, also count days.",
+      "wordIds": [
+        "word.jmdict.2225040",
+        "word.jmdict.1462900",
+        "word.jmdict.1301330",
+        "word.jmdict.1307320",
+        "word.jmdict.1268570",
+        "word.jmdict.1600850"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.dates-2",
+      "title": "The sixth to the tenth",
+      "note": "The rest of the first ten days of the month.",
+      "wordIds": [
+        "word.jmdict.1561470",
+        "word.jmdict.1579630",
+        "word.jmdict.1476920",
+        "word.jmdict.1243850",
+        "word.jmdict.1335000"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.daily-routine",
+      "title": "Your daily routine",
+      "note": "Verbs for an ordinary day, from getting up to going to bed.",
+      "wordIds": [
+        "word.jmdict.1223640",
+        "word.jmdict.1360010",
+        "word.jmdict.1390930",
+        "word.jmdict.1523940",
+        "word.jmdict.1547450",
+        "word.jmdict.1390980",
+        "word.jmdict.1399790",
+        "word.jmdict.1598550",
+        "word.jmdict.1221270"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.being-and-doing",
+      "title": "Being and doing",
+      "note": "Some of the most common verbs. ある is for things and いる for people and animals; する means to do.",
+      "wordIds": [
+        "word.jmdict.1296400",
+        "word.jmdict.1577980",
+        "word.jmdict.1157170",
+        "word.jmdict.1587040",
+        "word.jmdict.1562350",
+        "word.jmdict.1343950",
+        "word.jmdict.1606560",
+        "word.jmdict.1420470"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.moving",
+      "title": "Moving around",
+      "note": "Verbs for moving your body and going in and out.",
+      "wordIds": [
+        "word.jmdict.1514320",
+        "word.jmdict.1402540",
+        "word.jmdict.1174340",
+        "word.jmdict.1429700",
+        "word.jmdict.1352570",
+        "word.jmdict.1291800",
+        "word.jmdict.1597040",
+        "word.jmdict.1465590",
+        "word.jmdict.1338240"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.size-and-weight",
+      "title": "New, good, and big",
+      "note": "Describing things: new or old, good or bad, long or short, wide or narrow, heavy or light.",
+      "wordIds": [
+        "word.jmdict.1361490",
+        "word.jmdict.1265070",
+        "word.jmdict.2820690",
+        "word.jmdict.1151260",
+        "word.jmdict.1429750",
+        "word.jmdict.1418620",
+        "word.jmdict.1278410",
+        "word.jmdict.1237680",
+        "word.jmdict.1335750",
+        "word.jmdict.1252560"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.speed-and-distance",
+      "title": "Fast, far, and many",
+      "note": "More describing words, often in opposite pairs.",
+      "wordIds": [
+        "word.jmdict.1434180",
+        "word.jmdict.1404975",
+        "word.jmdict.1421970",
+        "word.jmdict.1242130",
+        "word.jmdict.1177800",
+        "word.jmdict.1407460",
+        "word.jmdict.1348910",
+        "word.jmdict.1408180",
+        "word.jmdict.1295510",
+        "word.jmdict.1236070"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.how-things-are",
+      "title": "Easy, fun, and busy",
+      "note": "Words for how something feels: easy or difficult, fun or boring, busy or free, quiet or lively.",
+      "wordIds": [
+        "word.jmdict.1157000",
+        "word.jmdict.1460850",
+        "word.jmdict.1533580",
+        "word.jmdict.1008190",
+        "word.jmdict.1207240",
+        "word.jmdict.1519290",
+        "word.jmdict.1577280",
+        "word.jmdict.1381820",
+        "word.jmdict.1463480",
+        "word.jmdict.1512610"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.meals",
+      "title": "Meals",
+      "note": "Food and drink in general, and the three meals of the day.",
+      "wordIds": [
+        "word.jmdict.1358340",
+        "word.jmdict.1600430",
+        "word.jmdict.1586330",
+        "word.jmdict.1602340",
+        "word.jmdict.1601340",
+        "word.jmdict.1554310",
+        "word.jmdict.1513060"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.ingredients",
+      "title": "Ingredients",
+      "note": "Eggs, meat, bread, rice, and seasonings. Uncooked rice is こめ; cooked rice is ごはん.",
+      "wordIds": [
+        "word.jmdict.1549140",
+        "word.jmdict.1231580",
+        "word.jmdict.1457440",
+        "word.jmdict.1253020",
+        "word.jmdict.1103090",
+        "word.jmdict.1508750",
+        "word.jmdict.1576630",
+        "word.jmdict.1291600",
+        "word.jmdict.1595020"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.drinks-and-fruit",
+      "title": "Drinks and fruit",
+      "note": "Many drink names are loanwords written in katakana.",
+      "wordIds": [
+        "word.jmdict.1231590",
+        "word.jmdict.1049180",
+        "word.jmdict.1280770",
+        "word.jmdict.1065950",
+        "word.jmdict.1329015",
+        "word.jmdict.2796520",
+        "word.jmdict.1555480",
+        "word.jmdict.1528410",
+        "word.jmdict.1099420"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.dishes-and-sweets",
+      "title": "Dishes and sweets",
+      "note": "Japanese dishes and well-known loanwords for food.",
+      "wordIds": [
+        "word.jmdict.1595650",
+        "word.jmdict.1440590",
+        "word.jmdict.1039140",
+        "word.jmdict.1067040",
+        "word.jmdict.1057850",
+        "word.jmdict.1001710",
+        "word.jmdict.1047860",
+        "word.jmdict.1013980"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.shopping",
+      "title": "Shopping",
+      "note": "Money, prices, and big shops. たかい means both tall and expensive.",
+      "wordIds": [
+        "word.jmdict.1589730",
+        "word.jmdict.1001820",
+        "word.jmdict.1175570",
+        "word.jmdict.1600160",
+        "word.jmdict.1283190",
+        "word.jmdict.1153670",
+        "word.jmdict.1083590",
+        "word.jmdict.1066710"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.eating-out",
+      "title": "Shops and places to eat",
+      "note": "Small shops end in や. A きっさてん is a traditional coffee shop.",
+      "wordIds": [
+        "word.jmdict.1145310",
+        "word.jmdict.1358550",
+        "word.jmdict.1226440",
+        "word.jmdict.1476960",
+        "word.jmdict.1522240",
+        "word.jmdict.1103480"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.rooms",
+      "title": "Around the house",
+      "note": "Parts of a home. Shoes come off in the げんかん before you step up into the house.",
+      "wordIds": [
+        "word.jmdict.1191740",
+        "word.jmdict.1412640",
+        "word.jmdict.1401400",
+        "word.jmdict.1266970",
+        "word.jmdict.1087820",
+        "word.jmdict.1436130",
+        "word.jmdict.1263400",
+        "word.jmdict.1203090",
+        "word.jmdict.1509290",
+        "word.jmdict.2220600"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.furniture",
+      "title": "Furniture and the bathroom",
+      "note": "Furniture and things in the kitchen and bathroom. でんき is electricity and also the lights.",
+      "wordIds": [
+        "word.jmdict.1220210",
+        "word.jmdict.1157070",
+        "word.jmdict.1078630",
+        "word.jmdict.1119650",
+        "word.jmdict.1522980",
+        "word.jmdict.1557110",
+        "word.jmdict.1061820",
+        "word.jmdict.1084810",
+        "word.jmdict.1382590",
+        "word.jmdict.1443000"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.things-you-carry",
+      "title": "Things you use every day",
+      "note": "Devices and things you carry with you.",
+      "wordIds": [
+        "word.jmdict.1080510",
+        "word.jmdict.1138860",
+        "word.jmdict.1443840",
+        "word.jmdict.1101570",
+        "word.jmdict.1316140",
+        "word.jmdict.1321900",
+        "word.jmdict.1260490",
+        "word.jmdict.1301940",
+        "word.jmdict.1208910",
+        "word.jmdict.1296970"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.paper-and-post",
+      "title": "Paper and post",
+      "note": "Paper, reading, and sending letters.",
+      "wordIds": [
+        "word.jmdict.1311530",
+        "word.jmdict.1362360",
+        "word.jmdict.1299400",
+        "word.jmdict.1327720",
+        "word.jmdict.1385070",
+        "word.jmdict.1546590",
+        "word.jmdict.1499690",
+        "word.jmdict.1585650",
+        "word.jmdict.1502390"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.stationery",
+      "title": "Writing things",
+      "note": "Things for writing and studying.",
+      "wordIds": [
+        "word.jmdict.1178590",
+        "word.jmdict.1121380",
+        "word.jmdict.1123590",
+        "word.jmdict.1093450",
+        "word.jmdict.1318970",
+        "word.jmdict.1577670"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.tableware",
+      "title": "Plates and chopsticks",
+      "note": "Things on the table. はし with a different pitch also means bridge.",
+      "wordIds": [
+        "word.jmdict.1299680",
+        "word.jmdict.1597530",
+        "word.jmdict.1050390",
+        "word.jmdict.1037670",
+        "word.jmdict.1476410",
+        "word.jmdict.1072590",
+        "word.jmdict.1089890",
+        "word.jmdict.1110110"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.clothes",
+      "title": "Clothes",
+      "note": "Clothes are ふく; many single pieces of clothing have loanword names.",
+      "wordIds": [
+        "word.jmdict.1500940",
+        "word.jmdict.1546020",
+        "word.jmdict.1061520",
+        "word.jmdict.1074260",
+        "word.jmdict.1067470",
+        "word.jmdict.1580340",
+        "word.jmdict.1049000",
+        "word.jmdict.1074270"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.wearing",
+      "title": "Shoes and wearing",
+      "note": "Japanese uses different verbs for wearing: きる for the upper body, はく for shoes and trousers. ぬぐ takes anything off.",
+      "wordIds": [
+        "word.jmdict.1246700",
+        "word.jmdict.1246740",
+        "word.jmdict.1519170",
+        "word.jmdict.1092820",
+        "word.jmdict.1124970",
+        "word.jmdict.1423000",
+        "word.jmdict.1607260",
+        "word.jmdict.1416400"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.town",
+      "title": "Around town",
+      "note": "Places you may need to find in a town.",
+      "wordIds": [
+        "word.jmdict.1243490",
+        "word.jmdict.1542430",
+        "word.jmdict.1490220",
+        "word.jmdict.1370420",
+        "word.jmdict.1173750",
+        "word.jmdict.1272500",
+        "word.jmdict.1413890",
+        "word.jmdict.1122650",
+        "word.jmdict.1257540"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.streets",
+      "title": "Streets and ways",
+      "note": "Finding your way: roads, corners, crossings, and ways in and out.",
+      "wordIds": [
+        "word.jmdict.1454080",
+        "word.jmdict.1206110",
+        "word.jmdict.1592970",
+        "word.jmdict.1237410",
+        "word.jmdict.1421700",
+        "word.jmdict.1343100",
+        "word.jmdict.1203620",
+        "word.jmdict.1582820",
+        "word.jmdict.1338850"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.positions",
+      "title": "Where things are",
+      "note": "Words for where something is: on, under, in, behind, and next to.",
+      "wordIds": [
+        "word.jmdict.1352130",
+        "word.jmdict.1184140",
+        "word.jmdict.1423310",
+        "word.jmdict.1203250",
+        "word.jmdict.1269410",
+        "word.jmdict.1180570",
+        "word.jmdict.1555830",
+        "word.jmdict.1403830",
+        "word.jmdict.1242160",
+        "word.jmdict.1215230"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.directions",
+      "title": "Left, right, north, and south",
+      "note": "Directions for finding the way.",
+      "wordIds": [
+        "word.jmdict.1171010",
+        "word.jmdict.1290800",
+        "word.jmdict.1447440",
+        "word.jmdict.1380840",
+        "word.jmdict.1459870",
+        "word.jmdict.1520670",
+        "word.jmdict.1277140"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.vehicles",
+      "title": "Getting around",
+      "note": "Ways to travel, from bicycles to aeroplanes.",
+      "wordIds": [
+        "word.jmdict.1323080",
+        "word.jmdict.1443530",
+        "word.jmdict.1420900",
+        "word.jmdict.1098390",
+        "word.jmdict.1076190",
+        "word.jmdict.1318290",
+        "word.jmdict.1485470",
+        "word.jmdict.1602800",
+        "word.jmdict.1318400"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.travel",
+      "title": "Travelling",
+      "note": "Tickets and travel, and verbs for getting on, off, across, and around a corner.",
+      "wordIds": [
+        "word.jmdict.1385170",
+        "word.jmdict.1245570",
+        "word.jmdict.1553170",
+        "word.jmdict.1030630",
+        "word.jmdict.1355120",
+        "word.jmdict.1589500",
+        "word.jmdict.1444680",
+        "word.jmdict.1239730"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.school",
+      "title": "School",
+      "note": "School and university. せいと are pupils at school; がくせい are students, especially at university.",
+      "wordIds": [
+        "word.jmdict.1206730",
+        "word.jmdict.1413240",
+        "word.jmdict.1237150",
+        "word.jmdict.1330290",
+        "word.jmdict.1337270",
+        "word.jmdict.1312350",
+        "word.jmdict.1079760",
+        "word.jmdict.1044070",
+        "word.jmdict.1379380"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.studying",
+      "title": "Studying",
+      "note": "Words for studying and lessons, including the word for word itself, ことば.",
+      "wordIds": [
+        "word.jmdict.1512670",
+        "word.jmdict.1320760",
+        "word.jmdict.1536010",
+        "word.jmdict.1449530",
+        "word.jmdict.1559160",
+        "word.jmdict.1297960",
+        "word.jmdict.1156800",
+        "word.jmdict.1264540"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.languages",
+      "title": "Languages and scripts",
+      "note": "Adding ご to a country's name gives its language. The three Japanese scripts have names too.",
+      "wordIds": [
+        "word.jmdict.1464530",
+        "word.jmdict.1174420",
+        "word.jmdict.1213170",
+        "word.jmdict.1507090",
+        "word.jmdict.1511600"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.work",
+      "title": "Work",
+      "note": "Jobs and companies. つとめる says where someone works.",
+      "wordIds": [
+        "word.jmdict.1198550",
+        "word.jmdict.1198560",
+        "word.jmdict.1304970",
+        "word.jmdict.1159980",
+        "word.jmdict.1002120",
+        "word.jmdict.1451150",
+        "word.jmdict.1240825",
+        "word.jmdict.1227560"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.free-time",
+      "title": "Free time",
+      "note": "Films, music, sport, and playing.",
+      "wordIds": [
+        "word.jmdict.1173720",
+        "word.jmdict.1183720",
+        "word.jmdict.1193180",
+        "word.jmdict.1073210",
+        "word.jmdict.1042820",
+        "word.jmdict.1106400",
+        "word.jmdict.1588120",
+        "word.jmdict.1419370",
+        "word.jmdict.1542160",
+        "word.jmdict.1303620"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.learning-verbs",
+      "title": "Learning and teaching",
+      "note": "Verbs for learning: ならう is to learn from someone, おしえる to teach.",
+      "wordIds": [
+        "word.jmdict.1333070",
+        "word.jmdict.1236900",
+        "word.jmdict.1206050",
+        "word.jmdict.1519210",
+        "word.jmdict.1449540",
+        "word.jmdict.1266440"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.hands",
+      "title": "Using your hands",
+      "note": "Verbs for things you do with your hands. きる here means to cut; the きる for clothes is in another lesson.",
+      "wordIds": [
+        "word.jmdict.1315720",
+        "word.jmdict.1421850",
+        "word.jmdict.1326980",
+        "word.jmdict.1338180",
+        "word.jmdict.1180470",
+        "word.jmdict.1169250",
+        "word.jmdict.1384830",
+        "word.jmdict.1202450",
+        "word.jmdict.1508590",
+        "word.jmdict.1350110"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.give-and-take",
+      "title": "Giving and taking",
+      "note": "Selling, lending, borrowing, and making. This とる is for taking photos.",
+      "wordIds": [
+        "word.jmdict.1473950",
+        "word.jmdict.1411160",
+        "word.jmdict.1323560",
+        "word.jmdict.1512130",
+        "word.jmdict.1259210",
+        "word.jmdict.1548370",
+        "word.jmdict.1305990",
+        "word.jmdict.1597890",
+        "word.jmdict.1298790"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.meeting-and-waiting",
+      "title": "Meeting and waiting",
+      "note": "Meeting people, waiting, and things that begin and end.",
+      "wordIds": [
+        "word.jmdict.1198180",
+        "word.jmdict.1410590",
+        "word.jmdict.1508380",
+        "word.jmdict.1307500",
+        "word.jmdict.1589600",
+        "word.jmdict.1334040",
+        "word.jmdict.1378690",
+        "word.jmdict.1483740",
+        "word.jmdict.1289590",
+        "word.jmdict.1228260"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.body",
+      "title": "The body",
+      "note": "Parts of the body.",
+      "wordIds": [
+        "word.jmdict.1409140",
+        "word.jmdict.1582310",
+        "word.jmdict.1217730",
+        "word.jmdict.1604890",
+        "word.jmdict.1317170",
+        "word.jmdict.1486720",
+        "word.jmdict.1275640",
+        "word.jmdict.1313000",
+        "word.jmdict.1327190",
+        "word.jmdict.1404630"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.health",
+      "title": "Health",
+      "note": "More parts of the body, and words for being well or ill. かみ here is the hair on your head.",
+      "wordIds": [
+        "word.jmdict.1002610",
+        "word.jmdict.2147990",
+        "word.jmdict.1477950",
+        "word.jmdict.1380440",
+        "word.jmdict.1490230",
+        "word.jmdict.1538160",
+        "word.jmdict.1583720",
+        "word.jmdict.1432680",
+        "word.jmdict.1260720",
+        "word.jmdict.1580480"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.weather",
+      "title": "Weather",
+      "note": "Rain, snow, wind, and sky. ふる is for rain and snow falling, ふく for wind blowing.",
+      "wordIds": [
+        "word.jmdict.1438690",
+        "word.jmdict.1171900",
+        "word.jmdict.1386500",
+        "word.jmdict.1499720",
+        "word.jmdict.1245290",
+        "word.jmdict.1173100",
+        "word.jmdict.1376460",
+        "word.jmdict.1592340",
+        "word.jmdict.1282790",
+        "word.jmdict.1370760"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.seasons",
+      "title": "Seasons",
+      "note": "The four seasons and how they feel. あつい here is hot weather.",
+      "wordIds": [
+        "word.jmdict.1341000",
+        "word.jmdict.1191320",
+        "word.jmdict.1332650",
+        "word.jmdict.1446070",
+        "word.jmdict.1343460",
+        "word.jmdict.1210360",
+        "word.jmdict.1586420",
+        "word.jmdict.1554370"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.nature",
+      "title": "Nature",
+      "note": "Mountains, rivers, and the sea, trees and flowers. はな here is flower.",
+      "wordIds": [
+        "word.jmdict.1302680",
+        "word.jmdict.1390020",
+        "word.jmdict.1201190",
+        "word.jmdict.1534520",
+        "word.jmdict.1194500",
+        "word.jmdict.1297210",
+        "word.jmdict.1376310"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.animals",
+      "title": "Animals",
+      "note": "Common animals.",
+      "wordIds": [
+        "word.jmdict.1258330",
+        "word.jmdict.1467640",
+        "word.jmdict.1430250",
+        "word.jmdict.1451470"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.taste-and-temperature",
+      "title": "Taste, light, and age",
+      "note": "Describing taste and temperature, light and dark, and age. This あつい is hot to the touch.",
+      "wordIds": [
+        "word.jmdict.1324520",
+        "word.jmdict.1324300",
+        "word.jmdict.1532350",
+        "word.jmdict.1154330",
+        "word.jmdict.1467720",
+        "word.jmdict.1556730",
+        "word.jmdict.1213400",
+        "word.jmdict.1365850"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.people-and-things",
+      "title": "Pretty, kind, and skilful",
+      "note": "Words for describing people and things you like.",
+      "wordIds": [
+        "word.jmdict.1591900",
+        "word.jmdict.1178940",
+        "word.jmdict.1541620",
+        "word.jmdict.1365250",
+        "word.jmdict.1577200",
+        "word.jmdict.1219510",
+        "word.jmdict.1547330",
+        "word.jmdict.1353320",
+        "word.jmdict.1185200",
+        "word.jmdict.1414340"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.likes",
+      "title": "Likes and dislikes",
+      "note": "Saying what you like, and words for the same, various, true, and best.",
+      "wordIds": [
+        "word.jmdict.1277450",
+        "word.jmdict.1257240",
+        "word.jmdict.1413660",
+        "word.jmdict.1414150",
+        "word.jmdict.1451750",
+        "word.jmdict.1587850",
+        "word.jmdict.1523060",
+        "word.jmdict.1165970"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.colours",
+      "title": "Colours",
+      "note": "Colours. Some are adjectives ending in い; others, like みどり, are nouns.",
+      "wordIds": [
+        "word.jmdict.1357600",
+        "word.jmdict.1383240",
+        "word.jmdict.1381390",
+        "word.jmdict.1474910",
+        "word.jmdict.1287420",
+        "word.jmdict.1182030",
+        "word.jmdict.1422720",
+        "word.jmdict.1555300"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.adverbs-1",
+      "title": "Very, often, and soon",
+      "note": "Words that say how or how much.",
+      "wordIds": [
+        "word.jmdict.1008630",
+        "word.jmdict.1605870",
+        "word.jmdict.1012620",
+        "word.jmdict.1430610",
+        "word.jmdict.1013050",
+        "word.jmdict.1163400"
+      ],
+      "origin": "authored"
+    },
+    {
+      "id": "lesson.words.adverbs-2",
+      "title": "Still, again, and not at all",
+      "note": "まだ, もう, and また are about time; あまり and ぜんぜん come before a negative verb.",
+      "wordIds": [
+        "word.jmdict.1527110",
+        "word.jmdict.1012480",
+        "word.jmdict.1524930",
+        "word.jmdict.1584930",
+        "word.jmdict.1395620",
+        "word.jmdict.1342550"
+      ],
+      "origin": "authored"
     }
   ]
 }

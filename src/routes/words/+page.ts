@@ -1,7 +1,8 @@
-import { wordLessons, wordLessonSlug } from '$lib/content/word-lessons';
+import { wordLessons, wordLessonSlug, words } from '$lib/content/word-lessons';
 import type { PageLoad } from './$types';
 
 export const load = (() => ({
+  wordCount: words.length,
   lessons: wordLessons.map((lesson) => ({
     slug: wordLessonSlug(lesson),
     title: lesson.title,

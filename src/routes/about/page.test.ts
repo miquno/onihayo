@@ -1,5 +1,6 @@
 import { render } from 'svelte/server';
 import { describe, expect, it, vi } from 'vitest';
+import { withoutHydrationMarkers } from '$lib/testing/html';
 
 vi.mock('$app/paths', () => ({ resolve: (path: string) => path }));
 
@@ -39,8 +40,8 @@ describe('about page', () => {
     expect(body).toContain('<a href="/privacy">privacy page</a>');
   });
 
-  it('describes the first vocabulary set as available', () => {
-    expect(body).toMatch(/a first set of 40 vocabulary\s+words are available/u);
+  it('describes the N5 vocabulary as available', () => {
+    expect(withoutHydrationMarkers(body)).toMatch(/633 N5\s+vocabulary words\s+are available/u);
     expect(body).toContain('<a href="/words">vocabulary lessons</a>');
   });
 });

@@ -178,6 +178,8 @@
   const itemsById = $derived(new Map(items.map((item) => [item.id, item])));
   const currentPracticeItem = $derived(itemsById.get(currentItem(session)?.id ?? ''));
   const current = $derived(currentPracticeItem && question(mode, currentPracticeItem));
+  // Kana and romaji show large on one line; a word's meaning wraps at a reading size.
+  const promptClass = $derived(current?.shown.name === 'meaning' ? 'character words' : 'character');
   const answered = $derived(lastAnswer(session));
   const progress = $derived(questionProgress(session));
   const summary = $derived(summarize(session));
@@ -309,7 +311,7 @@
   {/if}
 
   <form class="question" onsubmit={handleSubmit}>
-    <p class="character" id="prompt" lang={current.shown.lang}>{current.shown.text}</p>
+    <p class={promptClass} id="prompt" lang={current.shown.lang}>{current.shown.text}</p>
     {#if mode.input === 'choose'}
       <p class="label" id="choice-label">{answerLabel(current)}</p>
       <p class="hint" id="choice-hint">
@@ -465,6 +467,12 @@
     line-height: var(--line-height-heading);
     text-align: center;
     white-space: nowrap;
+  }
+
+  /* A word's meaning, such as "four; 4 (counting things)", wraps at a reading size. */
+  .character.words {
+    font-size: var(--font-size-2xl);
+    white-space: normal;
   }
 
   label,

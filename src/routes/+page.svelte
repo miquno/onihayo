@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getContext, onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import { wordLessons, words } from '$lib/content/word-lessons';
   import { pageTitle } from '$lib/site';
   import LinkButton from '$lib/ui/LinkButton.svelte';
   import { progressContextKey, type ProgressContext } from '$lib/progress/context';
@@ -65,8 +66,9 @@
   </p>
 {/if}
 <p>
-  The first 40 vocabulary words are ready in <a href={resolve('/words')}>five short lessons</a>. The
-  full N5 word list, kanji, and the rest of the path follow.
+  {words.length} N5 vocabulary words are ready in
+  <a href={resolve('/words')}>{wordLessons.length} short lessons</a>. Kanji, grammar, and the rest
+  of the path follow.
 </p>
 <p>
   Development follows a public, milestone-based

@@ -7,6 +7,8 @@ import {
   findWord,
   findWordLesson,
   isWordId,
+  lessonForWord,
+  wordHints,
   taughtKana,
   vocabularySelection,
   wordLessons,
@@ -79,6 +81,35 @@ describe('N5 vocabulary dataset', () => {
     ]);
   });
 
+  it('teaches every word in exactly one themed lesson of at most ten words', () => {
+    expect(wordLessons).toHaveLength(75);
+    const assigned = wordLessons.flatMap(({ wordIds }) => wordIds);
+    expect(assigned).toHaveLength(words.length);
+    expect(new Set(assigned).size).toBe(words.length);
+    for (const lesson of wordLessons) {
+      expect(lesson.wordIds.length, lesson.id).toBeGreaterThan(3);
+      expect(lesson.wordIds.length, lesson.id).toBeLessThanOrEqual(10);
+      expect(lesson.note, lesson.id).not.toMatch(/[<>*_`#[\]]/u);
+      expect(lesson.origin).toBe('authored');
+    }
+    expect(new Set(wordLessons.map(({ id }) => id)).size).toBe(wordLessons.length);
+  });
+
+  it('starts with greetings and numbers after the first set, and tells synonyms apart', () => {
+    expect(wordLessons.slice(5, 8).map(({ id }) => id)).toEqual([
+      'lesson.words.greetings',
+      'lesson.words.phrases',
+      'lesson.words.you-and-me'
+    ]);
+    expect(wordHints.get('word.jmdict.1307040')).toBe('counting things');
+    expect(lessonForWord('word.jmdict.1307040')).toEqual({
+      slug: 'counting-things',
+      title: 'Counting things',
+      number: 14
+    });
+    expect(lessonForWord('word.jmdict.9999999')).toBeUndefined();
+  });
+
   it('uses only kana and marks taught by the kana lessons', () => {
     expect(taughtKana).toEqual(expect.arrayContaining(['ー', 'っ', 'ッ']));
     expect(() => validateVocabulary(dataset, lessons, selection, taughtKana)).not.toThrow();
@@ -97,6 +128,7 @@ describe('N5 vocabulary dataset', () => {
     expect(findWord('word.jmdict.1311110')?.kana).toBe('わたし');
     expect(findWord('word.jmdict.9999999')).toBeUndefined();
     expect(findWordLesson('people')?.words).toHaveLength(8);
+    expect(findWordLesson('adverbs-2')?.next).toBeNull();
     expect(findWordLesson('constructor')).toBeUndefined();
     expect(isWordId('word.jmdict.1311110')).toBe(true);
     expect(isWordId('__proto__')).toBe(false);
