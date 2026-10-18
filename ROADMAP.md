@@ -230,17 +230,17 @@ Operational activation is deferred to 1.0. The implemented account foundation is
 
 ---
 
-## 0.10 — JLPT N5 vocabulary
+## 0.10 — JLPT N5 vocabulary ✅
 
 **Goal:** the complete Onihayo-curated N5-oriented vocabulary inventory, taught in small themed lessons and reviewed through the SRS. This is a versioned curriculum selection, not an official or exhaustive JLPT word list.
 **User-visible result:** complete N5 vocabulary lessons, a searchable word list, and word pages.
 **Prerequisites:** implemented 0.9 account foundation and 0.7. Guest progress with JSON export/import supports local development; hosted sync is not a prerequisite.
 
-- [ ] ADR: source and licence of the N5 word list (Onihayo-curated selection with JMdict lexical data; ADR 0013 prepared, pending merge), recorded in the source register.
+- [x] ADR: source and licence of the N5 word list (Onihayo-curated selection with JMdict lexical data; ADR 0013), recorded in the source register.
 - [x] N5 word dataset imported/selected with the 0.7 pipeline; every word tagged with its N5 list source.
 - [x] Themed lessons of at most 10 words, ordered by usefulness; kanji forms shown as optional until kanji are taught.
 - [x] Word search by kana, romaji, and English meaning (server-rendered results, works without JavaScript).
-- [ ] Word list page with filters (learned / not learned) and pagination.
+- [x] Word list page with filters (learned / not learned) and pagination.
 
 **Acceptance criteria:** every N5 word appears in exactly one lesson; search results are correct for kana, romaji, and English queries.
 **Required tests:** D (coverage against the chosen list, lesson sizes, uniqueness), U (search normalization and ranking), E + A (search, word list, lesson).
