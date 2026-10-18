@@ -13,6 +13,7 @@
   import { progressContextKey, type ProgressContext } from '$lib/progress/context';
   import { emptyProgress } from '$lib/progress/records';
   import { readProgress, type ProgressLoad, type ProgressNotice } from '$lib/progress/storage';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import { browserSchedulerClock } from '$lib/ui/scheduler-clock';
   import {
     dueReviewCount,
@@ -70,6 +71,7 @@
   <meta name="description" content="Practise kana and vocabulary that are due for review." />
 </svelte:head>
 
+<Kicker japanese="復習" label="Review" />
 <h1>Reviews</h1>
 {#if notice}
   <p role="status">

@@ -12,6 +12,7 @@
   } from '$lib/progress/word-list';
   import { pageTitle } from '$lib/site';
   import Card from '$lib/ui/Card.svelte';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -50,6 +51,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="一覧" label="All words" />
 <h1>Word list</h1>
 <p class="lead">
   Every word Onihayo teaches, in the order of the lessons. Show all of them, the ones you have

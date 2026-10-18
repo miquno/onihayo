@@ -17,7 +17,7 @@
 <p class="lead">
   Guest progress stays in your browser; optional accounts sync progress across devices.
 </p>
-<p class="updated">Last updated: <time datetime="2026-10-12">12 October 2026</time></p>
+<p class="updated">Last updated: <time datetime="2026-10-18">18 October 2026</time></p>
 
 <h2>What Onihayo stores</h2>
 {#if data.accountsEnabled}
@@ -50,6 +50,11 @@
   progress, session dates, and email-link dates, or delete the account on the Account page. Deletion
   immediately removes the account, synced progress, and sessions from the live database. Backup
   retention will be documented before accounts are publicly enabled.
+</p>
+<p>
+  If you choose a color scheme or accent color in Settings, that choice is kept in this browser's
+  local storage, separate from your progress. It is not sent to Onihayo, not synced to an account,
+  and not part of a progress export. Choosing the defaults again removes it.
 </p>
 <p>
   The current tab's scroll positions are kept in session storage for the Back button. Your typed

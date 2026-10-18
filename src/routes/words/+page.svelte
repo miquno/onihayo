@@ -3,6 +3,7 @@
   import { maxQueryLength } from '$lib/content/word-search';
   import { pageTitle } from '$lib/site';
   import Button from '$lib/ui/Button.svelte';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -18,6 +19,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="ことば" label="Words" />
 <h1>Vocabulary</h1>
 <p class="lead">
   {data.wordCount} everyday words for JLPT N5, written in kana, in {data.lessons.length} short lessons

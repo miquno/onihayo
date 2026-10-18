@@ -2,7 +2,17 @@
   import { onMount } from 'svelte';
   import { getContext } from 'svelte';
   import { pageTitle } from '$lib/site';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import Button from '$lib/ui/Button.svelte';
+  import {
+    accents,
+    applyAppearance,
+    defaultAppearance,
+    readAppearance,
+    saveAppearance,
+    themes,
+    type Appearance
+  } from '$lib/ui/appearance';
   import { emptyProgress, setProgressSettings } from '$lib/progress/records';
   import {
     exportProgress,
@@ -24,11 +34,28 @@
   let message = $state('');
   let today = $state(0);
   let completedToday = $derived(lessonsCompletedToday(progress, browserSchedulerClock(today)));
+  let appearance = $state<Appearance>(defaultAppearance);
 
   onMount(() => {
     today = Date.now();
+    try {
+      appearance = readAppearance(window.localStorage);
+    } catch {
+      appearance = defaultAppearance;
+    }
     ready = true;
   });
+
+  function chooseAppearance(next: Appearance) {
+    appearance = next;
+    applyAppearance(document.documentElement, next);
+    try {
+      saveAppearance(window.localStorage, next);
+      message = 'Appearance saved.';
+    } catch {
+      message = 'Browser storage is unavailable. This look lasts until you leave the page.';
+    }
+  }
 
   function updateSetting(event: Event, setting: 'dailyReviewCap' | 'newLessonsPerDay') {
     const input = event.currentTarget;
@@ -130,10 +157,11 @@
   <title>{pageTitle('Settings')}</title>
   <meta
     name="description"
-    content="Export, import, or reset learning progress saved in this browser."
+    content="Choose Onihayo's color scheme and accent color, and export, import, or reset learning progress."
   />
 </svelte:head>
 
+<Kicker japanese="設定" label="Settings" />
 <h1>Settings</h1>
 {#if ready}
   <p>
@@ -147,6 +175,51 @@
 {:else}
   <p>Loading progress from this browser…</p>
 {/if}
+
+<section aria-labelledby="appearance-heading">
+  <h2 id="appearance-heading">Appearance</h2>
+  <p>Saved in this browser only, apart from your progress.</p>
+  <fieldset>
+    <legend>Color scheme</legend>
+    {#each themes as theme (theme.id)}
+      <label class="choice">
+        <input
+          type="radio"
+          name="theme"
+          value={theme.id}
+          checked={appearance.theme === theme.id}
+          onchange={() => {
+            chooseAppearance({ ...appearance, theme: theme.id });
+          }}
+          disabled={!ready}
+        />
+        {theme.label}
+      </label>
+    {/each}
+  </fieldset>
+  <fieldset>
+    <legend>Accent color</legend>
+    {#each accents as accent (accent.id)}
+      <label class="choice">
+        <input
+          type="radio"
+          name="accent"
+          value={accent.id}
+          checked={appearance.accent === accent.id}
+          onchange={() => {
+            chooseAppearance({ ...appearance, accent: accent.id });
+          }}
+          disabled={!ready}
+        />
+        <span class="swatch" data-accent={accent.id} aria-hidden="true"></span>
+        <span
+          >{accent.label} <span lang="ja">{accent.japanese}</span>
+          <span class="description">({accent.description})</span></span
+        >
+      </label>
+    {/each}
+  </fieldset>
+</section>
 
 <section aria-labelledby="export-heading">
   <h2 id="export-heading">Export progress</h2>
@@ -256,5 +329,44 @@
 
   .message {
     min-height: 1.5em;
+  }
+
+  fieldset {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-lg);
+  }
+
+  legend {
+    padding-inline: var(--space-2);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .choice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    padding-block: var(--space-2);
+    cursor: pointer;
+  }
+
+  .choice input {
+    display: inline;
+    margin: 0;
+    accent-color: var(--color-accent);
+  }
+
+  .swatch {
+    flex: none;
+    width: var(--space-5);
+    height: var(--space-5);
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+  }
+
+  .description {
+    color: var(--color-text-muted);
   }
 </style>

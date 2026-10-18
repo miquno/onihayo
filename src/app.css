@@ -3,7 +3,6 @@
  * `src/lib/ui/tokens.css`, which the root layout imports first.
  */
 :root {
-  color-scheme: light dark;
   font-family: var(--font-family-base);
   line-height: var(--line-height-body);
   background: var(--color-bg);
@@ -40,6 +39,17 @@ body {
 
 a {
   color: var(--color-link);
+  text-decoration-thickness: var(--border-width);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: calc(var(--border-width) * 2);
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-text);
 }
 
 :focus-visible {

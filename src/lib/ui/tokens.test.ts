@@ -1,20 +1,20 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { accents } from './appearance';
 
 const css = readFileSync(new URL('./tokens.css', import.meta.url), 'utf8').replace(
   /\/\*[\s\S]*?\*\//g,
   ''
 );
 
-const DARK = '@media (prefers-color-scheme: dark)';
 const REDUCED_MOTION = '@media (prefers-reduced-motion: reduce)';
 
-/** The CSS from `marker` up to the next `@media` rule (or the end of the file). */
-function section(marker: string): string {
-  const start = css.indexOf(marker);
-  if (start === -1) throw new Error(`tokens.css has no "${marker}" block`);
-  const end = css.indexOf('@media', start + marker.length);
-  return css.slice(start, end === -1 ? undefined : end);
+/** The declarations of the first rule whose selector list is exactly `selector`. */
+function rule(selector: string): string {
+  for (const [, selectors = '', body = ''] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (selectors.replace(/\s+/g, ' ').trim() === selector) return body;
+  }
+  throw new Error(`tokens.css has no "${selector}" rule`);
 }
 
 function declarations(block: string, prefix: string): Map<string, string> {
@@ -24,10 +24,31 @@ function declarations(block: string, prefix: string): Map<string, string> {
   );
 }
 
-const themes = {
-  light: declarations(css.slice(0, css.indexOf('@media')), 'color'),
-  dark: declarations(section(DARK), 'color')
-};
+type Scheme = 'light' | 'dark';
+
+/** Split `light-dark(#light, #dark)` color tokens into one map per color scheme. */
+function schemes(block: string): Record<Scheme, Map<string, string>> {
+  const result = { light: new Map<string, string>(), dark: new Map<string, string>() };
+  for (const [name, value] of declarations(block, 'color')) {
+    const pair = /^light-dark\(\s*(#[0-9a-f]{6})\s*,\s*(#[0-9a-f]{6})\s*\)$/.exec(value);
+    if (!pair) throw new Error(`--${name} is not light-dark() with two 6-digit hex colors`);
+    result.light.set(name, pair[1] ?? '');
+    result.dark.set(name, pair[2] ?? '');
+  }
+  return result;
+}
+
+const base = schemes(rule(':root'));
+const accentBlocks = new Map(
+  accents.map((accent) => [
+    accent.id,
+    schemes(
+      rule(
+        accent.id === 'sakura' ? ":root, [data-accent='sakura']" : `[data-accent='${accent.id}']`
+      )
+    )
+  ])
+);
 
 // WCAG 2.x relative luminance and contrast ratio.
 function luminance(hex: string): number {
@@ -48,18 +69,21 @@ function contrast(a: string, b: string): number {
 const pairs: [foreground: string, background: string, minimum: number][] = [
   ['color-text', 'color-bg', 4.5],
   ['color-text', 'color-surface', 4.5],
+  ['color-text', 'color-accent-soft', 4.5],
   ['color-text-muted', 'color-bg', 4.5],
   ['color-text-muted', 'color-surface', 4.5],
   ['color-link', 'color-bg', 4.5],
   ['color-link', 'color-surface', 4.5],
+  ['color-link', 'color-accent-soft', 4.5],
   ['color-on-accent', 'color-accent', 4.5],
   ['color-on-accent', 'color-accent-hover', 4.5],
   ['color-focus', 'color-bg', 3],
   ['color-focus', 'color-surface', 3],
   ['color-border', 'color-bg', 3],
   ['color-border', 'color-surface', 3],
-  ['color-accent', 'color-bg', 3],
-  ['color-accent', 'color-surface', 3],
+  ['color-accent', 'color-bg', 4.5],
+  ['color-accent', 'color-surface', 4.5],
+  ['color-accent', 'color-accent-soft', 4.5],
   ['color-accent-hover', 'color-bg', 3],
   ['color-accent-hover', 'color-surface', 3],
   ['color-stage-learning', 'color-bg', 3],
@@ -78,6 +102,9 @@ const pairs: [foreground: string, background: string, minimum: number][] = [
   ['color-heat-4', 'color-surface', 3]
 ];
 
+// Pure decoration has no contrast requirement (WCAG 1.4.11 exempts it), but it must stay visible.
+const decorative = ['color-line', 'color-petal'];
+
 describe('contrast', () => {
   it('matches the WCAG reference values', () => {
     expect(contrast('#000000', '#ffffff')).toBeCloseTo(21, 5);
@@ -86,36 +113,68 @@ describe('contrast', () => {
 });
 
 describe('color tokens', () => {
-  it('are 6-digit hex values', () => {
-    for (const theme of Object.values(themes)) {
-      expect(theme.size).toBeGreaterThan(0);
-      for (const value of theme.values()) expect(value).toMatch(/^#[0-9a-f]{6}$/);
+  it('are all covered by a contrast pair or listed as decoration', () => {
+    const paired = new Set([
+      ...pairs.flatMap(([foreground, background]) => [foreground, background]),
+      ...decorative
+    ]);
+    const sakura = accentBlocks.get('sakura');
+    const names = [...base.light.keys(), ...(sakura ? sakura.light.keys() : [])];
+    expect(names.length).toBeGreaterThan(0);
+    expect(names.filter((name) => !paired.has(name))).toEqual([]);
+  });
+
+  it('let every accent set exactly the same tokens, and nothing the base sets', () => {
+    const sakura = [...(accentBlocks.get('sakura')?.light.keys() ?? [])].sort();
+    expect(sakura.length).toBeGreaterThan(0);
+    for (const block of accentBlocks.values()) {
+      expect([...block.light.keys()].sort()).toEqual(sakura);
     }
+    expect(sakura.filter((name) => base.light.has(name))).toEqual([]);
   });
 
-  it('define the same colors in light and dark mode', () => {
-    expect([...themes.dark.keys()].sort()).toEqual([...themes.light.keys()].sort());
-  });
+  for (const accent of accents) {
+    for (const scheme of ['light', 'dark'] as const) {
+      const theme = new Map([
+        ...base[scheme],
+        ...(accentBlocks.get(accent.id)?.[scheme] ?? new Map<string, string>())
+      ]);
 
-  it('are all covered by a contrast pair', () => {
-    const paired = new Set(pairs.flatMap(([foreground, background]) => [foreground, background]));
-    expect([...themes.light.keys()].filter((name) => !paired.has(name))).toEqual([]);
-  });
+      it.each(pairs)(
+        `${accent.id}, ${scheme}: %s on %s meets %d:1`,
+        (foreground, background, minimum) => {
+          const fg = theme.get(foreground);
+          const bg = theme.get(background);
+          if (fg === undefined || bg === undefined) throw new Error('missing color token');
+          expect(contrast(fg, bg)).toBeGreaterThanOrEqual(minimum);
+        }
+      );
 
-  for (const [name, theme] of Object.entries(themes)) {
-    it.each(pairs)(`${name}: %s on %s meets %d:1`, (foreground, background, minimum) => {
-      const fg = theme.get(foreground);
-      const bg = theme.get(background);
-      if (fg === undefined || bg === undefined) throw new Error('missing color token');
-      expect(contrast(fg, bg)).toBeGreaterThanOrEqual(minimum);
-    });
+      it(`${accent.id}, ${scheme}: decoration differs from the background`, () => {
+        for (const name of decorative) {
+          const value = theme.get(name);
+          const bg = theme.get('color-bg');
+          if (value === undefined || bg === undefined) throw new Error('missing color token');
+          expect(contrast(value, bg)).toBeGreaterThan(1.1);
+        }
+      });
+    }
   }
+});
+
+describe('theme and accent selectors', () => {
+  it('pin the color scheme for an explicit theme', () => {
+    expect(rule(":root[data-theme='light']")).toMatch(/color-scheme:\s*light;/);
+    expect(rule(":root[data-theme='dark']")).toMatch(/color-scheme:\s*dark;/);
+  });
 });
 
 describe('motion tokens', () => {
   it('become zero under prefers-reduced-motion', () => {
-    const durations = declarations(css.slice(0, css.indexOf('@media')), 'duration');
-    const reduced = declarations(section(REDUCED_MOTION), 'duration');
+    const durations = declarations(rule(':root'), 'duration');
+    const start = css.indexOf(REDUCED_MOTION);
+    expect(start).toBeGreaterThan(-1);
+    const reduced = declarations(css.slice(start), 'duration');
     expect(durations.size).toBeGreaterThan(0);
     expect([...reduced.keys()].sort()).toEqual([...durations.keys()].sort());
     for (const value of reduced.values()) expect(value).toBe('0ms');

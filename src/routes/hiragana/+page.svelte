@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { pageTitle } from '$lib/site';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import LessonList from '$lib/ui/LessonList.svelte';
   import type { PageProps } from './$types';
 
@@ -15,6 +16,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="ひらがな" label="The first script" />
 <h1>Hiragana</h1>
 <p class="lead">
   <span lang="ja">ひらがな</span> (hiragana) is the first Japanese script to learn. Each character stands

@@ -22,6 +22,7 @@
     type ItemGroup
   } from '$lib/progress/statistics';
   import { pageTitle } from '$lib/site';
+  import Kicker from '$lib/ui/Kicker.svelte';
   import { reviewCountText } from '$lib/ui/charts';
   import ActivityHeatmap from '$lib/ui/ActivityHeatmap.svelte';
   import ForecastChart from '$lib/ui/ForecastChart.svelte';
@@ -136,6 +137,7 @@
   />
 </svelte:head>
 
+<Kicker japanese="記録" label="Your record" />
 <h1>Progress</h1>
 <p class="lead">
   What you have learned so far, worked out from the progress saved for you. Take it at your own
