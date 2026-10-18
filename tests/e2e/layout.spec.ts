@@ -73,6 +73,16 @@ const pages: PageCase[] = [
     current: { navigation: 'Primary', link: 'Vocabulary' }
   },
   {
+    path: '/words/search',
+    title: 'Word search — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
+    path: '/words/search?q=tea',
+    title: '“tea” — Word search — Onihayo',
+    current: { navigation: 'Primary', link: 'Vocabulary', state: 'true' }
+  },
+  {
     path: '/reviews',
     title: 'Reviews — Onihayo',
     current: { navigation: 'Primary', link: 'Reviews' }

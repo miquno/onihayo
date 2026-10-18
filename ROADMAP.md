@@ -239,7 +239,7 @@ Operational activation is deferred to 1.0. The implemented account foundation is
 - [ ] ADR: source and licence of the N5 word list (Onihayo-curated selection with JMdict lexical data; ADR 0013 prepared, pending merge), recorded in the source register.
 - [x] N5 word dataset imported/selected with the 0.7 pipeline; every word tagged with its N5 list source.
 - [x] Themed lessons of at most 10 words, ordered by usefulness; kanji forms shown as optional until kanji are taught.
-- [ ] Word search by kana, romaji, and English meaning (server-rendered results, works without JavaScript).
+- [x] Word search by kana, romaji, and English meaning (server-rendered results, works without JavaScript).
 - [ ] Word list page with filters (learned / not learned) and pagination.
 
 **Acceptance criteria:** every N5 word appears in exactly one lesson; search results are correct for kana, romaji, and English queries.

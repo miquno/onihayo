@@ -22,6 +22,10 @@ const validated = validateVocabulary(wordDataset, authoredLessons, selectionMani
 export const words: readonly WordRecord[] = validated.words;
 export const wordLessons: readonly WordLesson[] = validated.lessons;
 export const vocabularySelection: VocabularySelection = validated.selection;
+/** Every word in the order the lessons teach them, most useful first. */
+export const wordsInTeachingOrder: readonly WordRecord[] = validated.lessons.flatMap((lesson) =>
+  lesson.wordIds.flatMap((id) => validated.words.filter((word) => word.id === id))
+);
 /** Authored usage hints by word ID, for the words whose meanings alone match a synonym's. */
 export const wordHints: ReadonlyMap<string, string> = new Map(
   validated.selection.entries.flatMap(({ sequence, hint }) =>

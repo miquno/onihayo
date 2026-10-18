@@ -1,6 +1,8 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import { maxQueryLength } from '$lib/content/word-search';
   import { pageTitle } from '$lib/site';
+  import Button from '$lib/ui/Button.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -25,6 +27,14 @@
   The words are Onihayo's own N5-oriented selection: the words beginners need most, not an official
   list. Start at the top; each lesson builds on the kana you already know.
 </p>
+
+<form class="search" method="GET" action={resolve('/words/search')} role="search">
+  <label for="word-search">Search words by kana, romaji, kanji, or meaning</label>
+  <div class="field">
+    <input id="word-search" type="search" name="q" maxlength={maxQueryLength} autocomplete="off" />
+    <Button type="submit" variant="secondary">Search</Button>
+  </div>
+</form>
 
 <ol class="lessons">
   {#each data.lessons as lesson (lesson.slug)}
@@ -56,6 +66,33 @@
   .lead {
     font-size: var(--font-size-lg);
     color: var(--color-text);
+  }
+
+  .search {
+    margin: var(--space-6) 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  input {
+    flex: 1 1 12rem;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
   }
 
   .lessons {
