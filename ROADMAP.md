@@ -255,7 +255,7 @@ Operational activation is deferred to 1.0. The implemented account foundation is
 **User-visible result:** kanji lessons, kanji practice and reviews, kanji pages with stroke-order diagrams, and kanji search.
 **Prerequisites:** 0.10.
 
-- [ ] Register entries and licence verification for KANJIDIC2 and KanjiVG; N5 kanji list source decided (ADR).
+- [x] Register entries and licence verification for KANJIDIC2 and KanjiVG; N5 kanji list source decided (ADR 0014).
 - [ ] Import script for the N5 kanji subset (meanings, on/kun readings, stroke count) and KanjiVG stroke data; validation tests.
 - [ ] Kanji lessons that introduce each kanji with example words the learner already knows.
 - [ ] Kanji practice modes (meaning, reading) through the shared engine; kanji enter reviews.
@@ -265,7 +265,7 @@ Operational activation is deferred to 1.0. The implemented account foundation is
 **Acceptance criteria:** every N5 kanji has at least one meaning, one reading, stroke data, and one known example word.
 **Required tests:** D (kanji dataset, stroke data presence), U (kanji adapter, "all kanji learned" rule), E + A (kanji lesson → practice, detail page).
 **Security/privacy:** SVGs are generated at import time and rendered as trusted local data, never from user input.
-**Content/licensing:** CC BY-SA datasets (to verify); share-alike for derived SVGs.
+**Content/licensing:** KANJIDIC2 (CC BY-SA 4.0) and KanjiVG (CC BY-SA 3.0), verified in ADR 0014; share-alike for derived stroke data.
 
 ---
 
